@@ -59,8 +59,8 @@ export default {
   color: white;
   padding: 1rem 2rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .game {
