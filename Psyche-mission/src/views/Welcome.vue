@@ -17,7 +17,7 @@ export default {
 </script>
 
 <template>
-  <router-view></router-view>
+  <h1>Welcome to the Psyche mission's web-based game portal!</h1>
 
 </template>
 
