@@ -9,8 +9,7 @@ export default {
 
 <template>
   <div class="main">  <!--root container-->
-
-    <!-- page header with 3 links navigation-->
+    <!-- page header -->
     <header class="header">
       <h1>Psyche Mission Game Portal AR, VR, and XR</h1>
     </header>
@@ -87,7 +86,7 @@ export default {
 
 .platforms {
   display: grid;
-  grid-template-columns:  1fr 1fr 1fr 1fr;  /*4 columns equal width*/
+  grid-template-columns:  1fr 1fr 1fr 1fr;  /* 4 columns equal width*/
   gap: 20px;
   padding: 10px;
 }
@@ -115,7 +114,7 @@ export default {
 
 @media (max-width: 900px) {
   .platforms {
-    grid-template-columns: 1fr 1fr; /*4 columns equal width*/
+    grid-template-columns: 1fr 1fr; /* 2 columns equal width*/
   }
 }
 
