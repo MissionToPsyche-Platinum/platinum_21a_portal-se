@@ -2,20 +2,57 @@
 export default {
   name: "HomePage",
   data() {
-    return {};
+    return {
+      isDark: false,// variable to track if dark mode is active
+    };
+  },
+  mounted() {
+    // get the previously saved mode from the browser local storage
+    const savedMode = localStorage.getItem("savedMode");
+    //check if previous mode is a dark mode, enable dark mode on page load
+    if (savedMode === "Dark") {
+      this.isDark = true;// will update automatically
+
+    }
+
+
+  },
+  methods: {
+
+    //this function toggle between dark mode and light mode
+    toggleMode() {
+      this.isDark = !this.isDark;//if dark mode is active change to light mode, if light mode is active change to dark mode
+      if (this.isDark) {
+        localStorage.setItem("savedMode", "Dark");// save dark mode in local storage
+      } else {
+        localStorage.setItem("savedMode", "Light");// save light mode in local storage
+      }
+    }
+
   }
 };
 </script>
 
 <template>
 
-  <h1>Welcome to the Psyche mission's web-based game portal!</h1>
 
+  <!--dynamically adds either the "light" or "dark" class-->
+  <div :class="['main',isDark ? 'dark': 'light']">  <!--root container-->
 
-  <div class="main">  <!--root container-->
+    <!-- Top section containing the toggle button and title -->
+    <div class="top">
+      <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
+      <button :class="['toggle', isDark ? 'dark': 'light']" @click="toggleMode">
+        <!--dynamically change thee text based on the mode-->
+        {{ isDark ? "switch to light" : "switch to dark" }}
+      </button>
+
+      <h1>Welcome to the Psyche mission's web-based game portal!</h1>
+    </div>
     <!-- page header -->
     <header class="header">
       <h1>Psyche Mission Game Portal AR, VR, and XR</h1>
+
     </header>
 
     <!-- place holder for an introduction -->
@@ -25,7 +62,7 @@ export default {
 
     <!--  main platforms section play as place holder for different platforms -->
     <section class="platforms">
-    <!--card for web baseed games-->
+      <!--card for web baseed games-->
       <div class="platform">
         <h3>Web Games</h3>
         <p>Browser-based games.</p>
@@ -66,50 +103,88 @@ export default {
 
 <style>
 
+/*main container styling*/
 .main {
-  border: 1px solid ;
+  border: 1px solid;
   font-family: Arial, sans-serif;
+  position: relative;
 }
 
-
+/*header styling*/
 .header {
-  border: 1px solid ;
+  border: 1px solid;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px;
+  position: relative;
 }
 
+/*tob section styling that hold the toggle button*/
+.top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  position: relative;
+}
 
+/*light mode styling*/
+.light {
+  color: #000309;
+  background-color: #ffffff;
+}
 
+/*dark mode styling*/
+.dark {
+  color: #ffffff;
+  background-color: #000309;
+}
+
+/*toggle button styling*/
+.toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 8px 12px;
+  border: 1px solid;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+/*intro section styling*/
 .intro {
-  border: 1px solid ;
+  border: 1px solid;
   padding: 10px;
   text-align: center;
 }
 
-
+/*platforms section styling*/
 .platforms {
   display: grid;
-  grid-template-columns:  1fr 1fr 1fr 1fr;  /* 4 columns equal width*/
+  grid-template-columns:  1fr 1fr 1fr 1fr; /* 4 columns equal width*/
   gap: 20px;
   padding: 10px;
 }
 
+/*platform cards styling*/
 .platform {
-  border: 1px solid ;
+  border: 1px solid;
   padding: 10px;
   text-align: center;
 }
 
+/*game section place holder styling*/
 .games-placeholder {
-  border: 1px solid ;
+  border: 1px solid;
   padding: 40px;
   text-align: center;
 }
 
+/*footer styling*/
 .footer {
-  border: 1px solid ;
+  border: 1px solid;
   text-align: center;
   padding: 15px;
 
