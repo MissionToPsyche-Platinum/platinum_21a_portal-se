@@ -4,7 +4,8 @@ import GamePage from "../views/GamePage.vue"
 
 const routes = [
     {path: "/", component: HomePage},
-    {path: "/gamepage", component: GamePage}
+    {path: "/gamepage", component: GamePage},
+    {path: "/:id", name: "GamePage", component: GamePage, props: true}
 ];
 
 const router = createRouter({

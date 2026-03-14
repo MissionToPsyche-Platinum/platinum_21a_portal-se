@@ -1,4 +1,5 @@
 <script>
+import gameData from '../assets/games.json'
 import GameLink from '../components/GameLink.vue'
 
 export default {
@@ -9,6 +10,7 @@ export default {
   data() {
     return {
       isDark: false,// variable to track if dark mode is active
+      games: gameData.games, // creates an array of game objects from JSON file
     };
   },
   mounted() {
@@ -17,7 +19,6 @@ export default {
     //check if previous mode is a dark mode, enable dark mode on page load
     if (savedMode === "Dark") {
       this.isDark = true;// will update automatically
-
     }
 
 
@@ -95,7 +96,9 @@ export default {
     <section class="games-placeholder">
       <h2>Available Experiences</h2>
       <p>Place holder for games links and previews in upcoming sprints.</p>
-      <GameLink />
+      <div class="game-grid">
+        <GameLink v-for="game in games" :key="game.id" :game="game" />
+      </div>
     </section>
 
     <!-- footer -->
@@ -186,6 +189,14 @@ export default {
   border: 1px solid;
   padding: 40px;
   text-align: center;
+}
+
+/*grid styling for game links*/
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 10px;
 }
 
 /*footer styling*/

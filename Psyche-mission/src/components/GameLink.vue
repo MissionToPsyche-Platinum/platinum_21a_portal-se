@@ -1,14 +1,18 @@
 <script>
 export default {
-  data() {
-    return {};
-  }
+    props: {
+        game: { type: Object }
+    },
+    data() {
+        return {};
+    }
 };
 </script>
 
 <template>
     <div class="game-link-card">
-        <a href="/gamepage" class="game-link">Game Title</a>
+        <h2>{{ game.title }}</h2>
+        <router-link :to="{ name: 'GamePage', params: {id: game.id }}">Play</router-link>
     </div>
 </template>
 
