@@ -44,7 +44,7 @@ export default {
       <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
       <button :class="['toggle', isDark ? 'dark': 'light']" @click="toggleMode">
         <!--dynamically change thee text based on the mode-->
-        {{ isDark ? "switch to light" : "switch to dark" }}
+        {{ isDark ? "Switch to Light" : "Switch to Dark" }}
       </button>
 
       <h1>Welcome to the Psyche mission's web-based game portal!</h1>
