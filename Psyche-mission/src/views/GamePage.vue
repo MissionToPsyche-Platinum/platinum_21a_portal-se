@@ -1,13 +1,20 @@
 <script>
+import gameData from "../assets/games.json"
+
 export default {
     name: 'GamePage',
+    props: ['id'],
     data() {
         return {
+            game: null
         }
     },
     methods: {
 
-    }
+    },
+    created() {
+        this.game = gameData.games.find(game => game.id == this.id);
+    },
 }
 </script>
 
@@ -18,7 +25,10 @@ export default {
         </nav>
 
         <div class="game">
-            <div class="placeholder-content">Game component goes here</div>
+            <div class="placeholder-content">
+                <h1 v-if="game">{{ this.game.title }}</h1>
+                <h1 v-else>Loading...</h1>
+            </div>
         </div>
 
         <div class="details">
