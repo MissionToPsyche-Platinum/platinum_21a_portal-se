@@ -3,18 +3,25 @@ import gameData from "../assets/games.json"
 
 export default {
     name: 'GamePage',
-    props: ['id'],
+    props: ['id'], // ID of game passed to this component
     data() {
         return {
             game: null
         }
     },
     methods: {
-
+        findGame() {
+            this.game = gameData.games.find(game => game.id == this.id); // Find game data from JSON
+        }
     },
     created() {
-        this.game = gameData.games.find(game => game.id == this.id);
+        this.findGame();
     },
+    watch: {
+        id() {
+            this.findGame(); // if game changes but GamePage is not re-created, find new game. 
+        }
+    }
 }
 </script>
 
