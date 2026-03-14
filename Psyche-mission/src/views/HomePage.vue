@@ -1,6 +1,11 @@
 <script>
+import GameLink from '../components/GameLink.vue'
+
 export default {
   name: "HomePage",
+  components: {
+    GameLink,
+  },
   data() {
     return {
       isDark: false,// variable to track if dark mode is active
@@ -90,6 +95,7 @@ export default {
     <section class="games-placeholder">
       <h2>Available Experiences</h2>
       <p>Place holder for games links and previews in upcoming sprints.</p>
+      <GameLink />
     </section>
 
     <!-- footer -->
