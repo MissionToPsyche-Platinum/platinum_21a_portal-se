@@ -11,7 +11,13 @@ export default {
     },
     methods: {
         findGame() {
-            this.game = gameData.games.find(game => game.id == this.id); // Find game data from JSON
+            const gameFound = gameData.games.find(game => game.id == this.id); // Find game data from JSON
+
+            if(!gameFound) {
+                this.$router.replace({name: "NotFound"}); // load NotFound page if game ID is not valid
+            } else {
+                this.game = gameFound;
+            }
         }
     },
     created() {
