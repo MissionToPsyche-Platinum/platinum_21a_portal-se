@@ -97,7 +97,7 @@ export default {
       <h2>Available Experiences</h2>
       <p>Place holder for games links and previews in upcoming sprints.</p>
       <div class="game-grid">
-        <GameLink v-for="game in games" :key="game.id" :game="game" />
+        <GameLink v-for="game in games" :key="game.id" :game="game" :is-dark="isDark"/>
       </div>
     </section>
 
@@ -195,8 +195,8 @@ export default {
 .game-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-  padding: 10px;
+  gap: 50px;
+  padding: 20px;
 }
 
 /*footer styling*/
