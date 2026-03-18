@@ -88,12 +88,12 @@ export default {
     </div>
 
     <div class="suggested-games">
-        <div v-for="i in 3" :key="i" class="suggestion">
+        <div v-for="i in 3" :key="i" :class="['suggestion',gameIsDark ? 'suggestion-dark': 'suggestion-light']">
             Suggested Game components go here
         </div>
     </div>
 
-    <footer class="footer">
+    <footer :class="['footer',gameIsDark ? 'footer-dark' : 'footer']">
         <p>footer component goes here</p>
     </footer>
   </div>
