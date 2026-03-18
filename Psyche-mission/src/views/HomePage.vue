@@ -11,6 +11,8 @@ export default {
     return {
       isDark: false,// variable to track if dark mode is active
       games: gameData.games, // creates an array of game objects from JSON file
+      darkColor: "#000000",// variable for selected dark mode color with a default value
+      lightColor: "#ffffff"// variable for selected light mode color with a default value
     };
   },
   mounted() {
@@ -19,6 +21,15 @@ export default {
     //check if previous mode is a dark mode, enable dark mode on page load
     if (savedMode === "Dark") {
       this.isDark = true;// will update automatically
+    }
+    /*check for saved colors in browser*/
+    const savedDarkColor = localStorage.getItem("savedDarkColor");
+    const savedLightColor = localStorage.getItem("savedLightColor");
+    if (savedDarkColor) {
+      this.darkColor = savedDarkColor;// retrieve the dark color prefrence from the browser
+    }
+    if (savedLightColor) {
+      this.lightColor = savedLightColor;// retrieve the light color prefrence from the browser
     }
 
 
@@ -33,6 +44,15 @@ export default {
       } else {
         localStorage.setItem("savedMode", "Light");// save light mode in local storage
       }
+    },
+
+    // these function update the localstorage with the current colors selection
+    updateDarkColor() {
+      localStorage.setItem("savedDarkColor", this.darkColor);
+    },
+
+    updateLightColor() {
+      localStorage.setItem("savedLightColor", this.lightColor);
     }
 
   }
@@ -43,16 +63,30 @@ export default {
 
 
   <!--dynamically adds either the "light" or "dark" class-->
-  <div :class="['main',isDark ? 'dark': 'light']">  <!--root container-->
+  <div :class="['main', isDark ? 'dark' : 'light']" :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]">
+    <!--root container-->
 
     <!-- Top section containing the toggle button and title -->
     <div class="top">
       <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
-      <button :class="['toggle', isDark ? 'dark': 'light']" @click="toggleMode">
-        <!--dynamically change thee text based on the mode-->
-        {{ isDark ? "Switch to Light" : "Switch to Dark" }}
-      </button>
-
+      <div class="theme-controls">
+        <button class="toggle"
+                :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
+                @click="toggleMode">
+          <!--dynamically change thee text based on the mode-->
+          {{ isDark ? "Switch to Light" : "Switch to Dark" }}
+        </button>
+        <div class="pickers">
+          <label>
+            Dark Mode
+            <input type="color" v-model="darkColor" @input="updateDarkColor"/>
+          </label>
+          <label>
+            Light Mode
+            <input type="color" v-model="lightColor" @input="updateLightColor"/>
+          </label>
+        </div>
+      </div>
       <h1>Welcome to the Psyche mission's web-based game portal!</h1>
     </div>
     <!-- page header -->
@@ -138,21 +172,11 @@ export default {
   position: relative;
 }
 
-/*light mode styling*/
-.light {
-  color: #000309;
-  background-color: #ffffff;
-}
 
-/*dark mode styling*/
-.dark {
-  color: #ffffff;
-  background-color: #000309;
-}
 
 /*toggle button styling*/
 .toggle {
-  position: absolute;
+
   top: 10px;
   right: 10px;
   padding: 8px 12px;
@@ -205,6 +229,31 @@ export default {
   text-align: center;
   padding: 15px;
 
+}
+
+.theme-controls {
+
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: normal;
+  margin: 5px 0px 5px 0px;
+}
+
+.pickers {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 5px 0px 5px 0px;
+
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* Responsiveness */
