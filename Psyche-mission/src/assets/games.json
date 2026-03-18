@@ -2,6 +2,62 @@
 	"games":
 		[
 			{
+				"id": "psyche-scraper",
+				"title": "Psyche Scraper",
+				"thumbnail": "None",
+				"difficulty": "Easy",
+				"genre": "VR Experience",
+				"age": "Elementary",
+				"class": "Iridium - 2025",
+				"gtype": "iridium",
+				"video": "None",
+				"credits": "Kevin Nangcas, Shannon Ray, Erik Sousa, Chad Valente",
+				"src": "https://github.com/MissionToPsyche-Iridium/iridium_20b_vr_game-se",
+				"description":"Psyche Scraper is a Virtual Reality space game that is based off of an existing 2D web game, “Return to Psyche.” These games are inspired by NASA’s Psyche mission, which aims to study the metal-rich asteroid, Psyche 16. "
+			},
+			{
+				"id": "escape-to-psyche",
+				"title": "Escape to Psyche",
+				"thumbnail": "None",
+				"difficulty": "Medium",
+				"genre": "VR Experience",
+				"age": "Elementary",
+				"class": "Iridium - 2025",
+				"gtype": "iridium",
+				"video": "None",
+				"credits": "Ava Shilling, Akshara Rajesh, Peter Nguyen, Quinton Jones",
+				"src": "https://github.com/MissionToPsyche-Iridium/iridium_20a_vr_game-vcu",
+				"description":"A virtual reality escape room set during a futuristic mission to the asteroid Psyche."
+			},
+			{
+				"id": "psyche-16-expedition-vr",
+				"title": "Psyche 16: Expedition VR",
+				"thumbnail": "None",
+				"difficulty": "Medium",
+				"genre": "VR Experience",
+				"age": "Middle School",
+				"class": "Iridium - 2025",
+				"gtype": "iridium",
+				"video": "None",
+				"credits": "David Branson, Armani Cardenas, Caroline David, Yeseul Lim, Dylan Gilbert Peppard, Jonathan Vigil",
+				"src": "https://github.com/MissionToPsyche-Iridium/iridium_19d_surface_vr-uci?tab=readme-ov-file",
+				"description":"A first person VR simulation of the surface and orbit of Asteroid 16 Psyche, as well as, the surface of the Moon."
+			},
+			{
+				"id": "nasa-psyche-mission-surface-data-vr",
+				"title": "NASA Psyche Mission: Surface Data VR",
+				"thumbnail": "None",
+				"difficulty": "Medium",
+				"genre": "VR Experience",
+				"age": "High School",
+				"class": "Iridium - 2025",
+				"gtype": "iridium",
+				"video": "None",
+				"credits": "Iuliia Orellana, Jose Grijalva, Estevan Perez, Neisa Mattos",
+				"src": "https://github.com/MissionToPsyche-Iridium/iridium_19c_surface_vr-se",
+				"description":"An interactive and educational Virtual Reality (VR) experience allowing users to explore Mars using real NASA data."
+			},
+			{
 				"id": "jolts-journey",
 				"title": "JOLTS JOURNEY",
 				"thumbnail": "jolts-journey.png",
