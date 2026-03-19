@@ -1,9 +1,18 @@
 <template>
     <!-- Navigation Bar -->
     <nav class="nav-bar">
+        <!-- Logo that links to the home page -->
+        <router-link to="/" class="logo-link">
+            <img src="@/assets/PsycheLogo.png" alt="Logo" class="logo"/>
+        </router-link>
 
+        <!-- "Home" and "About" links -->
+        <div class="nav-links">
+            <a href="/" class="nav-link" target="_blank">Home</a>
+            <a href="https://psyche.ssl.berkeley.edu/" class="nav-link" target="_blank">About</a>
+        </div>
     </nav>
-</template>
+ </template>
 
 <script>
 export default {
@@ -21,4 +30,29 @@ export default {
     border: 2px solid #ddd;
     border-bottom: 2px solid #ddd;
 }
-</style>
+
+.nav-links {
+   display: flex;
+   gap: 20px;
+}
+
+.nav-link {
+   color: #ffffff;
+   font-weight: bold;
+   transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+   color: #007bff;
+}
+
+.logo {
+   height: 40px;
+   cursor: pointer;
+}
+
+.logo-link {
+   display: flex;
+   align-items: center;
+}
+ </style>
