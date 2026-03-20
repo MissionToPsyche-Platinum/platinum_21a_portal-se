@@ -40,8 +40,12 @@ export default {
     toggleMode() {
       this.isDark = !this.isDark;//if dark mode is active change to light mode, if light mode is active change to dark mode
       if (this.isDark) {
+        this.darkColor = "#000000";
+        this.lightColor = "#ffffff";
         localStorage.setItem("savedMode", "Dark");// save dark mode in local storage
       } else {
+        this.darkColor = "#ffffff";
+        this.lightColor = "#000000";
         localStorage.setItem("savedMode", "Light");// save light mode in local storage
       }
     },
@@ -62,7 +66,7 @@ export default {
 
 <template>
   <!--dynamically adds either the "light" or "dark" class-->
-  <div :class="['main', isDark ? 'dark' : 'light']" :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]">
+  <div class="main" :style="[{backgroundColor: darkColor},{ color: lightColor}]">
     <!--root container-->
 
     <!-- Top section containing the toggle button and title -->
@@ -77,12 +81,14 @@ export default {
         </button>
         <div class="pickers">
           <label>
-            Dark Mode
-            <input type="color" v-model="darkColor" @input="updateDarkColor" class="picker" :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
+            Background
+            <input type="color" v-model="darkColor" @input="updateDarkColor" class="picker"
+                   :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
           </label>
           <label>
-            Light Mode
-            <input type="color" v-model="lightColor" @input="updateLightColor" class="picker" :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
+            Text
+            <input type="color" v-model="lightColor" @input="updateLightColor" class="picker"
+                   :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
           </label>
         </div>
       </div>
@@ -166,7 +172,6 @@ export default {
 }
 
 
-
 /* top section styling (toggle button/color pickers) */
 .top {
   display: flex;
@@ -210,7 +215,6 @@ export default {
 }
 
 
-
 /* platforms section styling */
 .platforms {
   display: grid;
@@ -236,7 +240,6 @@ export default {
   transform: translateY(-10px);
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
 }
-
 
 
 /* game section placeholder styling */
@@ -309,8 +312,8 @@ export default {
 
 }
 
-.picker{
-  padding: 1px ;
+.picker {
+  padding: 1px;
   border: 1px solid currentColor;
   background: transparent;
   cursor: pointer;
@@ -350,7 +353,6 @@ input[type="color"] {
   .top {
     padding-top: 110px;
   }
-
 
 
 }
