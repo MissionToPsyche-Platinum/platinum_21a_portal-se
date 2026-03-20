@@ -22,14 +22,14 @@ export default {
 </template>
 
 <style scoped>
-    .game-link-card {
+    /*.game-link-card {
         border: 2px solid black;
         background-color:honeydew;
         border-radius: 20px;
         padding: 10px;
         font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    }
-
+    }*/
+/*
     .dark-mode {
         border: 2px solid white;
         background-color: #190d1b;
@@ -37,5 +37,5 @@ export default {
 
     .dark-link {
         color: rgb(5, 233, 17);
-    }
+    }*/
 </style>

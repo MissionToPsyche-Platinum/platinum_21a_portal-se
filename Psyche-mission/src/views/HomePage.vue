@@ -48,6 +48,7 @@ export default {
 
     // these function update the localstorage with the current colors selection
     updateDarkColor() {
+
       localStorage.setItem("savedDarkColor", this.darkColor);
     },
 
@@ -60,8 +61,6 @@ export default {
 </script>
 
 <template>
-
-
   <!--dynamically adds either the "light" or "dark" class-->
   <div :class="['main', isDark ? 'dark' : 'light']" :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]">
     <!--root container-->
@@ -79,20 +78,20 @@ export default {
         <div class="pickers">
           <label>
             Dark Mode
-            <input type="color" v-model="darkColor" @input="updateDarkColor"/>
+            <input type="color" v-model="darkColor" @input="updateDarkColor" class="picker" :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
           </label>
           <label>
             Light Mode
-            <input type="color" v-model="lightColor" @input="updateLightColor"/>
+            <input type="color" v-model="lightColor" @input="updateLightColor" class="picker" :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
           </label>
         </div>
       </div>
       <h1>Welcome to the Psyche mission's web-based game portal!</h1>
     </div>
+
     <!-- page header -->
     <header class="header">
       <h1>Psyche Mission Game Portal AR, VR, and XR</h1>
-
     </header>
 
     <!-- place holder for an introduction -->
@@ -131,7 +130,7 @@ export default {
       <h2>Available Experiences</h2>
       <p>Place holder for games links and previews in upcoming sprints.</p>
       <div class="game-grid">
-        <GameLink v-for="game in games" :key="game.id" :game="game" :is-dark="isDark"/>
+        <GameLink v-for="game in games" :key="game.id" :game="game" :is-dark="isDark" class="platform"/>
       </div>
     </section>
 
@@ -139,135 +138,256 @@ export default {
     <footer class="footer">
       <p>Psyche Mission Portal – Capstone Project</p>
     </footer>
-
   </div>
-
 </template>
 
 <style>
-
-/*main container styling*/
+/* main container styling */
 .main {
-  border: 1px solid;
+  min-height: 100vh;
   font-family: Arial, sans-serif;
   position: relative;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  padding-bottom: 20px;
 }
 
-/*header styling*/
+/* header styling */
 .header {
-  border: 1px solid;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 18px 20px;
+  margin: 20px;
+  border: 1px solid rgba(128, 128, 128, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   position: relative;
+  text-align: center;
 }
 
-/*tob section styling that hold the toggle button*/
+
+
+/* top section styling (toggle button/color pickers) */
 .top {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 34px 20px 24px;
+  margin: 20px;
   position: relative;
+  text-align: center;
+  border: 1px solid rgba(128, 128, 128, 0.25);
+  border-radius: 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 
-
-/*toggle button styling*/
+/* toggle button styling */
 .toggle {
-
-  top: 10px;
-  right: 10px;
-  padding: 8px 12px;
-  border: 1px solid;
+  padding: 10px 15px;
+  border: 1px solid currentColor;
   background: transparent;
   cursor: pointer;
-  border-radius: 15px;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 
-/*intro section styling*/
+.toggle:hover {
+  transform: translateY(-10px);
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* intro section styling */
 .intro {
-  border: 1px solid;
-  padding: 10px;
+  margin: 20px;
+  padding: 28px 22px;
   text-align: center;
+  border: 1px solid rgba(128, 128, 128, 0.22);
+  border-radius: 20px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
-/*platforms section styling*/
+
+
+/* platforms section styling */
 .platforms {
   display: grid;
-  grid-template-columns:  1fr 1fr 1fr 1fr; /* 4 columns equal width*/
+  grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 columns equal width */
   gap: 20px;
-  padding: 10px;
+  padding: 0 20px;
+  margin-bottom: 20px;
+
 }
 
-/*platform cards styling*/
+/* platform cards styling */
 .platform {
-  border: 1px solid;
-  padding: 10px;
+  border: 1px solid rgba(128, 128, 128, 0.22);
+  padding: 24px 18px;
   text-align: center;
+  border-radius: 18px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
-/*game section place holder styling*/
+.platform:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
+}
+
+
+
+/* game section placeholder styling */
 .games-placeholder {
-  border: 1px solid;
-  padding: 40px;
+  margin: 20px;
+  padding: 30px 24px;
   text-align: center;
+  border: 1px solid rgba(128, 128, 128, 0.22);
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
-/*grid styling for game links*/
+.games-placeholder h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.games-placeholder p {
+  margin: 0 auto 24px;
+  max-width: 750px;
+  opacity: 0.85;
+  line-height: 1.6;
+}
+
+/* grid styling for game links */
 .game-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 50px;
-  padding: 20px;
+  grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 columns equal width */
+  gap: 24px;
+  padding: 10px 0 0;
+
 }
 
-/*footer styling*/
+/* footer styling */
 .footer {
-  border: 1px solid;
+  margin: 20px;
   text-align: center;
-  padding: 15px;
-
+  padding: 18px;
+  border: 1px solid rgba(128, 128, 128, 0.22);
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  font-size: 0.95rem;
 }
 
+/* theme controls panel */
 .theme-controls {
-
   position: absolute;
-  top: 10px;
-  right: 20px;
+  top: 18px;
+  right: 18px;
   display: flex;
   flex-direction: column;
-  align-items: normal;
-  margin: 5px 0px 5px 0px;
+  align-items: stretch;
+  gap: 10px;
+  margin: 0;
+  padding: 14px;
+  border: 1px solid rgba(128, 128, 128, 0.22);
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(4px);
 }
 
+/* color pickers */
 .pickers {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  margin: 5px 0px 5px 0px;
+  gap: 8px;
+  margin: 0;
+
+
+}
+
+.picker{
+  padding: 1px ;
+  border: 1px solid currentColor;
+  background: transparent;
+  cursor: pointer;
+
+  font-weight: 100;
 
 }
 
 label {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.95rem;
 }
 
-/* Responsiveness */
+input[type="color"] {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50px;
+
+}
+
+/* Responsive design */
+@media (max-width: 1100px) {
+  .platforms,
+  .game-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 @media (max-width: 900px) {
-  .platforms {
-    grid-template-columns: 1fr 1fr; /* 2 columns equal width*/
+  .top {
+    padding-top: 110px;
   }
+
+
+
 }
 
 @media (max-width: 600px) {
-  .platforms {
+  .platforms,
+  .game-grid {
     grid-template-columns: 1fr;
   }
-}
 
+  .top,
+  .header,
+  .intro,
+  .games-placeholder,
+  .footer {
+    margin: 14px;
+  }
+
+  .top {
+    flex-direction: column;
+    padding: 22px 16px;
+  }
+
+  .top h1 {
+    font-size: 1.55rem;
+    padding: 0;
+  }
+
+  .header h1 {
+    font-size: 1.2rem;
+  }
+
+  .theme-controls {
+    position: static;
+    width: 100%;
+    max-width: 320px;
+    margin-bottom: 16px;
+  }
+}
 </style>
