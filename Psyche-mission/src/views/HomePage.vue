@@ -258,7 +258,13 @@ label {
 
 /* Responsiveness */
 
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
+  .platforms {
+    grid-template-columns: 1fr 1fr 1fr 1fr; /* 2 columns equal width*/
+  }
+}
+
+@media (max-width: 800px) {
   .platforms {
     grid-template-columns: 1fr 1fr; /* 2 columns equal width*/
   }
