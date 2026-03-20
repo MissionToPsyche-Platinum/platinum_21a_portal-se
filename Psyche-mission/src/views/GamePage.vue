@@ -6,223 +6,480 @@ export default {
   props: ['id'], // ID of game passed to this component
   data() {
     return {
-      gameIsDark: false,// variable to track if dark mode is active
+      gameIsDark: false, // track whether dark mode is active
+      backGround: "#ffffff", // whole page background color
+      foreGround: "#000000", // whole page text color
       game: null
     }
   },
   mounted() {
-    // get the previously saved mode from the browser local storage
+    // restore saved mode
     const savedMode = localStorage.getItem("gameSavedMode");
-    //check if previous mode is a dark mode, enable dark mode on page load
-    if(savedMode==="Dark"){
-      this.isDark=true;// will update automatically
-
-            if(!gameFound) {
-                this.$router.replace({name: "NotFound"}); // load NotFound page if game ID is not valid
-            } else {
-                this.game = gameFound;
-            }
-        }
-    },
-    methods: {
-      //this function toggle between dark mode and light mode
-      toggleMode(){
-        this.gameIsDark=!this.gameIsDark;//if dark mode is active change to light mode, if light mode is active change to dark mode
-        if(this.gameIsDark){
-          localStorage.setItem("gameSavedMode","Dark");// save dark mode in local storage
-        } else {
-          localStorage.setItem("gameSavedMode","Light");// save light mode in local storage
-        }
-      },
-
-      findGame() {
-          const gameFound = gameData.games.find(game => game.id == this.id); // Find game data from JSON
-
-          if(!gameFound) {
-                this.$router.replace({name: "NotFound"}); // load NotFound page if game ID is not valid
-            } else {
-                this.game = gameFound;
-            }
-      }
-    },
-    created() {
-        this.findGame();
-    },
-    watch: {
-        id() {
-            this.findGame(); // if game changes but GamePage is not re-created, find new game. 
-        }
+    if (savedMode === "Dark") {
+      this.gameIsDark = true;
     }
+
+    // restore saved colors
+    const savedBackGround = localStorage.getItem("gameSavedBackGround");
+    const savedForeGround = localStorage.getItem("gameSavedForeGround");
+
+    if (savedBackGround) {
+      this.backGround = savedBackGround;
+    } else {
+      this.backGround = this.gameIsDark ? "#000000" : "#ffffff";
+    }
+
+    if (savedForeGround) {
+      this.foreGround = savedForeGround;
+    } else {
+      this.foreGround = this.gameIsDark ? "#ffffff" : "#000000";
+    }
+  },
+  methods: {
+    // toggle between black/white dark-light defaults
+    toggleMode() {
+      this.gameIsDark = !this.gameIsDark;
+
+      if (this.gameIsDark) {
+        this.backGround = "#000000";
+        this.foreGround = "#ffffff";
+        localStorage.setItem("gameSavedMode", "Dark");
+      } else {
+        this.backGround = "#ffffff";
+        this.foreGround = "#000000";
+        localStorage.setItem("gameSavedMode", "Light");
+      }
+
+      localStorage.setItem("gameSavedBackGround", this.backGround);
+      localStorage.setItem("gameSavedForeGround", this.foreGround);
+    },
+
+    // save selected background color
+    updateBackGround() {
+      localStorage.setItem("gameSavedBackGround", this.backGround);
+    },
+
+    // save selected foreground/text color
+    updateForeGround() {
+      localStorage.setItem("gameSavedForeGround", this.foreGround);
+    },
+
+    // find game data by id
+    findGame() {
+      const gameFound = gameData.games.find(game => game.id == this.id);
+
+      if (!gameFound) {
+        this.$router.replace({ name: "NotFound" });
+      } else {
+        this.game = gameFound;
+      }
+    }
+  },
+  created() {
+    this.findGame();
+  },
+  watch: {
+    id() {
+      this.findGame();
+    }
+  }
 }
 </script>
 
 <template>
-  <div :class="['main-container',gameIsDark ? 'main-container-dark': 'main-container-light']">
-    <nav :class="['navbar', gameIsDark ? 'navbar-dark ' : 'navbar-light']">
+  <div
+      class="main-container"
+      :style="[
+      { backgroundColor: backGround },
+      { color: foreGround }
+    ]"
+  >
+    <div class="top">
+      <div class="theme-controls">
+        <button
+            class="toggle"
+            :style="{ color: foreGround, borderColor: foreGround }"
+            @click="toggleMode"
+        >
+          {{ gameIsDark ? "Switch to Light" : "Switch to Dark" }}
+        </button>
+
+
+        <div class="pickers">
+          <label>
+            Background
+            <input
+                type="color"
+                v-model="backGround"
+                @input="updateBackGround"
+                class="picker"
+                :style="[{backgroundColor: gameIsDark? backGround : foreGround},{color: gameIsDark? foreGround: backGround}]"
+            />
+          </label>
+          <label>
+            Text
+            <input
+                type="color"
+                v-model="foreGround"
+                @input="updateForeGround"
+                class="picker"
+                :style="[{backgroundColor: gameIsDark? backGround : foreGround},{color: gameIsDark? backGround: foreGround }]"
+            />
+          </label>
+        </div>
+
+      </div>
+
+      <h1>{{ game ? game.title : "Loading..." }}</h1>
+    </div>
+
+    <nav class="navbar">
       <h1>navbar component goes here</h1>
     </nav>
-    <!--toggle button that change the theme based on the mode, calls th toggleMode() function-->
-    <button :class="['toggle', gameIsDark ? 'main-container-dark': 'main-container-light']" @click="toggleMode">
-      <!--dynamically change thee text based on the mode-->
-      {{isDark? "Switch to Light": "Switch to Dark" }}
-    </button>
+
     <div class="game">
-        <div class="placeholder-content">
-            <h1 v-if="game">{{ this.game.title }}</h1>
-            <h1 v-else>Loading...</h1>
-        </div>
+      <div class="placeholder-content">
+        <h1 v-if="game">{{ game.title }}</h1>
+        <h1 v-else>Loading...</h1>
+      </div>
     </div>
 
     <div class="details">
-        <div class="description">
-            <h3>Game Description</h3>
-            <p>Game description component goes here.</p>
-        </div>
-        
-        <div class="vertical-divider"></div>
+      <div class="description">
+        <h3>Game Description</h3>
+        <p>Game description component goes here.</p>
+      </div>
 
-        <div class="metadata">
-            <h3>Metadata</h3>
-            <p>Metadata component goes here</p>
-        </div>
+      <div class="vertical-divider"></div>
+
+      <div class="metadata">
+        <h3>Metadata</h3>
+        <p>Metadata component goes here</p>
+      </div>
     </div>
 
     <div class="suggested-games">
-        <div v-for="i in 3" :key="i" :class="['suggestion',gameIsDark ? 'suggestion-dark': 'suggestion-light']">
-            Suggested Game components go here
-        </div>
+      <div
+          v-for="i in 3"
+          :key="i"
+          class="suggestion"
+      >
+        Suggested Game components go here
+      </div>
     </div>
 
-    <footer :class="['footer',gameIsDark ? 'footer-dark' : 'footer']">
-        <p>footer component goes here</p>
+    <footer class="footer">
+      <p>footer component goes here</p>
     </footer>
   </div>
 </template>
 
 <style scoped>
+/* main page container */
 .main-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  color: #333;
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  padding-bottom: 20px;
 }
 
-.navbar {
-  background: #2c3e50;
-  color: white;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-}
-
-.game {
-  width: 100%;
-  height: 50vh;
-  background: #120e31;
+/* top section styled like homepage */
+.top {
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #fff;
+  padding: 34px 20px 24px;
+  margin: 20px;
+  position: relative;
+  text-align: center;
+  border: 1px solid rgba(128, 128, 128, 0.25);
+  border-radius: 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
+.top h1 {
+  margin: 0;
+  max-width: 900px;
+  font-size: 2.2rem;
+  line-height: 1.3;
+  padding: 0 120px;
+}
+
+/* homepage-style theme controls panel */
+.theme-controls {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  margin: 0;
+  padding: 14px;
+  border: 1px solid rgba(128, 128, 128, 0.22);
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(4px);
+}
+
+/* toggle button */
+.toggle {
+  padding: 10px 16px;
+  border: 1px solid currentColor;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 50px;
+  font-weight: 600;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.toggle:hover {
+  transform: translateY(-10px);
+  opacity: 0.95;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+
+/* color pickers layout */
+.pickers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.95rem;
+}
+
+.picker {
+  padding: 1px ;
+  border: 1px solid currentColor;
+  background: transparent;
+  cursor: pointer;
+
+  font-weight: 100;
+}
+
+input[type="color"] {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 100px;
+}
+
+/* navbar */
+.navbar {
+  margin: 20px;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 1px solid rgba(128, 128, 128, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.navbar h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  letter-spacing: 0.3px;
+}
+
+/* hero/game display area */
+.game {
+  margin: 0 20px 20px;
+  min-height: 50vh;
+  border: 1px solid rgba(128, 128, 128, 0.22);
+  border-radius: 24px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.placeholder-content {
+  text-align: center;
+  padding: 24px;
+}
+
+.placeholder-content h1 {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+/* details section */
 .details {
   display: flex;
-  padding: 2rem;
-  gap: 2rem;
-  border-bottom: 1px solid #ccc;
+  gap: 24px;
+  margin: 0 20px 20px;
+  padding: 28px 24px;
+  border: 1px solid rgba(128, 128, 128, 0.22);
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
-.description {
-  flex: 1;
-}
-
+.description,
 .metadata {
   flex: 1;
 }
 
-.vertical-divider {
-  width: 1px;
-  background-color: #ccc;
+.description h3,
+.metadata h3 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1.2rem;
 }
 
+.description p,
+.metadata p {
+  margin: 0;
+  opacity: 0.85;
+  line-height: 1.6;
+}
+
+.vertical-divider {
+  width: 1px;
+  background-color: rgba(128, 128, 128, 0.35);
+  border-radius: 2px;
+}
+
+/* suggested cards */
 .suggested-games {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  margin-top: 3rem;
-  gap: 1rem;
-  padding: 2rem;
+  gap: 24px;
+  margin: 0 20px 20px;
 }
 
 .suggestion {
-  background: #f4f4f4;
-  height: 300px;
+  min-height: 220px;
+  padding: 24px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(128, 128, 128, 0.22);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: transparent;
 }
 
+.suggestion:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
+}
+
+/* footer */
 .footer {
+  margin: 0 20px 20px;
   margin-top: auto;
-  padding: 1rem;
-  background: #eee;
+  padding: 18px;
   text-align: center;
+  border: 1px solid rgba(128, 128, 128, 0.22);
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
-/* light mode styling*/
-.main-container-light{
-  color: #000309;
-  background-color: #ffffff;
+.footer p {
+  margin: 0;
 }
 
-/*dark mode styling*/
-.main-container-dark{
-  color: #ffffff;
-  background-color: #000309;
-}
-.suggestion-dark{
-  background: #000309;
-  color: #ffffff;
-  border: 1px solid #ccc;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* responsive design */
+@media (max-width: 1100px) {
+  .suggested-games {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.suggestion-light {
-  background: #f4f4f4;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@media (max-width: 800px) {
+  .details {
+    flex-direction: column;
+  }
+
+  .vertical-divider {
+    width: 100%;
+    height: 1px;
+  }
+
+  .placeholder-content h1 {
+    font-size: 1.7rem;
+  }
+
+  .top {
+    padding-top: 110px;
+  }
+
+  .top h1 {
+    padding: 0 20px;
+    font-size: 1.9rem;
+  }
+
+  .theme-controls {
+    top: 16px;
+    right: 16px;
+  }
 }
 
-.footer-dark {
-  color: #ffffff;
-  border: 1px solid #ccc;
-  margin-top: auto;
-  padding: 1rem;
-  background: #000309;
-  text-align: center;
-}
+@media (max-width: 600px) {
+  .suggested-games {
+    grid-template-columns: 1fr;
+  }
 
-.navbar-dark {
-  background: #000309;
-  color: white;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-}
+  .navbar,
+  .game,
+  .details,
+  .suggested-games,
+  .footer,
+  .top {
+    margin-left: 14px;
+    margin-right: 14px;
+  }
 
-.navbar-light{
-  background: #2c3e50;
-  color: white;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-}
+  .top {
+    flex-direction: column;
+    padding: 22px 16px;
+  }
 
+  .top h1 {
+    font-size: 1.55rem;
+    padding: 0;
+  }
+
+  .toggle {
+    align-self: stretch;
+  }
+
+  .theme-controls {
+    position: static;
+    width: 100%;
+    max-width: 320px;
+    margin-bottom: 16px;
+  }
+
+  .navbar h1 {
+    font-size: 1.15rem;
+  }
+
+  .placeholder-content h1 {
+    font-size: 1.45rem;
+  }
+
+  .details {
+    padding: 22px 16px;
+  }
+}
 </style>
