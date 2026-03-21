@@ -9,7 +9,8 @@ export default {
       gameIsDark: false, // track whether dark mode is active
       backGround: "#ffffff", // whole page background color
       foreGround: "#000000", // whole page text color
-      game: null
+      game: null,
+      src: null,
     }
   },
   mounted() {
@@ -73,7 +74,7 @@ export default {
       } else {
         this.game = gameFound;
       }
-    }
+    },
   },
   created() {
     this.findGame();
@@ -138,9 +139,16 @@ export default {
     </nav>
 
     <div class="game">
-      <div class="placeholder-content">
-        <h1 v-if="game">{{ game.title }}</h1>
-        <h1 v-else>Loading...</h1>
+      <div v-if="game && game.src" class="game-iframe">
+        <iframe
+          :src="game.src"
+          frameborder="0"
+          allowfullscreen
+          
+        ></iframe>
+      </div>
+      <div v-else>
+        <h1>Unable to Load</h1>
       </div>
     </div>
 
@@ -298,26 +306,29 @@ input[type="color"] {
 
 /* hero/game display area */
 .game {
+  height: 50vh;
   margin: 0 20px 20px;
-  min-height: 50vh;
   border: 1px solid rgba(128, 128, 128, 0.22);
   border-radius: 24px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
 }
 
-.placeholder-content {
+.game h1 {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.2;
   text-align: center;
   padding: 24px;
 }
 
-.placeholder-content h1 {
-  margin: 0;
-  font-size: 2rem;
-  line-height: 1.2;
+.game-iframe {
+  aspect-ratio: 16 / 9;
+}
+
+.game-iframe iframe{
+  width: 100%;
+  height: 100%;
 }
 
 /* details section */
