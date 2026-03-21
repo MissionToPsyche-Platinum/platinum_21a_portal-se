@@ -1,14 +1,21 @@
 <script>
+import NavBar from "./components/NavBar.vue";
+
 export default {
   data() {
     return {};
-  }
+  },
+  components: {
+    NavBar
+  },
 };
 </script>
 
 <template>
-  <router-view></router-view>
-
+  <div id="app">
+    <NavBar />
+    <router-view />
+  </div>
 </template>
 
 <style>
