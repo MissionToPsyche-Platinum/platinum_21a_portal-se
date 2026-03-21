@@ -75,6 +75,23 @@ export default {
         this.game = gameFound;
       }
     },
+
+    // toggle fullscreen for game iframe
+    toggleFullscreen() {
+      const gameContainer = this.$refs.gameContainer;
+
+      if (!document.fullscreenElement) {
+        if (gameContainer.requestFullscreen) {
+          gameContainer.requestFullscreen();
+        } else if (gameContainer.webkitRequestFullscreen) { // Safari
+          gameContainer.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    },
   },
   created() {
     this.findGame();
@@ -140,12 +157,17 @@ export default {
 
     <div class="game">
       <div v-if="game && game.src" class="game-iframe">
-        <iframe
-          :src="game.src"
-          frameborder="0"
-          allowfullscreen
-          
-        ></iframe>
+          <a :href="game.src" v-if="game.genre === 'VR Experience'"><h1>{{ game.src }}</h1></a>
+          <iframe v-else
+            ref="gameContainer"
+            :src="game.src"
+            frameborder="0"
+            allowfullscreen
+          ></iframe>
+
+          <button class="fullscreen-btn" @click="toggleFullscreen">
+            ⛶ Fullscreen
+          </button>
       </div>
       <div v-else>
         <h1>Unable to Load</h1>
@@ -306,7 +328,6 @@ input[type="color"] {
 
 /* hero/game display area */
 .game {
-  height: 50vh;
   margin: 0 20px 20px;
   border: 1px solid rgba(128, 128, 128, 0.22);
   border-radius: 24px;
@@ -316,19 +337,41 @@ input[type="color"] {
 
 .game h1 {
   margin: 0;
-  font-size: 2rem;
   line-height: 1.2;
   text-align: center;
-  padding: 24px;
+  padding: 40px;
 }
 
 .game-iframe {
+  position: relative;
+  width: 100%;
   aspect-ratio: 16 / 9;
 }
 
-.game-iframe iframe{
+.game-iframe iframe {
   width: 100%;
   height: 100%;
+}
+
+.fullscreen-btn {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.2s;
+  z-index: 10;
+}
+
+.fullscreen-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+:fullscreen .fullscreen-btn{
+  opacity: 0.5;
 }
 
 /* details section */
