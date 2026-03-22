@@ -139,11 +139,6 @@ export default {
         <GameLink v-for="game in games" :key="game.id" :game="game" :is-dark="isDark" class="platform"/>
       </div>
     </section>
-
-    <!-- footer -->
-    <footer class="footer">
-      <p>Psyche Mission Portal – Capstone Project</p>
-    </footer>
   </div>
 </template>
 
