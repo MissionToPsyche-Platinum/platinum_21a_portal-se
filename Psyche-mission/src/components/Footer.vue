@@ -1,17 +1,21 @@
 <template>
     <footer class="footer">
-        <a href="https://www.facebook.com/MissionToPsyche">
+        <a href="https://www.facebook.com/MissionToPsyche" target="_blank">
             <i class="fab fa-facebook"></i>
         </a>
-        <a href="https://www.instagram.com/missiontopsyche/">
+        <a href="https://www.instagram.com/missiontopsyche/" target="_blank">
             <i class="fab fa-instagram"></i>
         </a>
-        <a href="https://x.com/MissionToPsyche">
+        <a href="https://x.com/MissionToPsyche" target="_blank">
             <i class="fab fa-x-twitter"></i>
         </a>
-        <a href="https://www.youtube.com/channel/UC2BGcbPW8mxryXnjQcBqk6A">
+        <a href="https://www.youtube.com/channel/UC2BGcbPW8mxryXnjQcBqk6A" target="_blank">
             <i class="fab fa-youtube"></i>
         </a>
+
+        <p class="copyright">
+            <strong>{{ new Date().getFullYear() }} Psyche Mission</strong>. All rights reserved.
+        </p>
     </footer>
 </template>
 

@@ -214,10 +214,6 @@ export default {
         Suggested Game components go here
       </div>
     </div>
-
-    <footer class="footer">
-      <p>footer component goes here</p>
-    </footer>
   </div>
 </template>
 
