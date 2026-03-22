@@ -177,14 +177,31 @@ export default {
     <div class="details">
       <div class="description">
         <h3>Game Description</h3>
-        <p>Game description component goes here.</p>
+        <p>{{ game ? game.description : "--"}} </p>
       </div>
 
       <div class="vertical-divider"></div>
 
+      <!-- id: psyche-scraper
+      <!-- title: Psyche Scraper
+           				"thumbnail": "None",
+           				"difficulty": "Easy",
+           				"genre": "VR Experience",
+           				"age": "Elementary",
+           				"class": "Iridium - 2025",
+           				"gtype": "iridium",
+           				"video": "None",
+           				"credits": "Kevin Nangcas, Shannon Ray, Erik Sousa, Chad Valente",
+           				"src": "https://github.com/MissionToPsyche-Iridium/iridium_20b_vr_game-se",
+           				"description":"Psyche Scraper is a Virtual Reality space game that is based off of an existing 2D web game, “Return to Psyche.” These games are inspired by NASA’s Psyche mission, which aims to study the metal-rich asteroid, Psyche 16. " -->
+
       <div class="metadata">
-        <h3>Metadata</h3>
-        <p>Metadata component goes here</p>
+        <h3>Details</h3>
+        <p><strong>Difficulty</strong>: {{game.difficulty}}</p>
+        <p><strong>Genre</strong>: {{game.genre}}</p>
+        <p><strong>Age</strong>: {{game.age}}</p>
+        <p><strong>Class</strong>: {{game.class}}</p>
+        <p><strong>Credits</strong>: {{game.credits}}</p>
       </div>
     </div>
 
