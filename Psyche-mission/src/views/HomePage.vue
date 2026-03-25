@@ -1,11 +1,13 @@
 <script>
 import gameData from '../assets/games.json'
 import GameLink from '../components/GameLink.vue'
+import Filter from '../components/Filter.vue'
 
 export default {
   name: "HomePage",
   components: {
     GameLink,
+    Filter
   },
   data() {
     return {
@@ -31,8 +33,6 @@ export default {
     if (savedLightColor) {
       this.lightColor = savedLightColor;// retrieve the light color prefrence from the browser
     }
-
-
   },
   methods: {
 
@@ -103,6 +103,10 @@ export default {
     <!-- place holder for an introduction -->
     <section class="intro">
       <h2>Welcome to the Psyche Mission's Web-Based Portal By Team 1 platinum_21a_portal-se</h2>
+    </section>
+
+    <section class="filter">
+      <Filter :isDark="isDark" />
     </section>
 
     <!--  main platforms section play as place holder for different platforms -->
