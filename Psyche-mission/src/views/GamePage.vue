@@ -1,5 +1,6 @@
 <script>
 import gameData from "../assets/games.json"
+import QRCode from 'qrcode'
 
 export default {
   name: 'GamePage',
@@ -11,9 +12,10 @@ export default {
       foreGround: "#000000", // whole page text color
       game: null,
       src: null,
+      qrCode: null,
     }
   },
-  mounted() {
+  async mounted() {
     // restore saved mode
     const savedMode = localStorage.getItem("gameSavedMode");
     if (savedMode === "Dark") {
@@ -35,6 +37,8 @@ export default {
     } else {
       this.foreGround = this.gameIsDark ? "#ffffff" : "#000000";
     }
+
+    this.generateQR();
   },
   methods: {
     // toggle between black/white dark-light defaults
@@ -92,6 +96,26 @@ export default {
         }
       }
     },
+
+    // generate a qr code for the game
+    async generateQR() {
+      try {
+        this.qrCode = await QRCode.toDataURL(this.game.src, {
+          width: 200,
+          margin: 2,
+          color: {
+            dark: '#000000',
+            light: '#ffffff',
+          },
+          errorCorrectionLevel: 'H'
+        });
+        // debug code for testing
+        console.log(this.qrCode);
+      } catch (err) {
+        console.error(err);
+      }
+
+    }
   },
   created() {
     this.findGame();
@@ -99,6 +123,7 @@ export default {
   watch: {
     id() {
       this.findGame();
+      this.generateQR();
     }
   }
 }
