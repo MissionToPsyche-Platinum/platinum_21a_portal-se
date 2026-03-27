@@ -4,7 +4,7 @@
     {
       "id": "psyche-scraper",
       "title": "Psyche Scraper",
-      "thumbnail": ["https://github.com/MissionToPsyche-Iridium/iridium_20b_vr_game-se/raw/main/MissionToPsycheIridium/screenshots/iss1JPG.JPG?raw=true"],
+      "thumbnail": "https://github.com/MissionToPsyche-Iridium/iridium_20b_vr_game-se/raw/main/MissionToPsycheIridium/screenshots/iss1JPG.JPG?raw=true",
       "difficulty": "Easy",
       "genre": "VR Experience",
       "age": "Elementary",
@@ -18,7 +18,7 @@
     {
       "id": "escape-to-psyche",
       "title": "Escape to Psyche",
-      "thumbnail": ["https://github.com/MissionToPsyche-Iridium/iridium_20a_vr_game-vcu/blob/main/PsycheGame/Assets/Images/Space-Craft.png?raw=true"],
+      "thumbnail": "https://github.com/MissionToPsyche-Iridium/iridium_20a_vr_game-vcu/blob/main/PsycheGame/Assets/Images/Space-Craft.png?raw=true",
       "difficulty": "Medium",
       "genre": "VR Experience",
       "age": "Elementary",
@@ -32,7 +32,7 @@
     {
       "id": "psyche-16-expedition-vr",
       "title": "Psyche 16: Expedition VR",
-      "thumbnail": ["https://private-user-images.githubusercontent.com/15006985/425596916-fedf516b-d201-4ee3-b772-563710acc2ee.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzQ1MTEzODAsIm5iZiI6MTc3NDUxMTA4MCwicGF0aCI6Ii8xNTAwNjk4NS80MjU1OTY5MTYtZmVkZjUxNmItZDIwMS00ZWUzLWI3NzItNTYzNzEwYWNjMmVlLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAzMjYlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMzI2VDA3NDQ0MFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTA5ZTBkNjgxNmQwNjdlNGNlZDYxNmY3MDcwMzMyYzMxZmZlN2E3NDVmY2NlMGM5MWQ4NDZkNGEzYWFmOTJhYTAmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.RDiJZK7kV0qf3J7yQ5-E0gkFQyRcHezGSz3ccoCX0_Q"],
+      "thumbnail": "https://private-user-images.githubusercontent.com/15006985/425596916-fedf516b-d201-4ee3-b772-563710acc2ee.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzQ1NzgwMTUsIm5iZiI6MTc3NDU3NzcxNSwicGF0aCI6Ii8xNTAwNjk4NS80MjU1OTY5MTYtZmVkZjUxNmItZDIwMS00ZWUzLWI3NzItNTYzNzEwYWNjMmVlLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAzMjclMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMzI3VDAyMTUxNVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTc1MmIwMzJiNjkxOWM2NzFjOTllMTcxY2E1N2YxZjg4ZjY2MDlmMjUzNTY0ODIxOGU0YjRiNDNiYjI2NDg4M2MmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.UMQOYb7ihAzR4apUlUyX65LdGB1lYJwFQzZRHJ7Bggc",
       "difficulty": "Medium",
       "genre": "VR Experience",
       "age": "Middle School",
@@ -46,7 +46,7 @@
     {
       "id": "nasa-psyche-mission-surface-data-vr",
       "title": "NASA Psyche Mission: Surface Data VR",
-      "thumbnail": "None",
+      "thumbnail": "https://private-user-images.githubusercontent.com/62823948/429248847-7b77bea9-a8e2-4557-ad68-3ffee9b6bcd8.png?jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3NzQ1NzgxOTAsIm5iZiI6MTc3NDU3Nzg5MCwicGF0aCI6Ii82MjgyMzk0OC80MjkyNDg4NDctN2I3N2JlYTktYThlMi00NTU3LWFkNjgtM2ZmZWU5YjZiY2Q4LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNjAzMjclMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjYwMzI3VDAyMTgxMFomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTMwYTEwYjhmZTYyMWQzNGZhMmVjMzk1MzNiYzc3YWU0Mjc4ODFjYmE0ZmY4N2ZkZmYzNjFlMThlYjJhODM1OTMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.7k1FhLvt5jW4QTY12uGpoJ_-c0aE7xMw09MWSTgnIzo",
       "difficulty": "Medium",
       "genre": "VR Experience",
       "age": "High School",
@@ -60,7 +60,7 @@
     {
       "id": "jolts-journey",
       "title": "JOLTS JOURNEY",
-      "thumbnail": "jolts-journey.png",
+      "thumbnail": "https://capstone2021.missiontopsyche.org/images/jolts-journey.png",
       "difficulty": "Hard",
       "genre": "Adventure",
       "age": "High School",
@@ -74,7 +74,7 @@
     {
       "id": "return-from-psyche",
       "title": "RETURN FROM PSYCHE",
-      "thumbnail": "return_from_psyche.jpg",
+      "thumbnail": "https://capstone2022.missiontopsyche.org/images/return-from-psyche.png",
       "difficulty": "Easy",
       "genre": "Adventure",
       "age": "Elementary",
@@ -88,7 +88,7 @@
     {
       "id": "survive-to-psyche",
       "title": "SURVIVE TO PSYCHE",
-      "thumbnail": "survive-to-psyche.png",
+      "thumbnail": "https://capstone2021.missiontopsyche.org/images/survive-to-psyche.png",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "Elementary",
@@ -102,7 +102,7 @@
     {
       "id": "passage-to-psyche",
       "title": "PASSAGE TO PSYCHE",
-      "thumbnail": "passage-to-psyche.png",
+      "thumbnail": "https://capstone2021.missiontopsyche.org/images/passage-to-psyche.png",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "Middle School",
@@ -116,7 +116,7 @@
     {
       "id": "jump-to-psyche",
       "title": "JUMP TO PSYCHE",
-      "thumbnail": "jump-to-psyche.jpg",
+      "thumbnail": "https://capstone2021.missiontopsyche.org/images/jump-to-psyche.png",
       "difficulty": "Hard",
       "genre": "Trivia",
       "age": "Middle School",
@@ -130,7 +130,7 @@
     {
       "id": "psyche-driller",
       "title": "PSYCHE DRILLER",
-      "thumbnail": "psyche-driller.jpg",
+      "thumbnail": "https://capstone2021.missiontopsyche.org/images/psyche-driller.png",
       "difficulty": "Hard",
       "genre": "Adventure",
       "age": "High School",
@@ -144,7 +144,7 @@
     {
       "id": "journey-to-psyche",
       "title": "JOURNEY TO PSYCHE",
-      "thumbnail": "journey-to-psyche.png",
+      "thumbnail": "https://capstone2021.missiontopsyche.org/images/journey-to-psyche.png",
       "difficulty": "Medium",
       "genre": "Trivia",
       "age": "Middle School",
@@ -158,7 +158,7 @@
     {
       "id": "nasa-psyche-mission",
       "title": "NASA PSYCHE MISSION",
-      "thumbnail": "nasa-psyche-mission.png",
+      "thumbnail": "https://capstone2021.missiontopsyche.org/images/nasa-psyche-mission.png",
       "difficulty": "Easy",
       "genre": "Arcade",
       "age": "Elementary",
@@ -172,7 +172,7 @@
     {
       "id": "journey-to-psyche-2",
       "title": "JOURNEY TO PSYCHE 2",
-      "thumbnail": "journey-to-psyche-2.png",
+      "thumbnail": "https://capstone2021.missiontopsyche.org/images/journey-to-psyche-2.png",
       "difficulty": "Hard",
       "genre": "Trivia",
       "age": "Middle School",
@@ -186,7 +186,7 @@
     {
       "id": "psyche-space-sweeper",
       "title": "PSYCHE SPACE SWEEPER",
-      "thumbnail": "psyche-space-sweeper.jpg",
+      "thumbnail": "https://capstone2021.missiontopsyche.org/images/psyche-space-sweeper.png",
       "difficulty": "Easy",
       "genre": "Simulation",
       "age": "Elementary",
@@ -200,7 +200,7 @@
     {
       "id": "adventure-to-psyche",
       "title": "ADVENTURE TO PSYCHE",
-      "thumbnail": "adventure-to-psyche.jpg",
+      "thumbnail": "https://capstone2021.missiontopsyche.org/images/adventure-to-psyche.png",
       "difficulty": "Easy",
       "genre": "Adventure",
       "age": "Middle School",
@@ -214,7 +214,7 @@
     {
       "id": "mission-psyche",
       "title": "MISSION PSYCHE",
-      "thumbnail": "mission-psyche.png",
+      "thumbnail": "https://capstone2021.missiontopsyche.org/images/mission-psyche.png",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "Middle School",
@@ -228,7 +228,7 @@
     {
       "id": "asteroid-and-aspirations",
       "title": "ASTEROID AND ASPIRATIONS",
-      "thumbnail": "asteroid-and-aspirations.png",
+      "thumbnail": "https://capstone2022.missiontopsyche.org/images/asteroid-and-aspirations.png",
       "difficulty": "Hard",
       "genre": "Adventure",
       "age": "High School",
@@ -242,7 +242,7 @@
     {
       "id": "psyche-scanner",
       "title": "PSYCHE SCANNER",
-      "thumbnail": "psyche-scanner.png",
+      "thumbnail": "https://capstone2022.missiontopsyche.org/images/psyche-scanner.png",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "Elementary",
@@ -256,7 +256,7 @@
     {
       "id": "psyche-run",
       "title": "PSYCHE RUN",
-      "thumbnail": "psyche-run.png",
+      "thumbnail": "https://capstone2022.missiontopsyche.org/images/psyche-run.png",
       "difficulty": "Easy",
       "genre": "Adventure",
       "age": "Elementary",
@@ -270,7 +270,7 @@
     {
       "id": "zephyr-express",
       "title": "ZEPHYR EXPRESS",
-      "thumbnail": "zephyr-express.png",
+      "thumbnail": "https://capstone2022.missiontopsyche.org/images/zephyr-express.png",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "Elementary",
@@ -284,7 +284,7 @@
     {
       "id": "psyche-recon-sim",
       "title": "PSYCHE RECON SIM",
-      "thumbnail": "psyche-recon-sim.png",
+      "thumbnail": "https://capstone2022.missiontopsyche.org/images/psyche-recon-sim.png",
       "difficulty": "Medium",
       "genre": "Simulation",
       "age": "High School",
@@ -298,7 +298,7 @@
     {
       "id": "psyche-support",
       "title": "PSYCHE SUPPORT",
-      "thumbnail": "psyche-support.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche-support.png",
       "difficulty": "Medium",
       "genre": "Adventure",
       "age": "Elementary",
@@ -312,7 +312,7 @@
     {
       "id": "trivia-trek",
       "title": "TRIVIA TREK",
-      "thumbnail": "trivia-trek.jpg",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/trivia-trek.jpg",
       "difficulty": "Medium",
       "genre": "Trivia",
       "age": "Middle School",
@@ -326,7 +326,7 @@
     {
       "id": "interworlds",
       "title": "INTERWORLDS",
-      "thumbnail": "interworlds.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/interworlds.png",
       "difficulty": "Medium",
       "genre": "Adventure",
       "age": "Middle School",
@@ -340,7 +340,7 @@
     {
       "id": "meteoroid-mayhem",
       "title": "METEOROID MAYHEM",
-      "thumbnail": "meteoroid-mayhem.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/meteoroid-mayhem.png",
       "difficulty": "Medium",
       "genre": "Trivia",
       "age": "Middle School",
@@ -354,7 +354,7 @@
     {
       "id": "tour-de-space",
       "title": "TOUR DE SPACE",
-      "thumbnail": "tour-de-space.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/tour-de-space.png",
       "difficulty": "Hard",
       "genre": "Arcade",
       "age": "Middle School",
@@ -368,7 +368,7 @@
     {
       "id": "can-you-build-psyche",
       "title": "CAN YOU BUILD PSYCHE?",
-      "thumbnail": "can-you-build-psyche.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/can-you-build-psyche.png",
       "difficulty": "Medium",
       "genre": "Simulation",
       "age": "High School",
@@ -382,7 +382,7 @@
     {
       "id": "robs-journey",
       "title": "ROB'S JOURNEY",
-      "thumbnail": "robs-journey.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/robs-journey.png",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "High School",
@@ -396,7 +396,7 @@
     {
       "id": "expedition-psyche",
       "title": "EXPEDITION PSYCHE",
-      "thumbnail": "expedition-psyche.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/expedition-psyche.png",
       "difficulty": "Hard",
       "genre": "Adventure",
       "age": "High School",
@@ -410,7 +410,7 @@
     {
       "id": "sling-shot-psyche",
       "title": "SLING SHOT PSYCHE",
-      "thumbnail": "sling-shot-psyche.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/sling-shot-psyche.png",
       "difficulty": "Easy",
       "genre": "Arcade",
       "age": "Elementary",
@@ -424,7 +424,7 @@
     {
       "id": "psyche-unveiled",
       "title": "PSYCHE UNVEILED",
-      "thumbnail": "psyche-unveiled.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche-unveiled.png",
       "difficulty": "Hard",
       "genre": "Adventure",
       "age": "High School",
@@ -438,7 +438,7 @@
     {
       "id": "astro-academy",
       "title": "ASTRO ACADEMY",
-      "thumbnail": "astro-academy.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/astro-academy.png",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "High School",
@@ -452,7 +452,7 @@
     {
       "id": "mist",
       "title": "MIST",
-      "thumbnail": "mist.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/mist.png",
       "difficulty": "Hard",
       "genre": "Arcade",
       "age": "High School",
@@ -466,7 +466,7 @@
     {
       "id": "astroquest: psyche's odyssey",
       "title": "Astroquest: Psyche's Odyssey",
-      "thumbnail": "astroquest.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/astroquest.png",
       "difficulty": "Medium",
       "genre": "Trivia",
       "age": "High School",
@@ -480,7 +480,7 @@
     {
       "id": "on console: psyche",
       "title": "On Console: Psyche",
-      "thumbnail": "on-console-psyche.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/on-console-psyche.png",
       "difficulty": "Hard",
       "genre": "Simulation",
       "age": "High School",
@@ -494,7 +494,7 @@
     {
       "id": "asteriod tycoon",
       "title": "Asteriod Tycoon",
-      "thumbnail": "asteriod tycoon.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/asteriod%20tycoon.png",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "Middle School",
@@ -508,7 +508,7 @@
     {
       "id": "psyche rover 9000",
       "title": "Psyche Rover 9000",
-      "thumbnail": "psyche rover 9000.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche%20rover%209000.png",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "Middle School",
@@ -522,7 +522,7 @@
     {
       "id": "rubber to iron",
       "title": "Rubber to Iron",
-      "thumbnail": "rubber to iron.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/rubber%20to%20iron.png",
       "difficulty": "Medium",
       "genre": "Adventure",
       "age": "Middle School",
@@ -536,7 +536,7 @@
     {
       "id": "psyche bound",
       "title": "Psychebound",
-      "thumbnail": "psyche_bound.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche_bound.png",
       "difficulty": "Medium",
       "genre": "Adventure",
       "age": "Middle School",
@@ -551,7 +551,7 @@
     {
       "id": "psyche exploration",
       "title": "Psyche Exploration",
-      "thumbnail": "psyche_exploration.jpg",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche_exploration.jpg",
       "difficulty": "Easy",
       "genre": "Arcade",
       "age": "Elementary",
@@ -566,7 +566,7 @@
     {
       "id": "around psyche in 448 days",
       "title": "Around Psyche in 448 Days",
-      "thumbnail": "around psyche in 448 days.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/around%20psyche%20in%20448%20days.png",
       "difficulty": "Easy",
       "genre": "Arcade",
       "age": "Elementary",
@@ -581,7 +581,7 @@
     {
       "id": "super psyched",
       "title": "Super Psyched",
-      "thumbnail": "super_psyched.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/super_psyched.png",
       "difficulty": "Medium",
       "genre": "Adventure",
       "age": "Middle School",
@@ -596,7 +596,7 @@
     {
       "id": "psyche simulation",
       "title": "Psyche Simulation",
-      "thumbnail": "psyche_simulation.jpg",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche_simulation.jpg",
       "difficulty": "Medium",
       "genre": "Simulation",
       "age": "Middle School",
@@ -611,7 +611,7 @@
     {
       "id": "Core Informant: Psyche",
       "title": "Core Informant: Psyche",
-      "thumbnail": "core_informant_psyche.jpg",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/core_informant_psyche.jpg",
       "difficulty": "Medium",
       "genre": "Simulation",
       "age": "Middle School",
@@ -625,7 +625,7 @@
     {
       "id": "Psyche Exploration: Build and Launch",
       "title": "Psyche Exploration: Build and Launch",
-      "thumbnail": "psyche_exploration_build_and_launch.jpg",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche_exploration_build_and_launch.jpg",
       "difficulty": "Medium",
       "genre": "Simulation",
       "age": "Middle School",
@@ -639,7 +639,7 @@
     {
       "id": "Psyche Investigator",
       "title": "Psyche Investigator",
-      "thumbnail": "psyche_investigator.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche_investigator.png",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "Middle School",
@@ -653,7 +653,7 @@
     {
       "id": "Psyche Data Recon",
       "title": "Psyche Data Recon",
-      "thumbnail": "psyche_data_recon.jpg",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche_data_recon.jpg",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "Middle School",
@@ -667,7 +667,7 @@
     {
       "id": "Rhythms of Psyche",
       "title": "Rhythms of Psyche",
-      "thumbnail": "rhytms_of_psyche.jpg",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/rhytms_of_psyche.jpg",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "Middle School",
@@ -681,7 +681,7 @@
     {
       "id": "Psyche Surface Quest",
       "title": "Psyche Surface Quest",
-      "thumbnail": "psyche_surface_quest.jpg",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche_surface_quest.jpg",
       "difficulty": "Easy",
       "genre": "Adventure",
       "age": "Elementary",
@@ -695,7 +695,7 @@
     {
       "id": "Psyche Miner",
       "title": "Psyche Miner",
-      "thumbnail": "psyche_miner.jpg",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche_miner.jpg",
       "difficulty": "Medium",
       "genre": "Simulation",
       "age": "High School",
@@ -709,7 +709,7 @@
     {
       "id": "Asteroids and Trivia",
       "title": "Asteroids and Trivia",
-      "thumbnail": "asteroids_and_trivia.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/asteroids_and_trivia.png",
       "difficulty": "Medium",
       "genre": "Trivia",
       "age": "Middle School",
@@ -723,7 +723,7 @@
     {
       "id": "Asteroid Mission",
       "title": "Asteroid Mission",
-      "thumbnail": "asteroids_mission.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/asteroids_mission.png",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "Middle School",
@@ -737,7 +737,7 @@
     {
       "id": "Explore Psyche XR",
       "title": "Explore Psyche XR",
-      "thumbnail": "explore_psyche_xr.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/explore_psyche_xr.png",
       "difficulty": "Medium",
       "genre": "AR Experience",
       "age": "Middle School",
@@ -751,7 +751,7 @@
     {
       "id": "Psyche Quest",
       "title": "Psyche Quest",
-      "thumbnail": "psyche_quest.png",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche_quest.png",
       "difficulty": "Medium",
       "genre": "Arcade",
       "age": "Middle School",
@@ -765,7 +765,7 @@
     {
       "id": "Psyche Salvage",
       "title": "Psyche Salvage",
-      "thumbnail": "psyche_salvage.jpg",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche_salvage.jpg",
       "difficulty": "Medium",
       "genre": "Adventure",
       "age": "Middle School",
@@ -779,7 +779,7 @@
     {
       "id": "Lula Llama",
       "title": "Lula Llama",
-      "thumbnail": "lula_llama.jpg",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/lula_llama.jpg",
       "difficulty": "Medium",
       "genre": "Adventure",
       "age": "Middle School",
@@ -793,7 +793,7 @@
     {
       "id": "PsycheVision",
       "title": "PsycheVision",
-      "thumbnail": "psyche_vision.jpg",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/psyche_vision.jpg",
       "difficulty": "Medium",
       "genre": "AR Experience",
       "age": "Middle School",
@@ -807,7 +807,7 @@
     {
       "id": "PsyX",
       "title": "PsyX",
-      "thumbnail": "PsyX.jpg",
+      "thumbnail": "https://psyche-capstone-web-projects.web.app/images/PsyX.jpg",
       "difficulty": "Medium",
       "genre": "AR Experience",
       "age": "Middle School",

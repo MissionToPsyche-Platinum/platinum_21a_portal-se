@@ -9,27 +9,33 @@ export default {
       dark: this.isDark,
     };
   },
+
 };
 </script>
 
 <template>
   <div :class="{'dark-mode': isDark}" class="game-link-card">
 
-    <div class="preview">
 
-<!--      show image if thumbnail exists and not "None"-->
-      <img
-          v-if="game.thumbnail && game.thumbnail !== 'None'"
-          :src="game.thumbnail"
-          class="media"
-          :alt="game.title"
-      />
-
-    </div>
 
     <h2>{{ game.title }}</h2>
+
+    <!-- make the preview clickable-->
     <router-link :to="{ name: 'GamePage', params: {id: game.id }}">
-      <h3 :class="{'dark-link': isDark}" class="game-link">Play</h3>
+
+      <!--      play is removed since images is now clickable-->
+      <!--      <h3 :class="{'dark-link': isDark}" class="game-link">Play</h3>-->
+      <div class="preview">
+
+        <!--show image if thumbnail exists and not "None"-->
+        <img
+            v-if="game.thumbnail && game.thumbnail !== 'None'"
+            :src="game.thumbnail"
+            class="media"
+            :alt="game.title"
+        />
+
+      </div>
     </router-link>
   </div>
 </template>
@@ -51,21 +57,4 @@ export default {
 }
 
 
-
-/*.game-link-card {
-    border: 2px solid black;
-    background-color:honeydew;
-    border-radius: 20px;
-    padding: 10px;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-}*/
-/*
-    .dark-mode {
-        border: 2px solid white;
-        background-color: #190d1b;
-    }
-
-    .dark-link {
-        color: rgb(5, 233, 17);
-    }*/
 </style>
