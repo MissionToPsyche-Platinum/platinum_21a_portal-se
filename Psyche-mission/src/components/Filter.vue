@@ -40,6 +40,19 @@
                 <option value="medium">Medium</option>
                 <option value="hard">Hard</option>
             </select>
+
+      <!-- Sorter allows users to sort games' list based on a selected criteria -->
+
+      <select>
+        <option disabled value="">Sort By</option><
+        <option value="title-asc">Title A-Z</option> <!-- Sort title alphabetically (A to Z) -->
+        <option value="title-desc">Title Z-A</option> <!-- Sort title alphabetically (Z to A) -->
+        <option value="class-newest">Class Newest</option> <!-- Sort class by year (newest first) -->
+        <option value="class-oldest">Class Oldest</option><!-- Sort class by year (oldest first) -->
+        <option value="difficulty-easy">Difficulty Easy-Hard</option> <!-- Sort by difficulty (easy to hard) -->
+        <option value="difficulty-hard">Difficulty Hard-Easy</option> <!-- Sort by difficulty (hard to easy) -->
+      </select>
+
     </filter>
 </template>
 
