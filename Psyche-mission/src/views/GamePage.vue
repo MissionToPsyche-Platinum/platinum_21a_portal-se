@@ -11,8 +11,8 @@ export default {
       backGround: "#ffffff", // whole page background color
       foreGround: "#000000", // whole page text color
       game: null,
-      src: null,
       qrCode: null,
+      displayQr: true,
     }
   },
   async mounted() {
@@ -37,7 +37,7 @@ export default {
     } else {
       this.foreGround = this.gameIsDark ? "#ffffff" : "#000000";
     }
-
+    
     this.generateQR();
   },
   methods: {
@@ -115,6 +115,10 @@ export default {
         console.error(err);
       }
 
+    },
+    
+    toggleGame() {
+      this.displayQr = false;
     }
   },
   created() {
@@ -183,16 +187,25 @@ export default {
     <div class="game">
       <div v-if="game && game.src" class="game-iframe">
           <a :href="game.src" v-if="game.genre === 'VR Experience'"><h1>{{ game.src }}</h1></a>
-          <iframe v-else
-            ref="gameContainer"
-            :src="game.src"
-            frameborder="0"
-            allowfullscreen
-          ></iframe>
+          <div v-else-if="game.genre === 'AR Experience' && displayQr" class="qr-code-div">
+            <img :src="qrCode" />
+            <h3>The AR Experiences are optimized for use with a mobile device.</h3>
+            <h3>Please Scan the QR code with your mobile device to play!</h3>
+            <h3>Or:</h3>
+            <button class="load-game-btn" @click="toggleGame">Load Game In The Browser</button>
+          </div>
+          <div v-else class="iframe-div">
+            <iframe
+              ref="gameContainer"
+              :src="game.src"
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
 
-          <button class="fullscreen-btn" @click="toggleFullscreen">
-            ⛶ Fullscreen
-          </button>
+            <button class="fullscreen-btn" @click="toggleFullscreen">
+              ⛶ Fullscreen
+            </button>
+          </div>
       </div>
       <div v-else>
         <h1>Unable to Load</h1>
@@ -381,9 +394,13 @@ input[type="color"] {
 }
 
 .game-iframe {
+  aspect-ratio: 16 / 9;
+}
+
+.iframe-div {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
 }
 
 .game-iframe iframe {
@@ -410,6 +427,21 @@ input[type="color"] {
 
 :fullscreen .fullscreen-btn{
   opacity: 0.5;
+}
+
+.qr-code-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.load-game-btn {
+  border-radius: 30px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: darkcyan;
+  color: white
 }
 
 /* details section */
