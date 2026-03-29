@@ -14,9 +14,48 @@ export default {
       isDark: false,// variable to track if dark mode is active
       games: gameData.games, // creates an array of game objects from JSON file
       darkColor: "#000000",// variable for selected dark mode color with a default value
-      lightColor: "#ffffff"// variable for selected light mode color with a default value
+      lightColor: "#ffffff",// variable for selected light mode color with a default value
+      sortBy:"" /*===task 83===*/
     };
   },
+  /*==========task 83=========*/
+  computed: {
+    //sorting logic
+    sortGames() {
+      // copy the array to preserve the original state
+      let sorted = [...this.games];
+
+      // Sort alphabetically by game title (A to Z)
+      if (this.sortBy === "title-asc") {
+        sorted.sort((a, b) => a.title.localeCompare(b.title));
+
+        // Sort alphabetically by game title (Z to A)
+      } else if (this.sortBy === "title-desc") {
+        sorted.sort((a, b) => b.title.localeCompare(a.title));
+
+        // Sort class by year (newest first)
+      } else if (this.sortBy === "class-newest") {
+        sorted.sort((a, b) => b.class.localeCompare(a.class));
+
+        // Sort class by year (oldest first)
+      } else if (this.sortBy === "class-oldest") {
+        sorted.sort((a, b) => a.class.localeCompare(b.class));
+
+        // Sort by difficulty (easy to hard)
+      } else if (this.sortBy === "difficulty-easy") {
+        const order = { Easy: 1, Medium: 2, Hard: 3 };
+        sorted.sort((a, b) => order[a.difficulty] - order[b.difficulty]);
+
+        //Sort by difficulty (hard to easy)
+      } else if (this.sortBy === "difficulty-hard") {
+        const order = { Easy: 1, Medium: 2, Hard: 3 };
+        sorted.sort((a, b) => order[b.difficulty] - order[a.difficulty]);
+      }
+
+      return sorted;
+    }
+  },
+
   mounted() {
     // get the previously saved mode from the browser local storage
     const savedMode = localStorage.getItem("savedMode");
@@ -35,6 +74,13 @@ export default {
     }
   },
   methods: {
+
+    /*==============task 83=================*/
+    // retrieve the sort selection emitted by the Filter component and assign it to "sortBy"
+    handleSort(value) {
+      this.sortBy = value;// trigger computed
+    },
+
 
     //this function toggle between dark mode and light mode
     toggleMode() {
@@ -106,7 +152,7 @@ export default {
     </section>
 
     <section class="filter">
-      <Filter :isDark="isDark" />
+      <Filter :isDark="isDark" @sort-games="handleSort"/> <!--===========task 83============-->
     </section>
 
     <!--  main platforms section play as place holder for different platforms -->
@@ -140,7 +186,10 @@ export default {
       <h2>Available Experiences</h2>
       <p>Place holder for games links and previews in upcoming sprints.</p>
       <div class="game-grid">
-        <GameLink v-for="game in games" :key="game.id" :game="game" :is-dark="isDark" class="platform"/>
+
+        <!--===================task 83==================-->
+        <!--use computed sortGames-->
+        <GameLink v-for="game in sortGames" :key="game.id" :game="game" :is-dark="isDark" class="platform"/>
       </div>
     </section>
   </div>

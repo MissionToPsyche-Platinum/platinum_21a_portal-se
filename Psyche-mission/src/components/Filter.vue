@@ -2,7 +2,18 @@
     export default {
         props: {
             isDark: Boolean
+        },
+      data() {
+        return {
+          sortBy: "" // store selection option
+        };
+      },
+      methods: {
+        updateSort() {  // emit the selected sort option to the HomePage component
+          this.$emit("sort-games", this.sortBy);
         }
+      }
+
     }
 </script>
 
