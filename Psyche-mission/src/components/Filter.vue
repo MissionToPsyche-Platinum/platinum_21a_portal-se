@@ -2,7 +2,18 @@
     export default {
         props: {
             isDark: Boolean
+        },
+      data() {
+        return {
+          sortBy: "" // store selection option
+        };
+      },
+      methods: {
+        updateSort() {  // emit the selected sort option to the HomePage component
+          this.$emit("sort-games", this.sortBy);
         }
+      }
+
     }
 </script>
 
@@ -43,7 +54,7 @@
 
       <!-- Sorter allows users to sort games' list based on a selected criteria -->
 
-      <select>
+      <select v-model="sortBy" @change="updateSort">
         <option disabled value="">Sort By</option><
         <option value="title-asc">Title A-Z</option> <!-- Sort title alphabetically (A to Z) -->
         <option value="title-desc">Title Z-A</option> <!-- Sort title alphabetically (Z to A) -->
