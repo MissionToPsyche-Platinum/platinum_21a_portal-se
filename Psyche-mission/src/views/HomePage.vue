@@ -14,7 +14,13 @@ export default {
       isDark: false,// variable to track if dark mode is active
       games: gameData.games, // creates an array of game objects from JSON file
       darkColor: "#000000",// variable for selected dark mode color with a default value
-      lightColor: "#ffffff"// variable for selected light mode color with a default value
+      lightColor: "#ffffff",// variable for selected light mode color with a default value
+      activeFilters: {
+        class: "",
+        genre: "",
+        age: "",
+        difficulty: ""
+      }
     };
   },
   mounted() {
@@ -32,6 +38,18 @@ export default {
     }
     if (savedLightColor) {
       this.lightColor = savedLightColor;// retrieve the light color prefrence from the browser
+    }
+  },
+  computed: {
+    filteredGames() {
+      return this.games.filter(game => {
+        const classMatch = this.activeFilters.class ? game.class === this.activeFilters.class : true;
+        const genreMatch = this.activeFilters.genre ? game.genre === this.activeFilters.genre : true;
+        const ageMatch = this.activeFilters.age ? game.age === this.activeFilters.age : true;
+        const difficultyMatch = this.activeFilters.difficulty ? game.difficulty === this.activeFilters.difficulty : true;
+
+        return classMatch && genreMatch && ageMatch && difficultyMatch;
+      });
     }
   },
   methods: {
@@ -58,8 +76,11 @@ export default {
 
     updateLightColor() {
       localStorage.setItem("savedLightColor", this.lightColor);
-    }
+    },
 
+    handleFilters(filters) {
+      this.activeFilters = filters;
+    }
   }
 };
 </script>
@@ -106,7 +127,7 @@ export default {
     </section>
 
     <section class="filter">
-      <Filter :isDark="isDark" />
+      <Filter :isDark="isDark" @update-filter="handleFilters" />
     </section>
 
     <!--  main platforms section play as place holder for different platforms -->
@@ -140,7 +161,7 @@ export default {
       <h2>Available Experiences</h2>
       <p>Place holder for games links and previews in upcoming sprints.</p>
       <div class="game-grid">
-        <GameLink v-for="game in games" :key="game.id" :game="game" :is-dark="isDark" class="platform"/>
+        <GameLink v-for="game in filteredGames" :key="game.id" :game="game" :is-dark="isDark" class="platform"/>
       </div>
     </section>
   </div>
