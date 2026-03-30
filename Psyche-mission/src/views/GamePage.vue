@@ -99,6 +99,11 @@ export default {
 
     // generate a qr code for the game
     async generateQR() {
+      if (this.isMobileDevice()) {
+        this.displayQr = false;
+        return;
+      }
+
       try {
         this.qrCode = await QRCode.toDataURL(this.game.src, {
           width: 200,
@@ -119,7 +124,12 @@ export default {
     
     toggleGame() {
       this.displayQr = false;
-    }
+    },
+
+    isMobileDevice() {
+      // Use Regex to test the userAgent string to see if the user is using a mobile device
+      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    },
   },
   created() {
     this.findGame();
@@ -219,19 +229,6 @@ export default {
       </div>
 
       <div class="vertical-divider"></div>
-
-      <!-- id: psyche-scraper
-      <!-- title: Psyche Scraper
-           				"thumbnail": "None",
-           				"difficulty": "Easy",
-           				"genre": "VR Experience",
-           				"age": "Elementary",
-           				"class": "Iridium - 2025",
-           				"gtype": "iridium",
-           				"video": "None",
-           				"credits": "Kevin Nangcas, Shannon Ray, Erik Sousa, Chad Valente",
-           				"src": "https://github.com/MissionToPsyche-Iridium/iridium_20b_vr_game-se",
-           				"description":"Psyche Scraper is a Virtual Reality space game that is based off of an existing 2D web game, “Return to Psyche.” These games are inspired by NASA’s Psyche mission, which aims to study the metal-rich asteroid, Psyche 16. " -->
 
       <div class="metadata">
         <h3>Details</h3>
