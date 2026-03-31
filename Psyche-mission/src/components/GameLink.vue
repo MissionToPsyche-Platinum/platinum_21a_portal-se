@@ -3,12 +3,28 @@ export default {
   props: {
     game: { type: Object },
     isDark: { type: Boolean},
+    textColor: { type: String }, // task 93, text color passed from HomePage
   },
   data() {
     return {
       dark: this.isDark,
     };
   },
+  //==================== task 93====================
+
+  // compute numeric difficulty level, easy=1, medium=2, hard=3
+  computed: {
+    difficultyLevel() {
+      const difficulty = (this.game.difficulty || "").toLowerCase();
+
+      if (difficulty === "easy") return 1;// easy
+      if (difficulty === "medium") return 2;// medium
+      if (difficulty === "hard") return 3;// hard
+
+      return 0; // if undefined
+    }
+  },
+
 
 };
 </script>
@@ -19,6 +35,9 @@ export default {
 
 
     <h2>{{ game.title }}</h2>
+
+
+
 
     <!-- make the preview clickable-->
     <router-link :to="{ name: 'GamePage', params: {id: game.id }}">
@@ -55,6 +74,7 @@ export default {
   object-fit: cover;
   border-radius: 10px;
 }
+
 
 
 </style>
