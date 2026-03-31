@@ -36,6 +36,44 @@ export default {
 
     <h2>{{ game.title }}</h2>
 
+<<<<<<< HEAD
+
+=======
+    <!-- ==================== task 92====================-->
+
+    <!--Difficulty bar UI on game card-->
+    <div class="difficulty-section">
+  <span class="difficulty-label"> <!-- difficulty text label -->
+    Difficulty: {{ game.difficulty || "Unknown" }}
+  </span>
+
+      <div class="difficulty-bar"><!-- visual difficulty bar -->
+
+        <!-- easy -->
+        <span
+            :style="{
+        backgroundColor: textColor,
+        opacity: difficultyLevel >= 1 ? 1 : 0.2
+      }"
+        ></span>
+
+        <!-- medium -->
+        <span
+            :style="{
+        backgroundColor: textColor,
+        opacity: difficultyLevel >= 2 ? 1 : 0.2
+      }"
+        ></span>
+
+        <!-- hard -->
+        <span
+            :style="{
+        backgroundColor: textColor,
+        opacity: difficultyLevel >= 3 ? 1 : 0.2
+      }"
+        ></span>
+      </div>
+    </div>
 
 
 
@@ -73,6 +111,34 @@ export default {
   height: 150px;
   object-fit: cover;
   border-radius: 10px;
+}
+
+/*Difficulty bar styling*/
+
+.difficulty-section {
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.difficulty-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.difficulty-bar {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.difficulty-bar span {
+  width: 32px;
+  height: 8px;
+  border-radius: 999px;
+  transition: all 0.3s ease;
 }
 
 

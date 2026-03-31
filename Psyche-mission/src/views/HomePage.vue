@@ -189,7 +189,7 @@ export default {
 
         <!--===================task 83==================-->
         <!--use computed sortGames-->
-        <GameLink v-for="game in sortGames" :key="game.id" :game="game" :is-dark="isDark" class="platform"/>
+        <GameLink v-for="game in sortGames" :key="game.id" :game="game" :isDark="isDark" class="platform" :textColor="lightColor"/>
       </div>
     </section>
   </div>
