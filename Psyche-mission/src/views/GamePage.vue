@@ -1,5 +1,6 @@
 <script>
 import gameData from "../assets/games.json"
+import { getSuggestions } from "../utils/gameService.js"
 import QRCode from 'qrcode'
 
 export default {
@@ -13,6 +14,7 @@ export default {
       game: null,
       qrCode: null,
       displayQr: true,
+      suggestedGames: null,
     }
   },
   async mounted() {
@@ -77,6 +79,9 @@ export default {
         this.$router.replace({ name: "NotFound" });
       } else {
         this.game = gameFound;
+        this.suggestedGames = getSuggestions(this.game.id);
+        //debug code for testing
+        console.log(this.suggestedGames);
       }
     },
 
@@ -114,8 +119,6 @@ export default {
           },
           errorCorrectionLevel: 'H'
         });
-        // debug code for testing
-        console.log(this.qrCode);
       } catch (err) {
         console.error(err);
       }
