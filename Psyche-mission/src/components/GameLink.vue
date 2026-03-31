@@ -36,9 +36,7 @@ export default {
 
     <h2>{{ game.title }}</h2>
 
-<<<<<<< HEAD
 
-=======
     <!-- ==================== task 92====================-->
 
     <!--Difficulty bar UI on game card-->
