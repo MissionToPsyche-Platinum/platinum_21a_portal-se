@@ -15,15 +15,31 @@ export default {
       games: gameData.games, // creates an array of game objects from JSON file
       darkColor: "#000000",// variable for selected dark mode color with a default value
       lightColor: "#ffffff",// variable for selected light mode color with a default value
+      activeFilters: {
+        class: "",
+        genre: "",
+        age: "",
+        difficulty: ""
+      },
       sortBy:"" /*===task 83===*/
     };
   },
   /*==========task 83=========*/
   computed: {
+      filteredGames() {
+          return this.games.filter(game => {
+              const classMatch = this.activeFilters.class ? game.class === this.activeFilters.class : true;
+              const genreMatch = this.activeFilters.genre ? game.genre === this.activeFilters.genre : true;
+              const ageMatch = this.activeFilters.age ? game.age === this.activeFilters.age : true;
+              const difficultyMatch = this.activeFilters.difficulty ? game.difficulty === this.activeFilters.difficulty : true;
+
+          return classMatch && genreMatch && ageMatch && difficultyMatch;
+        });
+      },
     //sorting logic
     sortGames() {
       // copy the array to preserve the original state
-      let sorted = [...this.games];
+      let sorted = [...this.filteredGames];
 
       // Sort alphabetically by game title (A to Z)
       if (this.sortBy === "title-asc") {
@@ -104,8 +120,11 @@ export default {
 
     updateLightColor() {
       localStorage.setItem("savedLightColor", this.lightColor);
-    }
+    },
 
+    handleFilters(filters) {
+      this.activeFilters = filters;
+    }
   }
 };
 </script>
@@ -152,7 +171,7 @@ export default {
     </section>
 
     <section class="filter">
-      <Filter :isDark="isDark" @sort-games="handleSort"/> <!--===========task 83============-->
+      <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort" />
     </section>
 
     <!--  main platforms section play as place holder for different platforms -->
@@ -186,7 +205,6 @@ export default {
       <h2>Available Experiences</h2>
       <p>Place holder for games links and previews in upcoming sprints.</p>
       <div class="game-grid">
-
         <!--===================task 83==================-->
         <!--use computed sortGames-->
         <GameLink v-for="game in sortGames" :key="game.id" :game="game" :isDark="isDark" class="platform" :textColor="lightColor"/>
