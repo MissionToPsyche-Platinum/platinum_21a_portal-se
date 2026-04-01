@@ -2,12 +2,14 @@
 import gameData from '../assets/games.json'
 import GameLink from '../components/GameLink.vue'
 import Filter from '../components/Filter.vue'
+import SearchBar from '../components/SearchBar.vue'
 
 export default {
   name: "HomePage",
   components: {
     GameLink,
-    Filter
+    Filter,
+    SearchBar
   },
   data() {
     return {
@@ -168,6 +170,10 @@ export default {
     <!-- place holder for an introduction -->
     <section class="intro">
       <h2>Welcome to the Psyche Mission's Web-Based Portal By Team 1 platinum_21a_portal-se</h2>
+    </section>
+
+    <section class="search">
+      <SearchBar :isDark="isDark" />
     </section>
 
     <section class="filter">
