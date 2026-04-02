@@ -1,8 +1,9 @@
 <script>
 import gameData from "../assets/games.json"
-
+import GameRating from "../components/GameRating.vue";
 export default {
   name: 'GamePage',
+  components: {GameRating},
   props: ['id'], // ID of game passed to this component
   data() {
     return {
@@ -183,7 +184,7 @@ export default {
       <div class="vertical-divider"></div>
 
       <!-- id: psyche-scraper
-      <!-- title: Psyche Scraper
+      title: Psyche Scraper
            				"thumbnail": "None",
            				"difficulty": "Easy",
            				"genre": "VR Experience",
@@ -202,6 +203,15 @@ export default {
         <p><strong>Age</strong>: {{game.age}}</p>
         <p><strong>Class</strong>: {{game.class}}</p>
         <p><strong>Credits</strong>: {{game.credits}}</p>
+
+<!--game rating component goes here-->
+        <GameRating
+            v-if="game"
+            :gameId="game.id"
+            :isDark="gameIsDark"
+            :foreGround="foreGround"
+            :backGround="backGround"
+        />
       </div>
     </div>
 
