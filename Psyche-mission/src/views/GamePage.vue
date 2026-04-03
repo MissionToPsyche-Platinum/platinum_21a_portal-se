@@ -1,10 +1,16 @@
 <script>
 import gameData from "../assets/games.json"
+import GameLink from '../components/GameLink.vue'
 import { getSuggestions } from "../utils/gameService.js"
 import QRCode from 'qrcode'
+import GameRating from "../components/GameRating.vue";
 
 export default {
   name: 'GamePage',
+  components: { 
+    GameRating,
+    GameLink,
+  },
   props: ['id'], // ID of game passed to this component
   data() {
     return {
@@ -241,16 +247,25 @@ export default {
         <p><strong>Age</strong>: {{game.age}}</p>
         <p><strong>Class</strong>: {{game.class}}</p>
         <p><strong>Credits</strong>: {{game.credits}}</p>
+
+<!--game rating component goes here-->
+        <GameRating
+            v-if="game"
+            :gameId="game.id"
+            :isDark="gameIsDark"
+            :foreGround="foreGround"
+            :backGround="backGround"
+        />
       </div>
     </div>
 
     <div class="suggested-games">
-      <div
-          v-for="i in 3"
-          :key="i"
-          class="suggestion"
-      >
-        Suggested Game components go here
+      <div v-for="sGame in suggestedGames" :key="sGame.id" class="suggestion">
+        <GameLink
+            :game="sGame"
+            :isDark="gameIsDark"
+            :textColor="foreGround"
+        />
       </div>
     </div>
   </div>
