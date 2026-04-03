@@ -23,7 +23,7 @@ export default {
       suggestedGames: null,
     }
   },
-  async mounted() {
+  mounted() {
     // restore saved mode
     const savedMode = localStorage.getItem("gameSavedMode");
     if (savedMode === "Dark") {
@@ -45,8 +45,6 @@ export default {
     } else {
       this.foreGround = this.gameIsDark ? "#ffffff" : "#000000";
     }
-    
-    this.generateQR();
   },
   methods: {
     // toggle between black/white dark-light defaults
@@ -86,8 +84,7 @@ export default {
       } else {
         this.game = gameFound;
         this.suggestedGames = getSuggestions(this.game.id);
-        //debug code for testing
-        console.log(this.suggestedGames);
+        this.generateQR();
       }
     },
 
@@ -138,7 +135,7 @@ export default {
     isMobileDevice() {
       // Use Regex to test the userAgent string to see if the user is using a mobile device
       return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) 
-      || (/Macintosh/i.test(navitagor.userAgent) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1); // Additional check for modern Ipads with Macintosh in userAgent string
+      || (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1); // Additional check for modern Ipads with Macintosh in userAgent string
     },
   },
   created() {
@@ -146,8 +143,8 @@ export default {
   },
   watch: {
     id() {
+      this.displayQr = true;
       this.findGame();
-      this.generateQR();
     }
   }
 }
@@ -162,6 +159,8 @@ export default {
     ]"
   >
     <div class="top">
+      <h1>{{ game ? game.title : "Loading..." }}</h1>
+      <div class="spacer"></div>
       <div class="theme-controls">
         <button
             class="toggle"
@@ -197,12 +196,7 @@ export default {
 
       </div>
 
-      <h1>{{ game ? game.title : "Loading..." }}</h1>
     </div>
-
-    <nav class="navbar">
-      <h1>navbar component goes here</h1>
-    </nav>
 
     <div class="game">
       <div v-if="game && game.src" class="game-iframe">
@@ -282,36 +276,26 @@ export default {
   padding-bottom: 20px;
 }
 
-/* top section styled like homepage */
+/* top section styling (toggle button/color pickers) */
 .top {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 34px 20px 24px;
   margin: 20px;
-  position: relative;
-  text-align: center;
   border: 1px solid rgba(128, 128, 128, 0.25);
   border-radius: 24px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  gap: 20px;
 }
 
-.top h1 {
-  margin: 0;
-  max-width: 900px;
-  font-size: 2.2rem;
-  line-height: 1.3;
-  padding: 0 120px;
-}
-
-/* homepage-style theme controls panel */
 .theme-controls {
-  position: absolute;
-  top: 18px;
-  right: 18px;
+  flex: 0 1 auto;
+  width: fit-content;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center;
+  justify-content: flex-end;
   gap: 10px;
   margin: 0;
   padding: 14px;
@@ -319,6 +303,19 @@ export default {
   border-radius: 16px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   backdrop-filter: blur(4px);
+}
+
+.top h1 {
+  flex: 2;
+  text-align: center;
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.spacer {
+  flex: 0 1 auto;
+  width: 100px;
+  visibility: hidden;
 }
 
 /* toggle button */

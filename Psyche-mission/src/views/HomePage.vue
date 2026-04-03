@@ -138,39 +138,43 @@ export default {
 
     <!-- Top section containing the toggle button and title -->
     <div class="top">
+      <h1>Welcome to the Psyche mission's web-based game portal!</h1>
+      <div class="spacer"></div>
+
       <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
       <div class="theme-controls">
         <button class="toggle"
-                :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
-                @click="toggleMode">
+        :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
+        @click="toggleMode">
           <!--dynamically change thee text based on the mode-->
           {{ isDark ? "Switch to Light" : "Switch to Dark" }}
         </button>
+      
         <div class="pickers">
           <label>
             Background
             <input type="color" v-model="darkColor" @input="updateDarkColor" class="picker"
-                   :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
+            :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
           </label>
           <label>
             Text
             <input type="color" v-model="lightColor" @input="updateLightColor" class="picker"
-                   :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
+            :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
           </label>
         </div>
       </div>
-      <h1>Welcome to the Psyche mission's web-based game portal!</h1>
+
     </div>
 
     <!-- page header -->
-    <header class="header">
+    <!-- <header class="header">
       <h1>Psyche Mission Game Portal AR, VR, and XR</h1>
-    </header>
+    </header> -->
 
     <!-- place holder for an introduction -->
-    <section class="intro">
+    <!-- <section class="intro">
       <h2>Welcome to the Psyche Mission's Web-Based Portal By Team 1 platinum_21a_portal-se</h2>
-    </section>
+    </section> -->
 
     <section class="search">
       <SearchBar :isDark="isDark" />
@@ -247,17 +251,64 @@ export default {
 /* top section styling (toggle button/color pickers) */
 .top {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 34px 20px 24px;
   margin: 20px;
-  position: relative;
-  text-align: center;
   border: 1px solid rgba(128, 128, 128, 0.25);
   border-radius: 24px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  gap: 20px;
 }
 
+.top h1 {
+  flex: 2;
+  text-align: center;
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.spacer {
+  flex: 0 1 auto;
+  width: 100px;
+  visibility: hidden;
+}
+
+.theme-controls {
+  flex: 0 1 auto;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 0;
+  padding: 14px;
+  border: 1px solid rgba(128, 128, 128, 0.22);
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(4px);
+}
+
+/* color pickers */
+.pickers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+
+
+}
+
+.picker {
+  padding: 1px;
+  border: 1px solid currentColor;
+  background: transparent;
+  cursor: pointer;
+
+  font-weight: 100;
+
+}
 
 /* toggle button styling */
 .toggle {
@@ -313,7 +364,6 @@ export default {
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
 }
 
-
 /* game section placeholder styling */
 .games-placeholder {
   margin: 20px;
@@ -358,41 +408,6 @@ export default {
 }
 
 /* theme controls panel */
-.theme-controls {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 10px;
-  margin: 0;
-  padding: 14px;
-  border: 1px solid rgba(128, 128, 128, 0.22);
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(4px);
-}
-
-/* color pickers */
-.pickers {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 0;
-
-
-}
-
-.picker {
-  padding: 1px;
-  border: 1px solid currentColor;
-  background: transparent;
-  cursor: pointer;
-
-  font-weight: 100;
-
-}
 
 label {
   display: flex;
