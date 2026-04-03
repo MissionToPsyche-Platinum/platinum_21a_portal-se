@@ -131,7 +131,8 @@ export default {
 
     isMobileDevice() {
       // Use Regex to test the userAgent string to see if the user is using a mobile device
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) 
+      || (/Macintosh/i.test(navitagor.userAgent) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1); // Additional check for modern Ipads with Macintosh in userAgent string
     },
   },
   created() {
