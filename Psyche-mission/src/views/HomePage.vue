@@ -23,7 +23,8 @@ export default {
         age: "",
         difficulty: ""
       },
-      sortBy:"" /*===task 83===*/
+      sortBy:"" /*===task 83===*/,
+      searchRequest: ""
     };
   },
   /*==========task 83=========*/
@@ -34,8 +35,10 @@ export default {
               const genreMatch = this.activeFilters.genre ? game.genre === this.activeFilters.genre : true;
               const ageMatch = this.activeFilters.age ? game.age === this.activeFilters.age : true;
               const difficultyMatch = this.activeFilters.difficulty ? game.difficulty === this.activeFilters.difficulty : true;
+              const searchMatch = this.searchRequest ? game.title.toLowerCase().includes(this.searchRequest.toLowerCase()) ||
+                                                       game.description.toLowerCase().includes(this.searchRequest.toLowerCase()) : true
 
-          return classMatch && genreMatch && ageMatch && difficultyMatch;
+          return classMatch && genreMatch && ageMatch && difficultyMatch && searchMatch;
         });
       },
     //sorting logic
@@ -177,7 +180,7 @@ export default {
     </section> -->
 
     <section class="search">
-      <SearchBar :isDark="isDark" />
+      <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
     </section>
 
     <section class="filter">
