@@ -30,7 +30,7 @@ export default {
       if (this.game.thumbnail && this.game.thumbnail !== "None") {
         return this.game.thumbnail;
       } else {
-        return new URL('../assets/PsycheLogo.png', import.meta.url).href;
+        return psycheLogo;
       }
     },
   },
