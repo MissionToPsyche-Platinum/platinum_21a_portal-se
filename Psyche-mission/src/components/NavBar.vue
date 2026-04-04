@@ -8,8 +8,8 @@
 
         <!-- "Home" and "About" links -->
         <div class="nav-links">
-            <a href="/" class="nav-link" target="_blank">Home</a>
-            <a href="https://psyche.ssl.berkeley.edu/" class="nav-link" target="_blank">About</a>
+            <a href="/" class="nav-link">Home</a>
+            <a href="https://psyche.ssl.berkeley.edu/" class="nav-link" target="_blank" rel="noopener noreferrer">About</a>
         </div>
     </nav>
  </template>
@@ -22,6 +22,9 @@ export default {
 
 <style scoped>
 .nav-bar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;

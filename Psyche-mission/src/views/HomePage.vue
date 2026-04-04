@@ -216,7 +216,6 @@ export default {
     <!-- placeholder for Game Links -->
     <section class="games-placeholder">
       <h2>Available Experiences</h2>
-      <p>Place holder for games links and previews in upcoming sprints.</p>
       <div class="game-grid">
         <!--===================task 83==================-->
         <!--use computed sortGames-->
