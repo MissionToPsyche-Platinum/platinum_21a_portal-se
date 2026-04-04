@@ -1,4 +1,6 @@
 <script>
+import psycheLogo from '@/assets/PsycheLogo.png'
+
 export default {
   props: {
     game: { type: Object },
@@ -22,6 +24,20 @@ export default {
       if (difficulty === "hard") return 3;// hard
 
       return 0; // if undefined
+    },
+
+    gameImage() {
+      if (this.game.thumbnail && this.game.thumbnail !== "None") {
+        return this.game.thumbnail;
+      } else {
+        return new URL('../assets/PsycheLogo.png', import.meta.url).href;
+      }
+    },
+  },
+
+  methods: {
+    handleImgError(e) {
+      e.target.src = psycheLogo;
     }
   },
 
@@ -30,53 +46,49 @@ export default {
 </script>
 
 <template>
-  <div :class="{'dark-mode': isDark}" class="game-link-card">
+  <router-link :to="{ name: 'GamePage', params: {id: game.id }}">
+    <div :class="{'dark-mode': isDark}" class="game-link-card">
 
 
 
-    <h2>{{ game.title }}</h2>
+      <h2>{{ game.title }}</h2>
 
 
-    <!-- ==================== task 92====================-->
+      <!-- ==================== task 92====================-->
 
-    <!--Difficulty bar UI on game card-->
-    <div class="difficulty-section">
-  <span class="difficulty-label"> <!-- difficulty text label -->
-    Difficulty: {{ game.difficulty || "Unknown" }}
-  </span>
+      <!--Difficulty bar UI on game card-->
+      <div class="difficulty-section">
+      <span class="difficulty-label"> <!-- difficulty text label -->
+        Difficulty: {{ game.difficulty || "Unknown" }}
+      </span>
 
-      <div class="difficulty-bar"><!-- visual difficulty bar -->
+        <div class="difficulty-bar"><!-- visual difficulty bar -->
 
-        <!-- easy -->
-        <span
-            :style="{
-        backgroundColor: textColor,
-        opacity: difficultyLevel >= 1 ? 1 : 0.2
-      }"
-        ></span>
+          <!-- easy -->
+          <span
+              :style="{
+          backgroundColor: textColor,
+          opacity: difficultyLevel >= 1 ? 1 : 0.2
+        }"
+          ></span>
 
-        <!-- medium -->
-        <span
-            :style="{
-        backgroundColor: textColor,
-        opacity: difficultyLevel >= 2 ? 1 : 0.2
-      }"
-        ></span>
+          <!-- medium -->
+          <span
+              :style="{
+          backgroundColor: textColor,
+          opacity: difficultyLevel >= 2 ? 1 : 0.2
+        }"
+          ></span>
 
-        <!-- hard -->
-        <span
-            :style="{
-        backgroundColor: textColor,
-        opacity: difficultyLevel >= 3 ? 1 : 0.2
-      }"
-        ></span>
+          <!-- hard -->
+          <span
+              :style="{
+          backgroundColor: textColor,
+          opacity: difficultyLevel >= 3 ? 1 : 0.2
+        }"
+          ></span>
+        </div>
       </div>
-    </div>
-
-
-
-    <!-- make the preview clickable-->
-    <router-link :to="{ name: 'GamePage', params: {id: game.id }}">
 
       <!--      play is removed since images is now clickable-->
       <!--      <h3 :class="{'dark-link': isDark}" class="game-link">Play</h3>-->
@@ -84,18 +96,22 @@ export default {
 
         <!--show image if thumbnail exists and not "None"-->
         <img
-            v-if="game.thumbnail && game.thumbnail !== 'None'"
-            :src="game.thumbnail"
+            :src="gameImage"
+            @error="handleImgError"
             class="media"
             :alt="game.title"
         />
 
       </div>
-    </router-link>
-  </div>
+    </div>
+  </router-link>
 </template>
 
 <style scoped>
+a {
+  text-decoration: none;
+  color: inherit;
+}
 
 .preview {
   display: flex;
