@@ -3,13 +3,15 @@ import gameData from '../assets/games.json'
 import GameLink from '../components/GameLink.vue'
 import Filter from '../components/Filter.vue'
 import SearchBar from '../components/SearchBar.vue'
+import QuizModal from '../components/QuizModal.vue'
 
 export default {
   name: "HomePage",
   components: {
     GameLink,
     Filter,
-    SearchBar
+    SearchBar,
+    QuizModal
   },
   data() {
     return {
@@ -24,7 +26,8 @@ export default {
         difficulty: ""
       },
       sortBy:"" /*===task 83===*/,
-      searchRequest: ""
+      searchRequest: "",
+      isQuizOpen: false
     };
   },
   /*==========task 83=========*/
@@ -76,7 +79,6 @@ export default {
       return sorted;
     }
   },
-
   mounted() {
     // get the previously saved mode from the browser local storage
     const savedMode = localStorage.getItem("savedMode");
@@ -129,6 +131,14 @@ export default {
 
     handleFilters(filters) {
       this.activeFilters = filters;
+    },
+
+    openQuiz() {
+      this.isQuizOpen = true;
+    },
+
+    closeQuiz() {
+      this.isQuizOpen = false;
     }
   }
 };
@@ -177,7 +187,21 @@ export default {
     <!-- place holder for an introduction -->
     <!-- <section class="intro">
       <h2>Welcome to the Psyche Mission's Web-Based Portal By Team 1 platinum_21a_portal-se</h2>
+      <p>Discover the latest web-based experiences from the Psyche Mission team.</p>
     </section> -->
+
+     <section class="quiz">
+        <div id="quiz-container" class="quiz-container">
+            <label id="quiz-label" class="quiz-label">
+                  Take a quiz to find your favorite game!
+            </label>
+            <button id="quiz-button" class="quiz-button" @click="openQuiz">
+                Take Quiz
+            </button>
+        </div>
+    </section>
+
+     <QuizModal v-if="isQuizOpen" @close="closeQuiz" />
 
     <section class="search">
       <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
@@ -480,5 +504,21 @@ input[type="color"] {
     max-width: 320px;
     margin-bottom: 16px;
   }
+}
+.quiz-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid rgba(128);
+  border-radius: 10px;
+}
+.quiz-label {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
 }
 </style>
