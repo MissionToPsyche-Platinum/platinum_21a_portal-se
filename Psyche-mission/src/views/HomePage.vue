@@ -34,8 +34,15 @@ export default {
   computed: {
       filteredGames() {
           return this.games.filter(game => {
+            let genreMatch = true;
+
+            if (this.activeFilters.genre === 'Web Based') {
+              genreMatch = game.genre != 'AR Experience' && game.genre != 'VR Experience'
+            } else if (this.activeFilters.genre) {
+              genreMatch = game.genre === this.activeFilters.genre;
+            }
+
               const classMatch = this.activeFilters.class ? game.class === this.activeFilters.class : true;
-              const genreMatch = this.activeFilters.genre ? game.genre === this.activeFilters.genre : true;
               const ageMatch = this.activeFilters.age ? game.age === this.activeFilters.age : true;
               const difficultyMatch = this.activeFilters.difficulty ? game.difficulty === this.activeFilters.difficulty : true;
               const searchMatch = this.searchRequest ? game.title.toLowerCase().includes(this.searchRequest.toLowerCase()) ||
@@ -139,6 +146,14 @@ export default {
 
     closeQuiz() {
       this.isQuizOpen = false;
+    },
+
+    setGenreFilter(genre) {
+      if (this.activeFilters.genre === genre) {
+        this.activeFilters.genre = "";
+      } else {
+        this.activeFilters.genre = genre;
+      }
     }
   }
 };
@@ -211,28 +226,28 @@ export default {
       <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort" />
     </section>
 
-    <!--  main platforms section play as place holder for different platforms -->
+    <!--  main platforms section can be used to filter the displayed games -->
     <section class="platforms">
       <!--card for web baseed games-->
-      <div class="platform">
+      <div class="platform" @click="setGenreFilter('Web Based')">
         <h3>Web Games</h3>
         <p>Browser-based games.</p>
       </div>
       <!--card for AR games-->
-      <div class="platform">
+      <div class="platform" @click="setGenreFilter('AR Experience')">
         <h3>AR Experiences</h3>
         <p>Augmented reality.</p>
       </div>
       <!--card for VR games-->
-      <div class="platform">
+      <div class="platform" @click="setGenreFilter('VR Experience')">
         <h3>VR Experiences</h3>
         <p>Virtual reality.</p>
       </div>
 
-      <!--card for XR games-->
-      <div class="platform">
-        <h3>XR Experiences</h3>
-        <p>Mixed reality.</p>
+      <!--card for All games-->
+      <div class="platform" @click="setGenreFilter('')">
+        <h3>All Experiences</h3>
+        <p>Show Everything.</p>
       </div>
 
     </section>
