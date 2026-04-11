@@ -9,6 +9,7 @@ export default {
   },
   data() {
     return {
+
       isFavorite: false, // true if the game is saved in favorite
     };
   },
@@ -17,7 +18,6 @@ export default {
     this.loadFavoriteState();
     window.addEventListener("favorites-updated", this.loadFavoriteState);
   },
-
 
 
   //==================== task 93====================
@@ -65,10 +65,12 @@ export default {
       let favorites = this.getFavoriteGames();
 
       if (favorites.includes(this.game.id)) {
+
         favorites = favorites.filter(id => id !== this.game.id); // remove from favorites
         this.isFavorite = false;
       } else {
         favorites.push(this.game.id);  // add to favorites
+
         this.isFavorite = true;
       }
 
@@ -77,9 +79,11 @@ export default {
       // notify other components that favorites changed
       window.dispatchEvent(new Event("favorites-updated"));
     },
+
     /*===========task 1 end =====*/
 
 },
+
 
 
 };
@@ -253,3 +257,4 @@ a {
 
 
 </style>
+
