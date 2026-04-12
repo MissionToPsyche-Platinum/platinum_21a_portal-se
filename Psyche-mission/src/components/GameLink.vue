@@ -54,13 +54,13 @@ export default {
       const savedFavorites = localStorage.getItem("favoriteGames");
       return savedFavorites ? JSON.parse(savedFavorites) : [];
     },
-    // check if the current game is saved
+    // load and check if the current game is saved
     loadFavoriteState() {
       const favorites = this.getFavoriteGames();
       this.isFavorite = favorites.includes(this.game.id);
     },
-// switches the current game between favorite and not favorite, if the current game is saved remove it
-// if not, save it.
+// switches between favorite/not favorite, if the current game is saved remove it
+// if not, save it
     toggleFavorite() {
       let favorites = this.getFavoriteGames();
 
@@ -80,7 +80,7 @@ export default {
       window.dispatchEvent(new Event("favorites-updated"));
     },
 
-    /*===========task 1 end =====*/
+
 
 },
 
