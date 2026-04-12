@@ -27,7 +27,13 @@ export default {
       },
       sortBy:"" /*===task 83===*/,
       searchRequest: "",
-      isQuizOpen: false
+      isQuizOpen: false,
+      platforms: [
+        {label: 'Web Games', genre: 'Web Based', desc: 'Browser-based games.'},
+        {label: 'AR Experiences', genre: 'AR Experience', desc: 'Augmented reality.'},
+        {label: 'VR Experiences', genre: 'VR Experience', desc: 'Virtual Reality.'},
+        {label: 'All Experiences', genre: '', desc: 'Show everything.'},
+      ],
     };
   },
   /*==========task 83=========*/
@@ -224,28 +230,16 @@ export default {
 
     <!--  main platforms section can be used to filter the displayed games -->
     <section class="platforms">
-      <!--card for web baseed games-->
-      <div class="platform" @click="setGenreFilter('Web Based')">
-        <h3>Web Games</h3>
-        <p>Browser-based games.</p>
+      <div
+        v-for="platform in platforms"
+        :key="platform.genre"
+        class="platform"
+        :class="{'active-platform': activeFilters.genre === platform.genre}"
+        @click="setGenreFilter(platform.genre)"
+      >
+        <h3>{{ platform.label }}</h3>
+        <p>{{ platform.desc }}</p>
       </div>
-      <!--card for AR games-->
-      <div class="platform" @click="setGenreFilter('AR Experience')">
-        <h3>AR Experiences</h3>
-        <p>Augmented reality.</p>
-      </div>
-      <!--card for VR games-->
-      <div class="platform" @click="setGenreFilter('VR Experience')">
-        <h3>VR Experiences</h3>
-        <p>Virtual reality.</p>
-      </div>
-
-      <!--card for All games-->
-      <div class="platform" @click="setGenreFilter('')">
-        <h3>All Experiences</h3>
-        <p>Show Everything.</p>
-      </div>
-
     </section>
 
     <section class="filter">
@@ -382,31 +376,35 @@ export default {
   padding-bottom: 10px;
 }
 
-
-/* platforms section styling */
+/* platform cards styling */
 .platforms {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 columns equal width */
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   padding: 0 20px;
   margin-bottom: 20px;
-
 }
 
-/* platform cards styling */
 .platform {
-  border: 1px solid rgba(128, 128, 128, 0.22);
-  padding: 24px 18px;
+  border: 1px solid;
+  padding: 10px;
   text-align: center;
-  border-radius: 18px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 10px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.2));
+  overflow: hidden;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.platform:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
+.active-platform {
+  border: 3px solid currentColor;
+  background: rgba(128, 128, 128, 0.15);
+  box-shadow: 0 0 20px currentColor;
+  transform: scale(1.05);
+}
+
+.platform:active {
+  transform: scale(0.95) translateY(0);
 }
 
 /* game section placeholder styling */
