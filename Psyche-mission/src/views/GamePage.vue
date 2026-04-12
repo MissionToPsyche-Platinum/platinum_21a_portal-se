@@ -21,6 +21,7 @@ export default {
       qrCode: null,
       displayQr: true,
       suggestedGames: null,
+      isFavorite: false, // true if the game is saved in favorite
     }
   },
   mounted() {
@@ -45,6 +46,9 @@ export default {
     } else {
       this.foreGround = this.gameIsDark ? "#ffffff" : "#000000";
     }
+    this.loadFavoriteState();
+    window.addEventListener("favorites-updated", this.loadFavoriteState);
+
   },
   methods: {
     // toggle between black/white dark-light defaults
@@ -137,7 +141,40 @@ export default {
       return (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) 
       || (/Macintosh/i.test(navigator.userAgent) && navigator.maxTouchPoints && navigator.maxTouchPoints > 1); // Additional check for modern Ipads with Macintosh in userAgent string
     },
+
+    // read saved favorite list from localStorage
+    getFavoriteGames() {
+      //if favorite list exists, convert it to an array, otherwise return null
+      const savedFavorites = localStorage.getItem("favoriteGames");
+      return savedFavorites ? JSON.parse(savedFavorites) : [];
+    },
+    // check if the current game is saved
+    loadFavoriteState() {
+      const favorites = this.getFavoriteGames();
+      this.isFavorite = favorites.includes(this.game.id);
+    },
+// switches between favorite/not favorite, if the current game is saved remove it
+// if not, save it
+    toggleFavorite() {
+      let favorites = this.getFavoriteGames();
+
+      if (favorites.includes(this.game.id)) {
+        favorites = favorites.filter(id => id !== this.game.id); // remove from favorites
+        this.isFavorite = false;
+      } else {
+        favorites.push(this.game.id);  // add to favorites
+        this.isFavorite = true;
+      }
+
+      localStorage.setItem("favoriteGames", JSON.stringify(favorites));
+
+      // notify other components that favorites changed
+      window.dispatchEvent(new Event("favorites-updated"));
+    },
+
+
   },
+
   created() {
     this.findGame();
   },
@@ -250,6 +287,26 @@ export default {
             :foreGround="foreGround"
             :backGround="backGround"
         />
+
+        <!--favorite button that change color dynamically and prevent navigation when clicked.-->
+        <div class="favorite-container">
+          <p>{{ isFavorite ? "Saved" : "" }} </p>
+
+          <button
+              class="favorite-btn"
+              :style="{ color: foreGround }"
+              :class="{ saved: isFavorite }"
+              @click.prevent.stop="toggleFavorite"
+              :aria-label="isFavorite ? 'Remove from favorites' : 'Save to favorites'"
+              :title="isFavorite ? 'Unsave game' : 'Save game'"
+          >
+            {{ isFavorite ? "\u2665" : "\u2661" }} <!--heart icon changes based on the state-->
+
+
+          </button>
+        </div>
+
+
       </div>
     </div>
 
@@ -534,6 +591,35 @@ input[type="color"] {
 .footer p {
   margin: 0;
 }
+
+/* favorite button styling */
+
+.favorite-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.favorite-btn {
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 1;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.1);
+  opacity: 0.85;
+}
+
+.favorite-btn.saved {
+  opacity: 1;
+}
+
 
 /* responsive design */
 @media (max-width: 1100px) {
