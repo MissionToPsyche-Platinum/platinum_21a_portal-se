@@ -222,10 +222,6 @@ export default {
       <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
     </section>
 
-    <section class="filter">
-      <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort" />
-    </section>
-
     <!--  main platforms section can be used to filter the displayed games -->
     <section class="platforms">
       <!--card for web baseed games-->
@@ -250,6 +246,10 @@ export default {
         <p>Show Everything.</p>
       </div>
 
+    </section>
+
+    <section class="filter">
+      <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort" />
     </section>
 
     <!-- placeholder for Game Links -->
@@ -376,6 +376,10 @@ export default {
   border: 1px solid rgba(128, 128, 128, 0.22);
   border-radius: 20px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.search {
+  padding-bottom: 10px;
 }
 
 
