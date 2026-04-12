@@ -160,6 +160,10 @@ export default {
       } else {
         this.activeFilters.genre = genre;
       }
+    },
+
+    handleQuizResults(results) {
+        //TODO: Implement logic to handle quiz results
     }
   }
 };
@@ -222,7 +226,7 @@ export default {
         </div>
     </section>
 
-     <QuizModal v-if="isQuizOpen" @close="closeQuiz" />
+     <QuizModal v-if="isQuizOpen" @close="closeQuiz" @quiz-complete="handleQuizResults" />
 
     <section class="search">
       <SearchBar :isDark="isDark" @search="searchRequest = $event"/>

@@ -1,4 +1,4 @@
-<script>
+g<script>
 export default {
    props: {
        isDark: Boolean
