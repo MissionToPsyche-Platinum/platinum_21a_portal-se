@@ -27,23 +27,37 @@ export default {
       },
       sortBy:"" /*===task 83===*/,
       searchRequest: "",
-      isQuizOpen: false
+      isQuizOpen: false,
+      platforms: [
+        {label: 'Web Games', genre: 'Web Based', desc: 'Browser-based games.'},
+        {label: 'AR Experiences', genre: 'AR Experience', desc: 'Augmented reality.'},
+        {label: 'VR Experiences', genre: 'VR Experience', desc: 'Virtual Reality.'},
+        {label: 'All Experiences', genre: '', desc: 'Show everything.'},
+      ],
+      favoriteIds: [], // store saved favorite game IDs
     };
   },
   /*==========task 83=========*/
   computed: {
-      filteredGames() {
-          return this.games.filter(game => {
-              const classMatch = this.activeFilters.class ? game.class === this.activeFilters.class : true;
-              const genreMatch = this.activeFilters.genre ? game.genre === this.activeFilters.genre : true;
-              const ageMatch = this.activeFilters.age ? game.age === this.activeFilters.age : true;
-              const difficultyMatch = this.activeFilters.difficulty ? game.difficulty === this.activeFilters.difficulty : true;
-              const searchMatch = this.searchRequest ? game.title.toLowerCase().includes(this.searchRequest.toLowerCase()) ||
-                                                       game.description.toLowerCase().includes(this.searchRequest.toLowerCase()) : true
+    filteredGames() {
+      return this.games.filter(game => {
+        let genreMatch = true;
 
-          return classMatch && genreMatch && ageMatch && difficultyMatch && searchMatch;
-        });
-      },
+        if (this.activeFilters.genre === 'Web Based') {
+          genreMatch = game.genre != 'AR Experience' && game.genre != 'VR Experience'
+        } else if (this.activeFilters.genre) {
+          genreMatch = game.genre === this.activeFilters.genre;
+        }
+
+        const classMatch = this.activeFilters.class ? game.class === this.activeFilters.class : true;
+        const ageMatch = this.activeFilters.age ? game.age === this.activeFilters.age : true;
+        const difficultyMatch = this.activeFilters.difficulty ? game.difficulty === this.activeFilters.difficulty : true;
+        const searchMatch = this.searchRequest ? game.title.toLowerCase().includes(this.searchRequest.toLowerCase()) ||
+            game.description.toLowerCase().includes(this.searchRequest.toLowerCase()) : true
+
+        return classMatch && genreMatch && ageMatch && difficultyMatch && searchMatch;
+      });
+    },
     //sorting logic
     sortGames() {
       // copy the array to preserve the original state
@@ -77,7 +91,13 @@ export default {
       }
 
       return sorted;
-    }
+    },
+    // favorite games list filtered down to saved ones, also respect filtering options
+    favoriteGames() {
+      return this.filteredGames.filter(game => this.favoriteIds.includes(game.id));
+
+    },
+
   },
   mounted() {
     // get the previously saved mode from the browser local storage
@@ -95,6 +115,9 @@ export default {
     if (savedLightColor) {
       this.lightColor = savedLightColor;// retrieve the light color prefrence from the browser
     }
+    this.loadFavorites();
+    window.addEventListener("favorites-updated", this.loadFavorites);
+
   },
   methods: {
 
@@ -139,8 +162,28 @@ export default {
 
     closeQuiz() {
       this.isQuizOpen = false;
-    }
+    },
+
+    setGenreFilter(genre) {
+      if (this.activeFilters.genre === genre) {
+        this.activeFilters.genre = "";
+      } else {
+        this.activeFilters.genre = genre;
+      }
+    },
+
+    handleQuizResults(results) {
+      //TODO: Implement logic to handle quiz results
+      console.log("Quiz input received:", results)
+    },
+
+    loadFavorites() {
+      const saved = localStorage.getItem("favoriteGames");
+      this.favoriteIds = saved ? JSON.parse(saved) : [];
+    },
   }
+
+
 };
 </script>
 
@@ -157,22 +200,22 @@ export default {
       <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
       <div class="theme-controls">
         <button class="toggle"
-        :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
-        @click="toggleMode">
+                :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
+                @click="toggleMode">
           <!--dynamically change thee text based on the mode-->
           {{ isDark ? "Switch to Light" : "Switch to Dark" }}
         </button>
-      
+
         <div class="pickers">
           <label>
             Background
             <input type="color" v-model="darkColor" @input="updateDarkColor" class="picker"
-            :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
+                   :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
           </label>
           <label>
             Text
             <input type="color" v-model="lightColor" @input="updateLightColor" class="picker"
-            :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
+                   :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
           </label>
         </div>
       </div>
@@ -190,52 +233,52 @@ export default {
       <p>Discover the latest web-based experiences from the Psyche Mission team.</p>
     </section> -->
 
-     <section class="quiz">
-        <div id="quiz-container" class="quiz-container">
-            <label id="quiz-label" class="quiz-label">
-                  Take a quiz to find your favorite game!
-            </label>
-            <button id="quiz-button" class="quiz-button" @click="openQuiz">
-                Take Quiz
-            </button>
-        </div>
+    <section class="quiz">
+      <div id="quiz-container" class="quiz-container">
+        <label id="quiz-label" class="quiz-label">
+          Take a quiz to find your favorite game!
+        </label>
+        <button id="quiz-button" class="quiz-button" @click="openQuiz">
+          Take Quiz
+        </button>
+      </div>
     </section>
 
-     <QuizModal v-if="isQuizOpen" @close="closeQuiz" />
+    <QuizModal v-if="isQuizOpen" @close="closeQuiz" @quiz-complete="handleQuizResults" />
 
     <section class="search">
       <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
+    </section>
+
+    <!--  main platforms section can be used to filter the displayed games -->
+    <section class="platforms">
+      <div
+          v-for="platform in platforms"
+          :key="platform.genre"
+          class="platform"
+          :class="{'active-platform': activeFilters.genre === platform.genre}"
+          @click="setGenreFilter(platform.genre)"
+      >
+        <h3>{{ platform.label }}</h3>
+        <p>{{ platform.desc }}</p>
+      </div>
     </section>
 
     <section class="filter">
       <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort" />
     </section>
 
-    <!--  main platforms section play as place holder for different platforms -->
-    <section class="platforms">
-      <!--card for web baseed games-->
-      <div class="platform">
-        <h3>Web Games</h3>
-        <p>Browser-based games.</p>
-      </div>
-      <!--card for AR games-->
-      <div class="platform">
-        <h3>AR Experiences</h3>
-        <p>Augmented reality.</p>
-      </div>
-      <!--card for VR games-->
-      <div class="platform">
-        <h3>VR Experiences</h3>
-        <p>Virtual reality.</p>
-      </div>
+    <div>
+      <section >
+        <div class="game-grid">
+          <h2 v-if="favoriteGames.length > 0" style="text-align: center;">Favorite</h2>
 
-      <!--card for XR games-->
-      <div class="platform">
-        <h3>XR Experiences</h3>
-        <p>Mixed reality.</p>
-      </div>
+          <GameLink v-for="game in favoriteGames" :key="game.id" :game="game" :isDark="isDark" class="platform" :textColor="lightColor"/>
 
-    </section>
+        </div>
+      </section>
+    </div>
+
 
     <!-- placeholder for Game Links -->
     <section class="games-placeholder">
@@ -363,31 +406,39 @@ export default {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
-
-/* platforms section styling */
-.platforms {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 columns equal width */
-  gap: 20px;
-  padding: 0 20px;
-  margin-bottom: 20px;
-
+.search {
+  padding-bottom: 10px;
 }
 
 /* platform cards styling */
-.platform {
-  border: 1px solid rgba(128, 128, 128, 0.22);
-  padding: 24px 18px;
-  text-align: center;
-  border-radius: 18px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  cursor: pointer;
+.platforms {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 0 20px;
+  margin-bottom: 20px;
 }
 
-.platform:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
+.platform {
+  border: 1px solid;
+  padding: 10px;
+  text-align: center;
+  border-radius: 10px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.2));
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.active-platform {
+  border: 3px solid currentColor;
+  background: rgba(128, 128, 128, 0.15);
+  box-shadow: 0 0 20px currentColor;
+  transform: scale(1.05);
+}
+
+.platform:active {
+  transform: scale(0.95) translateY(0);
 }
 
 /* game section placeholder styling */
@@ -522,3 +573,4 @@ input[type="color"] {
   text-align: center;
 }
 </style>
+
