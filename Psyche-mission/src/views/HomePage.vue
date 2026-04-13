@@ -34,29 +34,34 @@ export default {
         {label: 'VR Experiences', genre: 'VR Experience', desc: 'Virtual Reality.'},
         {label: 'All Experiences', genre: '', desc: 'Show everything.'},
       ],
+
+      favoriteIds: [], // store saved favorite game IDs
+
     };
   },
   /*==========task 83=========*/
   computed: {
-      filteredGames() {
-          return this.games.filter(game => {
-            let genreMatch = true;
 
-            if (this.activeFilters.genre === 'Web Based') {
-              genreMatch = game.genre != 'AR Experience' && game.genre != 'VR Experience'
-            } else if (this.activeFilters.genre) {
-              genreMatch = game.genre === this.activeFilters.genre;
-            }
+    filteredGames() {
+      return this.games.filter(game => {
+        let genreMatch = true;
 
-              const classMatch = this.activeFilters.class ? game.class === this.activeFilters.class : true;
-              const ageMatch = this.activeFilters.age ? game.age === this.activeFilters.age : true;
-              const difficultyMatch = this.activeFilters.difficulty ? game.difficulty === this.activeFilters.difficulty : true;
-              const searchMatch = this.searchRequest ? game.title.toLowerCase().includes(this.searchRequest.toLowerCase()) ||
-                                                       game.description.toLowerCase().includes(this.searchRequest.toLowerCase()) : true
 
-          return classMatch && genreMatch && ageMatch && difficultyMatch && searchMatch;
-        });
-      },
+        if (this.activeFilters.genre === 'Web Based') {
+          genreMatch = game.genre != 'AR Experience' && game.genre != 'VR Experience'
+        } else if (this.activeFilters.genre) {
+          genreMatch = game.genre === this.activeFilters.genre;
+        }
+
+        const classMatch = this.activeFilters.class ? game.class === this.activeFilters.class : true;
+        const ageMatch = this.activeFilters.age ? game.age === this.activeFilters.age : true;
+        const difficultyMatch = this.activeFilters.difficulty ? game.difficulty === this.activeFilters.difficulty : true;
+        const searchMatch = this.searchRequest ? game.title.toLowerCase().includes(this.searchRequest.toLowerCase()) ||
+            game.description.toLowerCase().includes(this.searchRequest.toLowerCase()) : true
+
+        return classMatch && genreMatch && ageMatch && difficultyMatch && searchMatch;
+      });
+    },
     //sorting logic
     sortGames() {
       // copy the array to preserve the original state
@@ -90,7 +95,13 @@ export default {
       }
 
       return sorted;
-    }
+    },
+    // favorite games list filtered down to saved ones, also respect filtering options
+    favoriteGames() {
+      return this.filteredGames.filter(game => this.favoriteIds.includes(game.id));
+
+    },
+
   },
   mounted() {
     // get the previously saved mode from the browser local storage
@@ -108,6 +119,9 @@ export default {
     if (savedLightColor) {
       this.lightColor = savedLightColor;// retrieve the light color prefrence from the browser
     }
+    this.loadFavorites();
+    window.addEventListener("favorites-updated", this.loadFavorites);
+
   },
   methods: {
 
@@ -163,10 +177,17 @@ export default {
     },
 
     handleQuizResults(results) {
-        //TODO: Implement logic to handle quiz results
-        console.log("Quiz input received:", results)
-    }
+      //TODO: Implement logic to handle quiz results
+      console.log("Quiz input received:", results)
+    },
+
+    loadFavorites() {
+      const saved = localStorage.getItem("favoriteGames");
+      this.favoriteIds = saved ? JSON.parse(saved) : [];
+    },
   }
+
+
 };
 </script>
 
@@ -183,22 +204,22 @@ export default {
       <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
       <div class="theme-controls">
         <button class="toggle"
-        :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
-        @click="toggleMode">
+                :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
+                @click="toggleMode">
           <!--dynamically change thee text based on the mode-->
           {{ isDark ? "Switch to Light" : "Switch to Dark" }}
         </button>
-      
+
         <div class="pickers">
           <label>
             Background
             <input type="color" v-model="darkColor" @input="updateDarkColor" class="picker"
-            :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
+                   :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
           </label>
           <label>
             Text
             <input type="color" v-model="lightColor" @input="updateLightColor" class="picker"
-            :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
+                   :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
           </label>
         </div>
       </div>
@@ -216,18 +237,18 @@ export default {
       <p>Discover the latest web-based experiences from the Psyche Mission team.</p>
     </section> -->
 
-     <section class="quiz">
-        <div id="quiz-container" class="quiz-container">
-            <label id="quiz-label" class="quiz-label">
-                  Take a quiz to find your favorite game!
-            </label>
-            <button id="quiz-button" class="quiz-button" @click="openQuiz">
-                Take Quiz
-            </button>
-        </div>
+    <section class="quiz">
+      <div id="quiz-container" class="quiz-container">
+        <label id="quiz-label" class="quiz-label">
+          Take a quiz to find your favorite game!
+        </label>
+        <button id="quiz-button" class="quiz-button" @click="openQuiz">
+          Take Quiz
+        </button>
+      </div>
     </section>
 
-     <QuizModal v-if="isQuizOpen" @close="closeQuiz" @quiz-complete="handleQuizResults" />
+    <QuizModal v-if="isQuizOpen" @close="closeQuiz" @quiz-complete="handleQuizResults" />
 
     <section class="search">
       <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
@@ -245,11 +266,23 @@ export default {
         <h3>{{ platform.label }}</h3>
         <p>{{ platform.desc }}</p>
       </div>
+
     </section>
 
     <section class="filter">
       <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort" />
     </section>
+
+    <div>
+      <section >
+        <div class="game-grid">
+          <h2 v-if="favoriteGames.length > 0" style="text-align: center;">Favorite</h2>
+
+          <GameLink v-for="game in favoriteGames" :key="game.id" :game="game" :isDark="isDark" class="platform" :textColor="lightColor"/>
+
+        </div>
+      </section>
+    </div>
 
     <!-- placeholder for Game Links -->
     <section class="games-placeholder">
@@ -544,3 +577,4 @@ input[type="color"] {
   text-align: center;
 }
 </style>
+
