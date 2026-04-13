@@ -164,6 +164,7 @@ export default {
 
     handleQuizResults(results) {
         //TODO: Implement logic to handle quiz results
+        console.log("Quiz input received:", results)
     }
   }
 };

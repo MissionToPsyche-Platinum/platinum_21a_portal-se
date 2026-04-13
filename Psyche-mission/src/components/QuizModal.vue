@@ -4,7 +4,7 @@ import { ref } from 'vue'
     const emit = defineEmits(['close', 'quiz-complete'])
     const closeModal = () => emit('close')
     const currentQuestionIdx = ref(0)
-    const answers = ref([])
+    const answers = ref({device: null, difficulty: null, fun: null, interest: null})
     const questions = [
         {
             question:"What device are you playing on?",
@@ -24,7 +24,9 @@ import { ref } from 'vue'
         }
     ]
     const selectAnswer = (option) => {
-        answers.value[currentQuestionIdx.value] = option
+        const keyMap = ['device', 'difficulty', 'fun', 'interest']
+
+        answers.value[keyMap[currentQuestionIdx.value]] = option
 
         if (currentQuestionIdx.value < questions.length - 1) {
             currentQuestionIdx.value++
@@ -36,6 +38,11 @@ import { ref } from 'vue'
     }
     const isFinished = ref(false)
     const showResults = () => {
+        if (answers.value.device === null || answers.value.difficulty === null || answers.value.fun === null || answers.value.interest === null) {
+            alert("Please answer all questions before submitting.")
+            return
+        }
+
         console.log("User answers:", answers.value)
         isFinished.value = true
         emit('quiz-complete', answers.value)
