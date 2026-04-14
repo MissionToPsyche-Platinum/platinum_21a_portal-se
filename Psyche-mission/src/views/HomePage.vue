@@ -25,7 +25,7 @@ export default {
         age: "",
         difficulty: ""
       },
-      sortBy:"" /*===task 83===*/,
+      sortBy: "" /*===task 83===*/,
       searchRequest: "",
       isQuizOpen: false,
       platforms: [
@@ -36,6 +36,9 @@ export default {
       ],
 
       favoriteIds: [], // store saved favorite game IDs
+
+      favoritesOnly: false, // true if main list shows only favorites
+
 
     };
   },
@@ -59,7 +62,9 @@ export default {
         const searchMatch = this.searchRequest ? game.title.toLowerCase().includes(this.searchRequest.toLowerCase()) ||
             game.description.toLowerCase().includes(this.searchRequest.toLowerCase()) : true
 
-        return classMatch && genreMatch && ageMatch && difficultyMatch && searchMatch;
+        const favoriteMatch = this.favoritesOnly ? this.favoriteIds.includes(game.id) : true;
+
+        return classMatch && genreMatch && ageMatch && difficultyMatch && searchMatch && favoriteMatch;
       });
     },
     //sorting logic
@@ -85,12 +90,12 @@ export default {
 
         // Sort by difficulty (easy to hard)
       } else if (this.sortBy === "difficulty-easy") {
-        const order = { Easy: 1, Medium: 2, Hard: 3 };
+        const order = {Easy: 1, Medium: 2, Hard: 3};
         sorted.sort((a, b) => order[a.difficulty] - order[b.difficulty]);
 
         //Sort by difficulty (hard to easy)
       } else if (this.sortBy === "difficulty-hard") {
-        const order = { Easy: 1, Medium: 2, Hard: 3 };
+        const order = {Easy: 1, Medium: 2, Hard: 3};
         sorted.sort((a, b) => order[b.difficulty] - order[a.difficulty]);
       }
 
@@ -185,6 +190,11 @@ export default {
       const saved = localStorage.getItem("favoriteGames");
       this.favoriteIds = saved ? JSON.parse(saved) : [];
     },
+
+    // toggle for favorites view
+    toggleFavoritesView() {
+      this.favoritesOnly = !this.favoritesOnly;
+    },
   }
 
 
@@ -248,7 +258,7 @@ export default {
       </div>
     </section>
 
-    <QuizModal v-if="isQuizOpen" @close="closeQuiz" @quiz-complete="handleQuizResults" />
+    <QuizModal v-if="isQuizOpen" @close="closeQuiz" @quiz-complete="handleQuizResults"/>
 
     <section class="search">
       <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
@@ -270,27 +280,31 @@ export default {
     </section>
 
     <section class="filter">
-      <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort" />
+      <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
     </section>
-
-    <div>
-      <section >
-        <div class="game-grid">
-          <h2 v-if="favoriteGames.length > 0" style="text-align: center;">Favorite</h2>
-
-          <GameLink v-for="game in favoriteGames" :key="game.id" :game="game" :isDark="isDark" class="platform" :textColor="lightColor"/>
-
-        </div>
-      </section>
-    </div>
+    <!-- show only favorites games' section-->
+    <section class="favorites-toggle-section">
+      <button
+          class="toggle"
+          :style="[
+      { backgroundColor: isDark ? darkColor : lightColor },
+      { color: isDark ? lightColor : darkColor }
+    ]"
+          @click="toggleFavoritesView"
+      >
+        {{ favoritesOnly ? "Show All Games" : "View Saved Games" }}
+      </button>
+    </section>
 
     <!-- placeholder for Game Links -->
     <section class="games-placeholder">
-      <h2>Available Experiences</h2>
+      <!-- dynamic title -->
+      <h2>{{ favoritesOnly ? "Favorite Games" : "Available Experiences" }}</h2>
       <div class="game-grid">
         <!--===================task 83==================-->
         <!--use computed sortGames-->
-        <GameLink v-for="game in sortGames" :key="game.id" :game="game" :isDark="isDark" class="platform" :textColor="lightColor"/>
+        <GameLink v-for="game in sortGames" :key="game.id" :game="game" :isDark="isDark" class="platform"
+                  :textColor="lightColor"/>
       </div>
     </section>
   </div>
@@ -398,6 +412,13 @@ export default {
   transform: translateY(-10px);
 
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.favorites-toggle-section {
+  display: flex;
+  justify-content: center; /* centers horizontally */
+  align-items: center;
+  margin: 20px 0;
 }
 
 /* intro section styling */
@@ -560,6 +581,7 @@ input[type="color"] {
     margin-bottom: 16px;
   }
 }
+
 .quiz-container {
   display: flex;
   flex-direction: column;
@@ -570,6 +592,7 @@ input[type="color"] {
   border: 1px solid rgba(128);
   border-radius: 10px;
 }
+
 .quiz-label {
   font-size: 20px;
   font-weight: bold;
