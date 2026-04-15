@@ -349,20 +349,14 @@ export default {
 }
 
 .top h1 {
-  flex: 2;
+  flex: 1;
   text-align: center;
   margin: 0;
   font-size: 1.6rem;
 }
 
-.spacer {
-  flex: 0 1 auto;
-  width: 100px;
-  visibility: hidden;
-}
-
 .theme-controls {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   width: fit-content;
   display: flex;
   flex-direction: column;
@@ -408,10 +402,13 @@ export default {
   transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
 }
 
-.toggle:hover {
-  transform: translateY(-10px);
+/* Only do movement on computer with mouse */
+@media (pointer: fine) {
+  .toggle:hover {
+    transform: translateY(-10px);
 
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  }
 }
 
 .favorites-toggle-section {
@@ -552,7 +549,6 @@ input[type="color"] {
     grid-template-columns: 1fr;
   }
 
-  .top,
   .header,
   .intro,
   .games-placeholder,
@@ -561,13 +557,19 @@ input[type="color"] {
   }
 
   .top {
-    flex-direction: column;
-    padding: 22px 16px;
+    position: relative;
+    padding: 15px;
+    min-height: 80px;
   }
 
   .top h1 {
-    font-size: 1.55rem;
-    padding: 0;
+    font-size: 1.05rem;
+    text-align: left;
+    margin: 0;
+    width: auto;
+    padding-right: 125px;
+    line-height: 1.3;
+    display: block;
   }
 
   .header h1 {
@@ -575,10 +577,30 @@ input[type="color"] {
   }
 
   .theme-controls {
-    position: static;
-    width: 100%;
-    max-width: 320px;
-    margin-bottom: 16px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    margin: 0;
+    transform: scale(0.65);
+    transform-origin: top right;
+  }
+
+  .pickers {
+    /* flex-direction: row; */
+    gap: 10px;
+  }
+
+  .pickers label {
+    font-size: 0.75rem;
+  }
+
+  .toggle {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+
+  .spacer {
+    display: none;
   }
 }
 
