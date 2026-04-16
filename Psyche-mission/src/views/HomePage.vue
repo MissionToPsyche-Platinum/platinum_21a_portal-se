@@ -453,7 +453,9 @@ export default {
 }
 
 .active-platform {
-  border: 3px solid currentColor;
+  border: 1px solid currentColor;
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
   background: rgba(128, 128, 128, 0.15);
   box-shadow: 0 0 20px currentColor;
   transform: scale(1.05);
@@ -492,7 +494,6 @@ export default {
   grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 columns equal width */
   gap: 24px;
   padding: 10px 0 0;
-
 }
 
 /* footer styling */
@@ -544,11 +545,6 @@ input[type="color"] {
 }
 
 @media (max-width: 600px) {
-  .platforms,
-  .game-grid {
-    grid-template-columns: 1fr;
-  }
-
   .header,
   .intro,
   .games-placeholder,
@@ -602,6 +598,34 @@ input[type="color"] {
   .spacer {
     display: none;
   }
+
+  .platforms {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 0 10px;
+  }
+
+  .platform h3 {
+    font-size: 0.7rem;
+    margin: 5px 0;
+    padding: 0 2px;
+  }
+
+  .platform p {
+    display: none;
+  }
+
+  .platform {
+    padding-bottom: 0px;
+  }
+
+  .game-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 0;    
+  }
+  
+
 }
 
 .quiz-container {

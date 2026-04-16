@@ -95,7 +95,7 @@ export default {
 
 
 
-      <h2>{{ game.title }}</h2>
+      <h2 class="game-title">{{ game.title }}</h2>
 
 
       <!-- ==================== task 92====================-->
@@ -254,7 +254,18 @@ a {
   transition: all 0.3s ease;
 }
 
+@media (max-width: 600px) {
+  .game-title {
+    font-size: 1.1rem;
+  }
 
+  .difficulty-label {
+    font-size: 0.7rem;
+  }
 
+  .difficulty-bar {
+    transform: scale(0.8);
+  }
+}
 </style>
 
