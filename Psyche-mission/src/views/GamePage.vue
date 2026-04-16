@@ -310,6 +310,7 @@ export default {
       </div>
     </div>
 
+    <h2 class="more-games-title">More games you might like:</h2>
     <div class="suggested-games">
       <div v-for="sGame in suggestedGames" :key="sGame.id" class="suggestion">
         <GameLink
@@ -620,6 +621,11 @@ input[type="color"] {
   opacity: 1;
 }
 
+.more-games-title {
+  text-align: center;
+  padding-top: 20px;
+}
+
 
 /* responsive design */
 @media (max-width: 1100px) {
@@ -658,14 +664,9 @@ input[type="color"] {
 }
 
 @media (max-width: 600px) {
-  .suggested-games {
-    grid-template-columns: 1fr;
-  }
-
   .navbar,
   .game,
   .details,
-  .suggested-games,
   .footer {
     margin-left: 14px;
     margin-right: 14px;
@@ -683,11 +684,6 @@ input[type="color"] {
     padding: 22px 16px;
   }
 
-  .platforms,
-  .game-grid {
-    grid-template-columns: 1fr;
-  }
-
   .top {
     position: relative;
     padding: 15px;
@@ -702,10 +698,6 @@ input[type="color"] {
     padding-right: 125px;
     line-height: 1.3;
     display: block;
-  }
-
-  .header h1 {
-    font-size: 1.2rem;
   }
 
   .theme-controls {
@@ -729,6 +721,25 @@ input[type="color"] {
   .toggle {
     padding: 6px 12px;
     font-size: 0.8rem;
+  }
+
+  .suggested-games {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 10px;
+  }
+
+  .suggestion {
+    min-height: auto;
+    padding: 5px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .suggestion :deep(h2),
+  .suggestion :deep(h3) {
+    font-size: 0.65rem !important;
+    margin: 4px 0;
   }
 }
 </style>
