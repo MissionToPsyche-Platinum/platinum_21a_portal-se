@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-
     const emit = defineEmits(['close', 'quiz-complete'])
     const closeModal = () => emit('close')
     const currentQuestionIdx = ref(0)
@@ -31,12 +30,11 @@ import { ref } from 'vue'
         if (currentQuestionIdx.value < questions.length - 1) {
             currentQuestionIdx.value++
         }
-        else {
-            showResults()
-        }
-
     }
     const isFinished = ref(false)
+    const isQuizComplete = () => {
+        return answers.value.device && answers.value.difficulty && answers.value.fun && answers.value.interest
+    }
     const showResults = () => {
         if (answers.value.device === null || answers.value.difficulty === null || answers.value.fun === null || answers.value.interest === null) {
             alert("Please answer all questions before submitting.")
@@ -44,14 +42,17 @@ import { ref } from 'vue'
         }
 
         console.log("User answers:", answers.value)
-        isFinished.value = true
-        emit('quiz-complete', answers.value)
-        setTimeout(() => {
-            closeModal()
-        }, 10000
-        )
-    }
 
+        isFinished.value = true
+
+        emit('quiz-complete', answers.value)
+
+        closeModal()
+    }
+    const submitAndViewResults = () => {
+        emit('quiz-complete', answers.value)
+        closeModal()
+    }
 </script>
 
 <template>
@@ -85,7 +86,7 @@ import { ref } from 'vue'
 
             <div class="modal-actions">
                 <button class="btn" @click="closeModal">Close</button>
-                <button>Submit</button>
+                <button class="btn" :disabled="!isQuizComplete()" @click="submitAndViewResults">View Results</button>
             </div>
         </div>
     </div>
@@ -117,5 +118,9 @@ import { ref } from 'vue'
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
+}
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 </style>

@@ -40,6 +40,8 @@ export default {
       favoritesOnly: false, // true if main list shows only favorites
 
       quizResults: [], // stores quiz results
+
+      showQuizResults: false
     };
   },
   /*==========task 83=========*/
@@ -104,9 +106,11 @@ export default {
     // favorite games list filtered down to saved ones, also respect filtering options
     favoriteGames() {
       return this.filteredGames.filter(game => this.favoriteIds.includes(game.id));
-
     },
 
+    displayGames() {
+        return this.showQuizResults ? this.quizResults :this.sortGames;
+    }
   },
   mounted() {
     // get the previously saved mode from the browser local storage
@@ -189,7 +193,32 @@ export default {
       //console.log("QUIZ RESULTS:", {filtered, scored, topGames})
       console.log(topGames.map(game => ({title: game.title, genre: game.genre, score: game.quizScore})))
 
-      this.quizResults = topGames;
+      console.log("Scroll: ", document.querySelector(".games-placeholder"))
+
+      this.quizResults = topGames
+
+      this.$nextTick(() => {
+        requestAnimationFrame(() => {
+           const el = document.querySelector(".games-placeholder")
+
+           if (!el)
+            return
+
+           el.scrollIntoView({behavior:"smooth", block: "start"})
+         })
+
+      })
+
+      /*this.showQuizResults = true
+      this.closeQuiz()
+
+
+      this.$nextTick(() => {
+        setTimeout(() => {
+          document.getElementById("games-placeholder")?.scrollIntoView({behavior:"smooth"})
+        }, 100
+        )
+      });*/
     },
 
     loadFavorites() {
@@ -343,7 +372,7 @@ export default {
         }
 
         return sorted.slice(0,3)
-    }
+    },
   }
 }
 </script>
@@ -450,7 +479,8 @@ export default {
       <div class="game-grid">
         <!--===================task 83==================-->
         <!--use computed sortGames-->
-        <GameLink v-for="game in sortGames" :key="game.id" :game="game" :isDark="isDark" class="platform"
+        <!--<GameLink v-for="game in sortGames" :key="game.id" :game="game" :isDark="isDark" class="platform"-->
+        <GameLink v-for="game in displayGames" :key="game.id" :game="game" :isDark="isDark" class="platform"
                   :textColor="lightColor"/>
       </div>
     </section>
