@@ -195,6 +195,7 @@ export default {
 
       console.log("Scroll: ", document.querySelector(".games-placeholder"))
 
+      this.showQuizResults = true
       this.quizResults = topGames
 
       this.$nextTick(() => {
@@ -208,17 +209,6 @@ export default {
          })
 
       })
-
-      /*this.showQuizResults = true
-      this.closeQuiz()
-
-
-      this.$nextTick(() => {
-        setTimeout(() => {
-          document.getElementById("games-placeholder")?.scrollIntoView({behavior:"smooth"})
-        }, 100
-        )
-      });*/
     },
 
     loadFavorites() {
