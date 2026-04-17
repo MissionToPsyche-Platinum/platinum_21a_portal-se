@@ -107,6 +107,14 @@ export default {
     favoriteGames() {
       return this.filteredGames.filter(game => this.favoriteIds.includes(game.id));
     },
+    // returns a formatted favorites count or returns an empty string if no favorites
+    favoritesCount() {
+      if (this.favoriteGames.length > 0)
+        return `(${this.favoriteGames.length})`;
+
+      return ""
+    },
+
 
     displayGames() {
         return this.showQuizResults ? this.quizResults :this.sortGames;
@@ -458,14 +466,15 @@ export default {
     ]"
           @click="toggleFavoritesView"
       >
-        {{ favoritesOnly ? "Show All Games" : "View Saved Games" }}
+        {{ favoritesOnly ? `Show All Games ${favoritesCount}` : `Show Favorite Games ${favoritesCount}` }}
+
       </button>
     </section>
 
     <!-- placeholder for Game Links -->
     <section class="games-placeholder">
       <!-- dynamic title -->
-      <h2>{{ favoritesOnly ? "Favorite Games" : "Available Experiences" }}</h2>
+      <h2>{{ favoritesOnly ? `Favorite Games ${favoritesCount}` : "Available Experiences" }}</h2>
       <div class="game-grid">
         <!--===================task 83==================-->
         <!--use computed sortGames-->
