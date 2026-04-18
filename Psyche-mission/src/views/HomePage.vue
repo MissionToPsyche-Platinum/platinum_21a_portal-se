@@ -378,10 +378,14 @@ export default {
 <template>
   <!--root container-->
   <!--dynamically adds either the "light" or "dark" class-->
-  <div class="main" :style="[{backgroundColor: darkColor},{ color: lightColor}]">
+  <div class="main"
+    :class="{ 'dark-mode': isDark, 'light-mode': !isDark }"
+    :style="[{backgroundColor: darkColor},{ color: lightColor}]">
 
-    <!-- Container for background effects -->
+    <!-- Containers for background effects -->
      <div class="background-effect"></div>
+     <div class="star-div stars-small" v-if="isDark"></div>
+     <div class="star-div stars-large" v-if="isDark"></div>
 
     <!-- Top section containing the toggle button and title -->
     <div class="top">
@@ -426,7 +430,7 @@ export default {
 
     <section class="quiz">
       <div id="quiz-container" class="quiz-container">
-        <label id="quiz-label" class="quiz-label">
+        <label id="quiz-label" class="quiz-label" :class="{ 'dark-mode': isDark, 'light-mode': !isDark }">
           Take a quiz to find your favorite game!
         </label>
         <button id="quiz-button" class="quiz-button" @click="openQuiz">
@@ -497,6 +501,7 @@ export default {
   position: relative;
   transition: background-color 0.3s ease, color 0.3s ease;
   padding-bottom: 20px;
+  overflow: hidden;
 }
 
 /* header styling */
@@ -822,8 +827,17 @@ input[type="color"] {
 .quiz-label {
   font-size: 20px;
   font-weight: bold;
-  color: #333;
+  /* color: #333; */
   text-align: center;
+}
+
+.filter {
+  z-index: 10;
+}
+
+.top, .quiz, .search, .platform, .games-placeholder {
+  position: relative;
+  z-index: 1;
 }
 
 .background-effect {
@@ -834,6 +848,49 @@ input[type="color"] {
   background: radial-gradient(circle at 50% 50%, rgba(97, 64, 196, 0.5), transparent 80%);
   filter: blur(50px);
   z-index: 0;
+}
+
+.star-div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Create stars and make them move across the screen */
+.stars-small {
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, #fff, rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 50px 70px, #fff, rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 150px 50px, #fff, rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 300px 250px, #fff, rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 410px 310px, #fff, rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 500px 100px, #fff, rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 700px 400px, #fff, rgba(0, 0, 0, 0)),
+    radial-gradient(2px 2px at 750px 500px, #fff, rgba(0, 0, 0, 0));
+  background-size: 800px 800px;
+  animation: moveStars 100s linear infinite;
+  opacity: 0.5
+}
+
+.stars-large {
+  background-image:
+    radial-gradient(5px 5px at 100px 150px, #fff, rgba(0, 0, 0, 0)),
+    radial-gradient(5px 5px at 250px 170px, #fff, rgba(0, 0, 0, 0)),
+    radial-gradient(5px 5px at 400px 350px, #fff, rgba(0, 0, 0, 0)),
+    radial-gradient(5px 5px at 510px 440px, #fff, rgba(0, 0, 0, 0)),
+    radial-gradient(5px 5px at 600px 100px, #fff, rgba(0, 0, 0, 0));
+  background-size: 1000px 1000px;
+  animation: moveStars 60s linear infinite;
+  opacity: 0.8
+}
+
+@keyframes moveStars{
+  from{ transform: translate(0, 0); }
+  to{ transform: translate(-400px, -400px); }
 }
 </style>
 
