@@ -729,6 +729,10 @@ input[type="color"] {
     margin: 10px;
   }
 
+  .game-iframe {
+    aspect-ratio: 4 / 5;
+  }
+
   .suggestion {
     min-height: auto;
     padding: 5px;
