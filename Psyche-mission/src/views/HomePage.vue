@@ -376,9 +376,12 @@ export default {
 </script>
 
 <template>
+  <!--root container-->
   <!--dynamically adds either the "light" or "dark" class-->
   <div class="main" :style="[{backgroundColor: darkColor},{ color: lightColor}]">
-    <!--root container-->
+
+    <!-- Container for background effects -->
+     <div class="background-effect"></div>
 
     <!-- Top section containing the toggle button and title -->
     <div class="top">
@@ -622,7 +625,8 @@ export default {
   padding: 10px;
   text-align: center;
   border-radius: 10px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.2));
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 50, 0.2));
+  border: 1px solid rgba(0, 0, 50, 0.1);
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -820,6 +824,16 @@ input[type="color"] {
   font-weight: bold;
   color: #333;
   text-align: center;
+}
+
+.background-effect {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 50%, rgba(97, 64, 196, 0.5), transparent 80%);
+  filter: blur(50px);
+  z-index: 0;
 }
 </style>
 
