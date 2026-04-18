@@ -39,7 +39,9 @@ export default {
 
       favoritesOnly: false, // true if main list shows only favorites
 
+      quizResults: [], // stores quiz results
 
+      showQuizResults: false
     };
   },
   /*==========task 83=========*/
@@ -104,9 +106,19 @@ export default {
     // favorite games list filtered down to saved ones, also respect filtering options
     favoriteGames() {
       return this.filteredGames.filter(game => this.favoriteIds.includes(game.id));
+    },
+    // returns a formatted favorites count or returns an empty string if no favorites
+    favoritesCount() {
+      if (this.favoriteGames.length > 0)
+        return `(${this.favoriteGames.length})`;
 
+      return ""
     },
 
+
+    displayGames() {
+        return this.showQuizResults ? this.quizResults :this.sortGames;
+    }
   },
   mounted() {
     // get the previously saved mode from the browser local storage
@@ -182,8 +194,29 @@ export default {
     },
 
     handleQuizResults(results) {
-      //TODO: Implement logic to handle quiz results
-      console.log("Quiz input received:", results)
+      let filtered = this.filterByDevice(this.games, results.device)
+      let scored = this.scoreQuiz(filtered, results)
+      let topGames = this.getTopGames(scored, results.device)
+
+      //console.log("QUIZ RESULTS:", {filtered, scored, topGames})
+      console.log(topGames.map(game => ({title: game.title, genre: game.genre, score: game.quizScore})))
+
+      console.log("Scroll: ", document.querySelector(".games-placeholder"))
+
+      this.showQuizResults = true
+      this.quizResults = topGames
+
+      this.$nextTick(() => {
+        requestAnimationFrame(() => {
+           const el = document.querySelector(".games-placeholder")
+
+           if (!el)
+            return
+
+           el.scrollIntoView({behavior:"smooth", block: "start"})
+         })
+
+      })
     },
 
     loadFavorites() {
@@ -195,10 +228,151 @@ export default {
     toggleFavoritesView() {
       this.favoritesOnly = !this.favoritesOnly;
     },
+
+    normalizeText(text) {
+      return text.toLowerCase()
+    },
+
+    //Difficulty is the difficulty of the game being looked at
+    //Selected is the difficulty selected by the user
+    getDifficultyScore(difficulty, selected) {
+        if (!selected) {
+            return 0;
+        }
+
+        const difficultyScores = {
+            Easy: ["Easy", "Medium"],
+            Medium: ["Easy", "Medium", "Hard"],
+            Hard: ["Medium", "Hard"]
+        }
+
+        if (difficulty === selected) {
+            return 2;
+        }
+        else if (difficultyScores[selected].includes(difficulty)) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    },
+
+    filterByDevice(games, device) {
+        if (device === "VR Headset") {
+            return games.filter(game => game.genre.includes("VR Experience"));
+        }
+        else if (device === "Phone/Tablet") {
+            return games.filter(game => game.genre.includes("AR Experience"));
+        }
+        else {
+            return games.filter(game => !game.genre.includes("VR Experience") && !game.genre.includes("AR Experience"));
+        }
+
+        return games;
+    },
+
+    keywordScoring(text, keywords) {
+        const max = 2
+        let score = 0
+
+        for (let word of keywords) {
+            if (text.includes(word)) {
+                score++
+
+                if (score >= max) {
+                    break
+                }
+
+            }
+        }
+
+        return score
+    },
+
+    getQuizConfiguration() {
+      return {
+        fun: {
+            "Fast-paced action": {
+                genres: ["Arcade"],
+                keywords: ["action", "fast", "quick", "speed", "surviv", "dodg", "avoid", "reflex", "navigat", "evade", "obstacle"]
+            },
+            "Exploring space": {
+                genres: ["Adventure"],
+                keywords: ["explor", "discover", "journey", "travel", "rover", "navigat", "mission"]
+            },
+            "Solving puzzles": {
+                genres: ["Adventure", "Simulation"],
+                keywords: ["escap", "solv", "puzzl", "clue", "unlock", "challeng"]
+            },
+            "Trivia and quizzes": {
+                genres: ["Trivia"],
+                keywords: ["quiz", "question", "trivia", "answer"]
+            },
+            "Doing science or collecting data": {
+                genres: ["Simulation"],
+                keywords: ["experiment", "discover", "collect", "data", "analy", "scan", "measur", "research", "sampl"]
+            },
+            "Building or managing things": {
+                genres: ["Simulation"],
+                keywords: ["build", "upgrad", "manag", "resource", "construct", "design", "creat"]
+            }
+        },
+        interest: {
+            "Psyche asteroid": ["psyche", "asteroid"],
+            "Planets and moons": ["mars", "moon", "planet"],
+            "Space missions and spacecraft": ["mission", "spacecraft", "satellite", "rocket", "ship", "launch", "orbit"],
+            "Learning science concepts": ["learn", "experiment", "educat", "scien"],
+            "Just playing for fun": []
+        }
+      }
+    },
+
+    scoreQuiz(games, answers) {
+      const quizConfig = this.getQuizConfiguration()
+
+      return games.map(game => {
+        let score = 0
+        const desc = this.normalizeText(game.description)
+
+        //Conditional difficulty scoring for laptop/desktop games
+        if (answers.device === "Laptop/Desktop") {
+            score += this.getDifficultyScore(game.difficulty, answers.difficulty)
+        }
+
+        const q3Config = quizConfig.fun[answers.fun]
+
+        if (q3Config) {
+            if (q3Config.genres.includes(games.genre)) {
+                score += 2
+            }
+
+            score += this.keywordScoring(desc, q3Config.keywords)
+        }
+
+        const q4Keywords = quizConfig.interest[answers.interest]
+
+        if (q4Keywords) {
+            score += this.keywordScoring(desc, q4Keywords)
+        }
+
+        return {
+          ...game,
+          quizScore: score
+        }
+      })
+    },
+
+    getTopGames(scoredGames, device) {
+        const sorted = scoredGames.sort((g1, g2) => g2.quizScore - g1.quizScore)
+
+        if (device === "VR Headset" || device === "Phone/Tablet") {
+            return sorted.slice(0,2)
+        }
+
+        return sorted.slice(0,3)
+    },
   }
-
-
-};
+}
 </script>
 
 <template>
@@ -292,18 +466,20 @@ export default {
     ]"
           @click="toggleFavoritesView"
       >
-        {{ favoritesOnly ? "Show All Games" : "View Saved Games" }}
+        {{ favoritesOnly ? `Show All Games ${favoritesCount}` : `Show Favorite Games ${favoritesCount}` }}
+
       </button>
     </section>
 
     <!-- placeholder for Game Links -->
     <section class="games-placeholder">
       <!-- dynamic title -->
-      <h2>{{ favoritesOnly ? "Favorite Games" : "Available Experiences" }}</h2>
+      <h2>{{ favoritesOnly ? `Favorite Games ${favoritesCount}` : "Available Experiences" }}</h2>
       <div class="game-grid">
         <!--===================task 83==================-->
         <!--use computed sortGames-->
-        <GameLink v-for="game in sortGames" :key="game.id" :game="game" :isDark="isDark" class="platform"
+        <!--<GameLink v-for="game in sortGames" :key="game.id" :game="game" :isDark="isDark" class="platform"-->
+        <GameLink v-for="game in displayGames" :key="game.id" :game="game" :isDark="isDark" class="platform"
                   :textColor="lightColor"/>
       </div>
     </section>
