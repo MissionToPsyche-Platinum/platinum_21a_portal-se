@@ -15,7 +15,7 @@ export default {
   },
   data() {
     return {
-      isDark: false,// variable to track if dark mode is active
+      isDark: true,// variable to track if dark mode is active
       games: gameData.games, // creates an array of game objects from JSON file
       darkColor: "#000000",// variable for selected dark mode color with a default value
       lightColor: "#ffffff",// variable for selected light mode color with a default value
