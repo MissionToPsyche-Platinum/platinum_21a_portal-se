@@ -205,7 +205,6 @@ export default {
 
       this.showQuizResults = true
       this.quizResults = topGames
-      this.isQuizOpen = false
 
       this.$nextTick(() => {
         requestAnimationFrame(() => {
@@ -440,7 +439,7 @@ export default {
       </div>
     </section>
 
-    <QuizModal v-if="isQuizOpen" @quiz-complete="handleQuizResults"/>
+    <QuizModal v-if="isQuizOpen" @close="closeQuiz" @quiz-complete="handleQuizResults"/>
 
     <section class="search">
       <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
@@ -502,7 +501,7 @@ export default {
   position: relative;
   transition: background-color 0.3s ease, color 0.3s ease;
   padding-bottom: 20px;
-
+  overflow: hidden;
 }
 
 /* header styling */
