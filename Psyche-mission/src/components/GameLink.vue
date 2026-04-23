@@ -6,6 +6,7 @@ export default {
     game: { type: Object },
     isDark: { type: Boolean},
     textColor: { type: String }, // task 93, text color passed from HomePage
+    compact: { type: Boolean, default: false }
   },
   data() {
     return {
@@ -91,7 +92,7 @@ export default {
 
 <template>
   <router-link :to="{ name: 'GamePage', params: {id: game.id }}">
-    <div :class="{'dark-mode': isDark}" class="game-link-card">
+    <div :class="['game-link-card',{'dark-mode': isDark, 'compact-card': compact}]" class="game-link-card">
 
 
 
