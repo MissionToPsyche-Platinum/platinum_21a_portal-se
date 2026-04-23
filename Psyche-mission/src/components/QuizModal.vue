@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
     const emit = defineEmits(['close', 'quiz-complete'])
     const closeModal = () => emit('close')
     const currentQuestionIdx = ref(0)
@@ -51,16 +51,24 @@ import { ref } from 'vue'
     }
     const submitAndViewResults = () => {
         emit('quiz-complete', answers.value)
-        closeModal()
     }
+    const progress = computed(() => {
+        const answered = Object.values(answers.value).filter(answer => answer !== null).length
+        return (answered / questions.length) * 100
+    })
 </script>
 
 <template>
     <div class="modal" @click="closeModal">
         <div class="modal-content" @click.stop>
             <h2>Quiz</h2>
+            <div class="progress-container">
+                <div class="progress-bar" :style="{ width: progress + '%' }"></div>
+            </div>
 
-            <div v-if="!isFinished">
+            <p class="progres-text">Question {{ currentQuestionIdx + 1 }} of {{ questions.length }}</p>
+
+            <div v-if="!isFinished" class="quiz-body">
                 <h3>
                     {{ questions[currentQuestionIdx].question }}
                 </h3>
@@ -122,5 +130,44 @@ import { ref } from 'vue'
 .button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+}
+.progress-container {
+    background-color: #2c2c2c;
+    width: 100%;
+    height: 10px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 10px 0 5px;
+}
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #00c6ff, #00c6ff);
+    transition: width 0.3s ease;
+}
+.progres-text {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-bottom: 10px;
+}
+.quiz-body {
+    margin-top: 10px;
+}
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+.option-button {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: #eee;
+    transition: 0.2s;
+}
+.option-button:hover {
+    background: #ddd;
+    transform: scale(1.02);
 }
 </style>
