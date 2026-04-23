@@ -253,7 +253,7 @@ export default {
               allowfullscreen
             ></iframe>
 
-            <button class="fullscreen-btn" @click="toggleFullscreen">
+            <button v-if="game.engine != 'unity'" class="fullscreen-btn" @click="toggleFullscreen">
               ⛶ Fullscreen
             </button>
           </div>
