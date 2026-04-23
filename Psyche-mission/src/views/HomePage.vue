@@ -118,6 +118,23 @@ export default {
 
     displayGames() {
         return this.showQuizResults ? this.quizResults :this.sortGames;
+    },
+
+    featuredGame() {
+      if (!this.games || this.games.length === 0) {
+        return null;
+      }
+
+      const start = new Date("2026-04-22")
+      const today = new Date()
+
+      start.setHours(0,0,0,0)
+      today.setHours(0,0,0,0)
+
+      const days = Math.floor((today - start) / (1000 * 60 * 60 * 24))
+      const idx = days % this.games.length
+
+      return this.games[idx]
     }
   },
   mounted() {
