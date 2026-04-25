@@ -4,6 +4,7 @@ import GameLink from '../components/GameLink.vue'
 import Filter from '../components/Filter.vue'
 import SearchBar from '../components/SearchBar.vue'
 import QuizModal from '../components/QuizModal.vue'
+import SidePanel from '@/components/SidePanel.vue'
 
 export default {
   name: "HomePage",
@@ -11,7 +12,8 @@ export default {
     GameLink,
     Filter,
     SearchBar,
-    QuizModal
+    QuizModal,
+    SidePanel
   },
   data() {
     return {
@@ -405,121 +407,124 @@ export default {
     <div class="star-div stars-small" v-if="isDark"></div>
     <div class="star-div stars-large" v-if="isDark"></div>
 
-    <!-- Top section containing the toggle button and title -->
-    <div class="top">
-      <h1>Welcome to the Psyche mission's web-based game portal!</h1>
-      <div class="spacer"></div>
+    <SidePanel></SidePanel>
+    <div class="content-wrapper">
+      <!-- Top section containing the toggle button and title -->
+      <div class="top">
+        <h1>Welcome to the Psyche mission's web-based game portal!</h1>
+        <div class="spacer"></div>
 
-      <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
-      <div class="theme-controls">
-        <button class="toggle"
-                :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
-                @click="toggleMode">
-          <!--dynamically change thee text based on the mode-->
-          {{ isDark ? "Switch to Light" : "Switch to Dark" }}
-        </button>
+        <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
+        <div class="theme-controls">
+          <button class="toggle"
+                  :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
+                  @click="toggleMode">
+            <!--dynamically change thee text based on the mode-->
+            {{ isDark ? "Switch to Light" : "Switch to Dark" }}
+          </button>
 
-        <div class="pickers">
-          <label>
-            Background
-            <input type="color" v-model="darkColor" @input="updateDarkColor" class="picker"
-                   :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
-          </label>
-          <label>
-            Text
-            <input type="color" v-model="lightColor" @input="updateLightColor" class="picker"
-                   :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
-          </label>
+          <div class="pickers">
+            <label>
+              Background
+              <input type="color" v-model="darkColor" @input="updateDarkColor" class="picker"
+                    :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
+            </label>
+            <label>
+              Text
+              <input type="color" v-model="lightColor" @input="updateLightColor" class="picker"
+                    :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
+            </label>
+          </div>
         </div>
+
       </div>
 
-    </div>
-
-    <!-- page header -->
-    <!-- <header class="header">
-      <h1>Psyche Mission Game Portal AR, VR, and XR</h1>
-    </header> -->
-
-    <!-- place holder for an introduction -->
-    <!-- <section class="intro">
-      <h2>Welcome to the Psyche Mission's Web-Based Portal By Team 1 platinum_21a_portal-se</h2>
-      <p>Discover the latest web-based experiences from the Psyche Mission team.</p>
-    </section> -->
-
-    <section class="quiz">
-      <div id="quiz-container" class="quiz-container">
-        <label id="quiz-label" class="quiz-label"  :class="{ 'dark-mode': isDark, 'light-mode': !isDark }">
-          Take a quiz to find your favorite game!
-        </label>
-        <button id="quiz-button" class="quiz-button" @click="openQuiz">
-          Take Quiz
-        </button>
-      </div>
-    </section>
-
-    <QuizModal v-if="isQuizOpen" @quiz-complete="handleQuizResults"/>
-
-    <section class="search">
-      <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
-    </section>
-
-    <!--  main platforms section can be used to filter the displayed games -->
-    <section class="platforms">
-      <div
-        v-for="platform in platforms"
-        :key="platform.genre"
-        class="platform"
-        :class="{'active-platform': activeFilters.genre === platform.genre}"
-        @click="setGenreFilter(platform.genre)"
-      >
-        <h3>{{ platform.label }}</h3>
-        <p>{{ platform.desc }}</p>
-      </div>
-
-    </section>
-
-    <section class="filter">
-      <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
-    </section>
-
-    <!-- placeholder for Game Links -->
-    <section class="games-placeholder">
-      <!-- show only favorites games' section-->
-      <section class="favorites-toggle-section">
-        <button
-            class="toggle"
-            :style="[
-      { backgroundColor: isDark ? darkColor : lightColor },
-      { color: isDark ? lightColor : darkColor }
-    ]"
-            @click="toggleFavoritesView"
-        >
-          {{ favoritesOnly ? `Show All Games ${favoritesCount}` : `Show Favorite Games ${favoritesCount}` }}
-
-        </button>
+      
+      <section class="quiz">
+        <div id="quiz-container" class="quiz-container">
+          <label id="quiz-label" class="quiz-label"  :class="{ 'dark-mode': isDark, 'light-mode': !isDark }">
+            Take a quiz to find your favorite game!
+          </label>
+          <button id="quiz-button" class="quiz-button" @click="openQuiz">
+            Take Quiz
+          </button>
+        </div>
       </section>
-      <!-- dynamic title -->
-      <h2>{{ favoritesOnly ? `Favorite Games ${favoritesCount}` : "Available Experiences" }}</h2>
-      <div class="game-grid">
-        <!--===================task 83==================-->
-        <!--use computed sortGames-->
-        <!--<GameLink v-for="game in sortGames" :key="game.id" :game="game" :isDark="isDark" class="platform"-->
-        <GameLink v-for="game in displayGames" :key="game.id" :game="game" :isDark="isDark" class="platform"
-                  :textColor="lightColor"/>
+
+      <QuizModal v-if="isQuizOpen" @quiz-complete="handleQuizResults"/>
+
+      <section class="search">
+        <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
+      </section>
+
+      <!--  main platforms section can be used to filter the displayed games -->
+      <section class="platforms">
+        <div
+          v-for="platform in platforms"
+          :key="platform.genre"
+          class="platform"
+          :class="{'active-platform': activeFilters.genre === platform.genre}"
+          @click="setGenreFilter(platform.genre)"
+        >
+          <h3>{{ platform.label }}</h3>
+          <p>{{ platform.desc }}</p>
+        </div>
+
+      </section>
+
+      <section class="filter">
+        <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
+      </section>
+
+      <div class="content-wrapper">
+        <!-- placeholder for Game Links -->
+        <section class="games-placeholder">
+          <!-- show only favorites games' section-->
+          <section class="favorites-toggle-section">
+            <button
+                class="toggle"
+                :style="[
+          { backgroundColor: isDark ? darkColor : lightColor },
+          { color: isDark ? lightColor : darkColor }
+        ]"
+                @click="toggleFavoritesView"
+            >
+              {{ favoritesOnly ? `Show All Games ${favoritesCount}` : `Show Favorite Games ${favoritesCount}` }}
+
+            </button>
+          </section>
+          <!-- dynamic title -->
+          <h2>{{ favoritesOnly ? `Favorite Games ${favoritesCount}` : "Available Experiences" }}</h2>
+          <div class="game-grid">
+            <!--===================task 83==================-->
+            <!--use computed sortGames-->
+            <!--<GameLink v-for="game in sortGames" :key="game.id" :game="game" :isDark="isDark" class="platform"-->
+            <GameLink v-for="game in displayGames" :key="game.id" :game="game" :isDark="isDark" class="platform"
+                      :textColor="lightColor"/>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
 <style>
 /* main container styling */
 .main {
+  display: flex;
+  flex-direction: row;
   min-height: 100vh;
   font-family: Arial, sans-serif;
   position: relative;
   transition: background-color 0.3s ease, color 0.3s ease;
   padding-bottom: 20px;
   overflow: hidden;
+}
+
+.content-wrapper {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 /* header styling */
