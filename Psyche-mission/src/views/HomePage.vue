@@ -473,26 +473,58 @@ export default {
 
     <section class="filter">
       <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
+      <div style="display: inline; justify-content: center; width: 100%;">
+      <button
+          class="toggle"
+          :style="[
+              { backgroundColor: isDark ? darkColor : lightColor },
+              { color: isDark ? lightColor : darkColor }
+            ]"
+          @click="toggleFavoritesView"
+      >
+
+        {{ favoritesOnly ? `Show All Games ${favoritesCount}` : `Show Favorite Games ${favoritesCount}` }}
+
+      </button>
+      </div>
     </section>
+
 
     <!-- placeholder for Game Links -->
     <section class="games-placeholder">
       <!-- show only favorites games' section-->
       <section class="favorites-toggle-section">
-        <button
-            class="toggle"
-            :style="[
-      { backgroundColor: isDark ? darkColor : lightColor },
-      { color: isDark ? lightColor : darkColor }
-    ]"
+<!--        <button
+                    class="toggle"
+                    :style="[
+              { backgroundColor: isDark ? darkColor : lightColor },
+              { color: isDark ? lightColor : darkColor }
+            ]"
             @click="toggleFavoritesView"
         >
+
           {{ favoritesOnly ? `Show All Games ${favoritesCount}` : `Show Favorite Games ${favoritesCount}` }}
 
-        </button>
+        </button>-->
+        <section v-if="favoriteGames.length > 0" class="favorites-row-section">
+          <h2 class="favorites-row-title">Favorite Games {{ favoritesCount }}</h2>
+
+          <div class="favorites-scroll-row">
+            <GameLink
+                v-for="game in favoriteGames"
+                :key="game.id"
+                :game="game"
+                :isDark="isDark"
+                :textColor="lightColor"
+                :compact="true"
+            />
+          </div>
+        </section>
+
+        <p v-else class="empty-favorites-message">
+          No favorite games saved yet.
+        </p>
       </section>
-      <!-- dynamic title -->
-      <h2>{{ favoritesOnly ? `Favorite Games ${favoritesCount}` : "Available Experiences" }}</h2>
       <div class="game-grid">
         <!--===================task 83==================-->
         <!--use computed sortGames-->
