@@ -484,26 +484,59 @@ export default {
 
     <section class="filter">
       <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
+      <div style="display: flex; justify-content: center; width: 100%; position: relative; z-index: 10; margin-top: -18px; margin-bottom: 16px;">
+      <button
+          class="toggle"
+          :style="[
+              { backgroundColor: isDark ? darkColor : lightColor },
+              { color: isDark ? lightColor : darkColor },
+              { position: 'relative', zIndex: 20, pointerEvents: 'auto' }
+            ]"
+          @click="toggleFavoritesView"
+      >
+
+        {{ favoritesOnly ? `Show All Games ${favoritesCount}` : `Show Favorite Games ${favoritesCount}` }}
+
+      </button>
+      </div>
     </section>
+
 
     <!-- placeholder for Game Links -->
     <section class="games-placeholder">
       <!-- show only favorites games' section-->
       <section class="favorites-toggle-section">
-        <button
-            class="toggle"
-            :style="[
-      { backgroundColor: isDark ? darkColor : lightColor },
-      { color: isDark ? lightColor : darkColor }
-    ]"
+<!--        <button
+                    class="toggle"
+                    :style="[
+              { backgroundColor: isDark ? darkColor : lightColor },
+              { color: isDark ? lightColor : darkColor }
+            ]"
             @click="toggleFavoritesView"
         >
+
           {{ favoritesOnly ? `Show All Games ${favoritesCount}` : `Show Favorite Games ${favoritesCount}` }}
 
-        </button>
+        </button>-->
+        <section v-if="favoriteGames.length > 0" class="favorites-row-section">
+          <h2 class="favorites-row-title">Favorite Games {{ favoritesCount }}</h2>
+
+          <div class="favorites-scroll-row">
+            <GameLink
+                v-for="game in favoriteGames"
+                :key="game.id"
+                :game="game"
+                :isDark="isDark"
+                :textColor="lightColor"
+                :compact="true"
+            />
+          </div>
+        </section>
+
+        <p v-else class="empty-favorites-message">
+          No favorite games saved yet.
+        </p>
       </section>
-      <!-- dynamic title -->
-      <h2>{{ favoritesOnly ? `Favorite Games ${favoritesCount}` : "Available Experiences" }}</h2>
       <div class="game-grid">
         <!--===================task 83==================-->
         <!--use computed sortGames-->
@@ -852,6 +885,7 @@ input[type="color"] {
   text-align: center;
 }
 
+
 .filter {
   z-index: 10;
 }
@@ -909,9 +943,53 @@ input[type="color"] {
   opacity: 0.8
 }
 
-@keyframes moveStars{
-  from{ transform: translate(0, 0); }
-  to{ transform: translate(-400px, -400px); }
+@keyframes moveStars {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-400px, -400px);
+  }
+}
+.favorites-row-section {
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.favorites-row-title {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.favorites-scroll-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px 4px 14px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.favorites-scroll-row > * {
+  flex: 0 0 auto;
+}
+
+.favorites-scroll-row::-webkit-scrollbar {
+  height: 8px;
+}
+
+.favorites-scroll-row::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.5);
+  border-radius: 999px;
+}
+
+.favorites-scroll-row::-webkit-scrollbar-track {
+  background: transparent;
+
 }
 </style>
 

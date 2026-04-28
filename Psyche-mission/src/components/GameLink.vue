@@ -6,6 +6,7 @@ export default {
     game: { type: Object },
     isDark: { type: Boolean},
     textColor: { type: String }, // task 93, text color passed from HomePage
+    compact: { type: Boolean, default: false }
   },
   data() {
     return {
@@ -91,7 +92,7 @@ export default {
 
 <template>
   <router-link :to="{ name: 'GamePage', params: {id: game.id }}">
-    <div :class="{'dark-mode': isDark}" class="game-link-card">
+    <div :class="['game-link-card',{'dark-mode': isDark, 'compact-card': compact}]">
 
 
 
@@ -253,6 +254,39 @@ a {
   border-radius: 999px;
   transition: all 0.3s ease;
 }
+
+
+.compact-card{
+  width: 180px;
+  min-width: 180px;
+  padding: 10px;
+}
+
+.compact-card .game-title {
+  font-size: 0.95rem;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+
+.compact-card .difficulty-section {
+  display: none;
+}
+
+.compact-card .media {
+  height: 95px;
+  max-width: 160px;
+}
+
+.compact-card .favorite-container {
+  margin-top: 2px;
+}
+
+.compact-card .favorite-btn {
+  font-size: 20px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
 
 @media (max-width: 600px) {
   .game-title {
