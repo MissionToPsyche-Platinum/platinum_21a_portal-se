@@ -100,16 +100,18 @@
     position: relative;
     display: inline-block;
     padding: 20px;
+    z-index: 100;
 }
 
 .filter-toggle {
     background-color: #330066;
     color: white;
+    width: 120px;
     padding: 12px 24px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     font-weight: bold;
 }
 
@@ -122,7 +124,7 @@
     border-radius: 0 8px 8px 8px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 15px;
     min-width: max-content;
     z-index: 100;    

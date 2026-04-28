@@ -407,75 +407,76 @@ export default {
     <div class="star-div stars-small" v-if="isDark"></div>
     <div class="star-div stars-large" v-if="isDark"></div>
 
-    <SidePanel></SidePanel>
-    <div class="content-wrapper">
       <!-- Top section containing the toggle button and title -->
-      <div class="top">
-        <h1>Welcome to the Psyche mission's web-based game portal!</h1>
-        <div class="spacer"></div>
-
-        <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
-        <div class="theme-controls">
-          <button class="toggle"
-                  :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
-                  @click="toggleMode">
-            <!--dynamically change thee text based on the mode-->
-            {{ isDark ? "Switch to Light" : "Switch to Dark" }}
-          </button>
-
-          <div class="pickers">
-            <label>
-              Background
-              <input type="color" v-model="darkColor" @input="updateDarkColor" class="picker"
-                    :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
-            </label>
-            <label>
-              Text
-              <input type="color" v-model="lightColor" @input="updateLightColor" class="picker"
-                    :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
-            </label>
-          </div>
-        </div>
-
-      </div>
-
+    <div class="top">
+      <h1>Welcome to the Psyche mission's web-based game portal!</h1>
+      <div class="spacer"></div>
       
-      <section class="quiz">
-        <div id="quiz-container" class="quiz-container">
-          <label id="quiz-label" class="quiz-label"  :class="{ 'dark-mode': isDark, 'light-mode': !isDark }">
-            Take a quiz to find your favorite game!
+      <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
+      <div class="theme-controls">
+        <button class="toggle"
+        :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
+        @click="toggleMode">
+        <!--dynamically change thee text based on the mode-->
+        {{ isDark ? "Switch to Light" : "Switch to Dark" }}
+        </button>
+      
+        <div class="pickers">
+          <label>
+            Background
+            <input type="color" v-model="darkColor" @input="updateDarkColor" class="picker"
+            :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
           </label>
-          <button id="quiz-button" class="quiz-button" @click="openQuiz">
-            Take Quiz
-          </button>
+          <label>
+            Text
+            <input type="color" v-model="lightColor" @input="updateLightColor" class="picker"
+            :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
+          </label>
         </div>
-      </section>
-
-      <QuizModal v-if="isQuizOpen" @quiz-complete="handleQuizResults"/>
-
-      <section class="search">
-        <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
-      </section>
-
-      <!--  main platforms section can be used to filter the displayed games -->
-      <section class="platforms">
-        <div
-          v-for="platform in platforms"
-          :key="platform.genre"
-          class="platform"
-          :class="{'active-platform': activeFilters.genre === platform.genre}"
-          @click="setGenreFilter(platform.genre)"
-        >
-          <h3>{{ platform.label }}</h3>
-          <p>{{ platform.desc }}</p>
-        </div>
-
-      </section>
-
-      <section class="filter">
-        <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
-      </section>
-
+      </div>
+      
+    </div>
+    
+    
+    <section class="quiz">
+      <div id="quiz-container" class="quiz-container">
+        <label id="quiz-label" class="quiz-label"  :class="{ 'dark-mode': isDark, 'light-mode': !isDark }">
+          Take a quiz to find your favorite game!
+        </label>
+        <button id="quiz-button" class="quiz-button" @click="openQuiz">
+          Take Quiz
+        </button>
+      </div>
+    </section>
+    
+    <QuizModal v-if="isQuizOpen" @quiz-complete="handleQuizResults"/>
+    
+    <section class="search">
+      <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
+    </section>
+    <!--  main platforms section can be used to filter the displayed games -->
+    
+    <div class="content-body">
+      <SidePanel>
+        <section class="platforms platform-filter-btns">
+          <h2>Options:</h2>
+          <div
+            v-for="platform in platforms"
+            :key="platform.genre"
+            class="platform"
+            :class="{'active-platform': activeFilters.genre === platform.genre}"
+            @click="setGenreFilter(platform.genre)"
+          >
+            <h3>{{ platform.label }}</h3>
+            <p>{{ platform.desc }}</p>
+          </div>
+    
+        </section>
+    
+        <section class="filter">
+          <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
+        </section>
+      </SidePanel>
       <div class="content-wrapper">
         <!-- placeholder for Game Links -->
         <section class="games-placeholder">
@@ -484,9 +485,9 @@ export default {
             <button
                 class="toggle"
                 :style="[
-          { backgroundColor: isDark ? darkColor : lightColor },
-          { color: isDark ? lightColor : darkColor }
-        ]"
+                { backgroundColor: isDark ? darkColor : lightColor },
+                { color: isDark ? lightColor : darkColor }
+                ]"
                 @click="toggleFavoritesView"
             >
               {{ favoritesOnly ? `Show All Games ${favoritesCount}` : `Show Favorite Games ${favoritesCount}` }}
@@ -511,14 +512,17 @@ export default {
 <style>
 /* main container styling */
 .main {
-  display: flex;
-  flex-direction: row;
   min-height: 100vh;
   font-family: Arial, sans-serif;
   position: relative;
   transition: background-color 0.3s ease, color 0.3s ease;
   padding-bottom: 20px;
   overflow: hidden;
+}
+
+.content-body {
+  display: flex;
+  flex-direction: row;
 }
 
 .content-wrapper {
@@ -646,6 +650,14 @@ export default {
   gap: 20px;
   padding: 0 20px;
   margin-bottom: 20px;
+}
+
+.platform-filter-btns {
+  width: 120px;
+  font-size: 0.9rem; 
+  padding-top: 100px;
+  display: flex;
+  flex-direction: column;
 }
 
 .platform {
