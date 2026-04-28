@@ -255,8 +255,8 @@ a {
   transition: all 0.3s ease;
 }
 
-/* US 154 / Task 155: compact mode for favorites row */
-.compact-card {
+
+.compact-card{
   width: 180px;
   min-width: 180px;
   padding: 10px;

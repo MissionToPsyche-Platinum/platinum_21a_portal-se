@@ -871,5 +871,44 @@ input[type="color"] {
   color: #333;
   text-align: center;
 }
+
+.favorites-row-section {
+  width: 100%;
+  margin-bottom: 28px;
+}
+.favorites-row-title {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.favorites-scroll-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px 4px 14px;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.favorites-scroll-row > * {
+  flex: 0 0 auto;
+}
+
+.favorites-scroll-row::-webkit-scrollbar {
+  height: 8px;
+}
+
+.favorites-scroll-row::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.5);
+  border-radius: 999px;
+}
+
+.favorites-scroll-row::-webkit-scrollbar-track {
+  background: transparent;
+}
 </style>
 
