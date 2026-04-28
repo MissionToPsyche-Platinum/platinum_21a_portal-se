@@ -100,7 +100,7 @@
     position: relative;
     display: inline-block;
     padding: 20px;
-    z-index: 10;
+    z-index: 100;
 }
 
 .filter-toggle {
