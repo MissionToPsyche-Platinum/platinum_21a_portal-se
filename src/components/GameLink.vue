@@ -1,6 +1,5 @@
 <script>
 import psycheLogo from '@/assets/PsycheLogo.png'
-
 export default {
   props: {
     game: { type: Object },
@@ -10,8 +9,8 @@ export default {
   },
   data() {
     return {
-
       isFavorite: false, // true if the game is saved in favorite
+      dark: this.isDark,
     };
   },
 
@@ -19,8 +18,6 @@ export default {
     this.loadFavoriteState();
     window.addEventListener("favorites-updated", this.loadFavoriteState);
   },
-
-
   //==================== task 93====================
 
   // compute numeric difficulty level, easy=1, medium=2, hard=3
@@ -80,13 +77,7 @@ export default {
       // notify other components that favorites changed
       window.dispatchEvent(new Event("favorites-updated"));
     },
-
-
-
-},
-
-
-
+  },
 };
 </script>
 
@@ -212,7 +203,6 @@ a {
   pointer-events: auto;
 }
 
-
 .preview {
   display: flex;
   justify-content: center;
@@ -302,4 +292,3 @@ a {
   }
 }
 </style>
-
