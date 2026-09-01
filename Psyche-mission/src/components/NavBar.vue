@@ -10,6 +10,9 @@
         <div class="nav-links">
             <a href="/" class="nav-link">Home</a>
             <a href="https://psyche.ssl.berkeley.edu/" class="nav-link" target="_blank" rel="noopener noreferrer">About</a>
+
+        <!--Admin navigation -->
+          <router-link to="/admin" class="nav-link">Admin</router-link>
         </div>
     </nav>
  </template>
