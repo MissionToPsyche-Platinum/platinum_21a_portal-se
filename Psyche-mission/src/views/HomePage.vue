@@ -1,6 +1,7 @@
 <script>
 import gameData from '../assets/games.json'
 import GameLink from '../components/GameLink.vue'
+import GamePreview from '@/components/GamePreview.vue'
 import Filter from '../components/Filter.vue'
 import SearchBar from '../components/SearchBar.vue'
 import QuizModal from '../components/QuizModal.vue'
@@ -10,6 +11,7 @@ export default {
   name: "HomePage",
   components: {
     GameLink,
+    GamePreview,
     Filter,
     SearchBar,
     QuizModal,
@@ -447,6 +449,11 @@ export default {
       <h2>Welcome to the Psyche Mission's Web-Based Portal By Team 1 platinum_21a_portal-se</h2>
       <p>Discover the latest web-based experiences from the Psyche Mission team.</p>
     </section> -->
+
+    <!-- Test code for testing game preview -->
+    <GamePreview
+      :game="games[0]"
+    />
 
     <FeaturedGame v-if="featuredGame" :game="featuredGame" :isDark="isDark" :textColor="lightColor" />
 
