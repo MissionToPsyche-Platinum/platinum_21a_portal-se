@@ -45,7 +45,10 @@ export default {
 
       quizResults: [], // stores quiz results
 
-      showQuizResults: false
+      showQuizResults: false,
+
+      hoveredGame: null,      // the current game the user's mouse is hovering over
+      mousePos: {x: 0, y: 0}  // the location to display the GamePreview hover drop down
     };
   },
   /*==========task 83=========*/
@@ -393,7 +396,33 @@ export default {
 
         return sorted.slice(0,3)
     },
-  }
+
+    // event handler for when a mouse enters a GameLink component
+    // used for GamePreview drop down
+    handleMouseEnter(game, event) {
+      this.hoveredGame = game;
+      this.updatePos(event);
+    },
+
+    // event handler for mouse movement used to move the GamePreview card with the mouse
+    handleMouseMove(event) {
+      this.updatePos(event);
+    },
+
+    // event handler for when the mouse pointer is no longer pointing at a GameCard
+    handleMouseLeave() {
+      this.hoveredGame = null;
+    },
+
+    // The position of the mouse pointer, offset by 15 pixels
+    // used to determine where to display the GamePreview
+    updatePos(event) {
+      this.mousePos = {
+        x: event.clientX + 15,
+        y: event.clientY + 15
+      };
+    },
+  },
 }
 </script>
 
@@ -449,11 +478,6 @@ export default {
       <h2>Welcome to the Psyche Mission's Web-Based Portal By Team 1 platinum_21a_portal-se</h2>
       <p>Discover the latest web-based experiences from the Psyche Mission team.</p>
     </section> -->
-
-    <!-- Test code for testing game preview -->
-    <GamePreview
-      :game="games[0]"
-    />
 
     <FeaturedGame v-if="featuredGame" :game="featuredGame" :isDark="isDark" :textColor="lightColor" />
 
@@ -536,6 +560,9 @@ export default {
                 :isDark="isDark"
                 :textColor="lightColor"
                 :compact="true"
+                @mouseenter.native="handleMouseEnter(game, $event)"
+                @mousemove.native="handleMouseMove($event)"
+                @mouseleave.native="handleMouseLeave"
             />
           </div>
         </section>
@@ -548,10 +575,32 @@ export default {
         <!--===================task 83==================-->
         <!--use computed sortGames-->
         <!--<GameLink v-for="game in sortGames" :key="game.id" :game="game" :isDark="isDark" class="platform"-->
-        <GameLink v-for="game in displayGames" :key="game.id" :game="game" :isDark="isDark" class="platform"
-                  :textColor="lightColor"/>
+        <GameLink 
+          v-for="game in displayGames" 
+          :key="game.id" 
+          :game="game" 
+          :isDark="isDark" 
+          class="platform"
+          :textColor="lightColor"
+          @mouseenter.native="handleMouseEnter(game, $event)"
+          @mousemove.native="handleMouseMove($event)"
+          @mouseleave.native="handleMouseLeave"
+        />
       </div>
     </section>
+
+    <!-- Div for holding the GamePreview hover drop down -->
+    <div
+      v-if="hoveredGame"
+      class="preview-dropdown"
+      :style="{ left: mousePos.x + 'px', top: mousePos.y + 'px' }"
+    >
+      <GamePreview
+        :game="hoveredGame"
+        :isDark="isDark"
+        :textColor="lightColor" 
+      />
+    </div>
   </div>
 </template>
 
@@ -997,6 +1046,14 @@ input[type="color"] {
 .favorites-scroll-row::-webkit-scrollbar-track {
   background: transparent;
 
+}
+
+.preview-dropdown {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  transition: top 0.05s ease-out, left 0.05s ease out;
+  opacity: 0.9;
 }
 </style>
 
