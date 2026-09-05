@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #111111;
+  --color-muted: #6b6b6b;
+  --font-sans: Arial, Helvetica, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: #000000;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #000000;
+}

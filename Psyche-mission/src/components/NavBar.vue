@@ -8,7 +8,7 @@
 
         <!-- "Home" and "About" links -->
         <div class="nav-links">
-            <a href="/" class="nav-link">Home</a>
+            <router-link to="/" class="nav-link">Home</router-link>
             <a href="https://psyche.ssl.berkeley.edu/" class="nav-link" target="_blank" rel="noopener noreferrer">About</a>
 
         <!--Admin navigation -->
@@ -32,9 +32,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;
-    background-color: #330066;
-    border: 2px solid #ddd;
-    border-bottom: 2px solid #ddd;
+    background-color: #111111;
 }
 
 .nav-links {
@@ -45,11 +43,12 @@ export default {
 .nav-link {
    color: #ffffff;
    font-weight: bold;
-   transition: color 0.3s ease;
+   text-decoration: none;
+   transition: color 0.2s ease;
 }
 
 .nav-link:hover {
-   color: #007bff;
+   color: #cccccc;
 }
 
 .logo {
@@ -61,4 +60,4 @@ export default {
    display: flex;
    align-items: center;
 }
- </style>
+</style>
