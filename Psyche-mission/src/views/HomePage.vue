@@ -143,21 +143,17 @@ export default {
     // get the previously saved mode from the browser local storage
     const savedMode = localStorage.getItem("savedMode");
     //check if previous mode is a dark mode, enable dark mode on page load
-    if (savedMode === "Dark") {
-      this.isDark = true;// will update automatically
-    }
-    /*check for saved colors in browser*/
-    const savedDarkColor = localStorage.getItem("savedDarkColor");
-    const savedLightColor = localStorage.getItem("savedLightColor");
-    if (savedDarkColor) {
-      this.darkColor = savedDarkColor;// retrieve the dark color prefrence from the browser
-    }
-    if (savedLightColor) {
-      this.lightColor = savedLightColor;// retrieve the light color prefrence from the browser
+    if (savedMode === "Light") {
+      this.isDark = false;
+      this.darkColor = "#ffffff";
+      this.lightColor = "#000000";
+    } else {
+      this.isDark = true;
+      this.darkColor = "#000000";
+      this.lightColor = "#ffffff";
     }
     this.loadFavorites();
     window.addEventListener("favorites-updated", this.loadFavorites);
-
   },
   methods: {
 
@@ -180,6 +176,8 @@ export default {
         this.lightColor = "#000000";
         localStorage.setItem("savedMode", "Light");// save light mode in local storage
       }
+      localStorage.setItem("savedDarkColor", this.darkColor);
+      localStorage.setItem("savedLightColor", this.lightColor);
     },
 
     // these function update the localstorage with the current colors selection
@@ -403,39 +401,36 @@ export default {
     :style="[{backgroundColor: darkColor},{ color: lightColor}]">
 
     <!-- Containers for background effects -->
-    <div class="background-effect"></div>
-    <div class="star-div stars-small" v-if="isDark"></div>
-    <div class="star-div stars-large" v-if="isDark"></div>
-
-    <!-- Top section containing the toggle button and title -->
-    <div class="top">
-      <h1>Welcome to the Psyche mission's web-based game portal!</h1>
-      <div class="spacer"></div>
-
-      <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
-      <div class="theme-controls">
-        <button class="toggle"
-                :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
-                @click="toggleMode">
-          <!--dynamically change thee text based on the mode-->
-          {{ isDark ? "Switch to Light" : "Switch to Dark" }}
-        </button>
-
-        <div class="pickers">
-          <label>
-            Background
-            <input type="color" v-model="darkColor" @input="updateDarkColor" class="picker"
-                   :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
-          </label>
-          <label>
-            Text
-            <input type="color" v-model="lightColor" @input="updateLightColor" class="picker"
-                   :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
-          </label>
+    <div class="star-div stars-small" :class="{ 'stars-inverted': !isDark }"></div>
+    <div class="star-div stars-large" :class="{ 'stars-inverted': !isDark }"></div>
+    <FeaturedGame v-if="featuredGame" :game="featuredGame" :isDark="isDark" :textColor="lightColor">
+      <template #toolbar>
+        <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
+        <div class="theme-controls">
+          <button class="toggle"
+                  :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
+                  @click="toggleMode">
+            <!--dynamically change thee text based on the mode-->
+            {{ isDark ? "Switch to Light" : "Switch to Dark" }}
+          </button>
+          <div class="pickers">
+            <label>
+              Background
+              <input type="color" v-model="darkColor" @input="updateDarkColor" class="picker"
+                     :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
+            </label>
+            <label>
+              Text
+              <input type="color" v-model="lightColor" @input="updateLightColor" class="picker"
+                     :style="[{backgroundColor: isDark? lightColor: darkColor},{color: isDark? lightColor: darkColor}]"/>
+            </label>
+          </div>
         </div>
+      </template>
+      <div id="quiz-container" class="quiz-container">
+        <button id="quiz-button" class="quiz-button" @click="openQuiz">Take Quiz</button>
       </div>
-
-    </div>
+    </FeaturedGame>
 
     <!-- page header -->
     <!-- <header class="header">
@@ -448,24 +443,27 @@ export default {
       <p>Discover the latest web-based experiences from the Psyche Mission team.</p>
     </section> -->
 
-    <FeaturedGame v-if="featuredGame" :game="featuredGame" :isDark="isDark" :textColor="lightColor" />
+    <QuizModal v-if="isQuizOpen" @quiz-complete="handleQuizResults" @close="closeQuiz"/>
 
-    <section class="quiz">
-      <div id="quiz-container" class="quiz-container">
-        <label id="quiz-label" class="quiz-label"  :class="{ 'dark-mode': isDark, 'light-mode': !isDark }">
-          Take a quiz to find your favorite game!
-        </label>
-        <button id="quiz-button" class="quiz-button" @click="openQuiz">
-          Take Quiz
+    <h2 id="games" class="games-heading">Games</h2>
+    <div class="browse-bar">
+      <section class="search">
+        <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
+      </section>
+      <section class="filter-section">
+        <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
+        <button
+            class="toggle"
+            :style="[
+                { backgroundColor: isDark ? darkColor : lightColor },
+                { color: isDark ? lightColor : darkColor }
+              ]"
+            @click="toggleFavoritesView"
+        >
+          {{ favoritesOnly ? `Show All Games ${favoritesCount}` : `Show Favorite Games ${favoritesCount}` }}
         </button>
-      </div>
-    </section>
-
-    <QuizModal v-if="isQuizOpen" @quiz-complete="handleQuizResults"/>
-
-    <section class="search">
-      <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
-    </section>
+      </section>
+    </div>
 
     <!--  main platforms section can be used to filter the displayed games -->
     <section class="platforms">
@@ -477,33 +475,11 @@ export default {
         @click="setGenreFilter(platform.genre)"
       >
         <h3>{{ platform.label }}</h3>
-        <p>{{ platform.desc }}</p>
-      </div>
-
-    </section>
-
-    <section class="filter">
-      <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
-      <div style="display: flex; justify-content: center; width: 100%; position: relative; z-index: 10; margin-top: -18px; margin-bottom: 16px;">
-      <button
-          class="toggle"
-          :style="[
-              { backgroundColor: isDark ? darkColor : lightColor },
-              { color: isDark ? lightColor : darkColor },
-              { position: 'relative', zIndex: 20, pointerEvents: 'auto' }
-            ]"
-          @click="toggleFavoritesView"
-      >
-
-        {{ favoritesOnly ? `Show All Games ${favoritesCount}` : `Show Favorite Games ${favoritesCount}` }}
-
-      </button>
       </div>
     </section>
-
 
     <!-- placeholder for Game Links -->
-    <section class="games-placeholder">
+    <section id="games-list" class="games-placeholder">
       <!-- show only favorites games' section-->
       <section class="favorites-toggle-section">
 <!--        <button
@@ -533,7 +509,7 @@ export default {
           </div>
         </section>
 
-        <p v-else class="empty-favorites-message">
+        <p v-else-if="favoritesOnly" class="empty-favorites-message">
           No favorite games saved yet.
         </p>
       </section>
@@ -541,177 +517,189 @@ export default {
         <!--===================task 83==================-->
         <!--use computed sortGames-->
         <!--<GameLink v-for="game in sortGames" :key="game.id" :game="game" :isDark="isDark" class="platform"-->
-        <GameLink v-for="game in displayGames" :key="game.id" :game="game" :isDark="isDark" class="platform"
+        <GameLink v-for="game in displayGames" :key="game.id" :game="game" :isDark="isDark"
                   :textColor="lightColor"/>
       </div>
     </section>
   </div>
 </template>
 
-<style>
+<style scoped>
 /* main container styling */
 .main {
   min-height: 100vh;
-  font-family: Arial, sans-serif;
   position: relative;
+  font-family: Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
   padding-bottom: 20px;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
-/* header styling */
-.header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 18px 20px;
-  margin: 20px;
-  border: 1px solid rgba(128, 128, 128, 0.25);
-  border-radius: 20px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+.browse-bar,
+.platforms,
+.games-placeholder,
+.games-heading {
   position: relative;
-  text-align: center;
+  z-index: 10;
 }
 
-
-/* top section styling (toggle button/color pickers) */
-.top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 34px 20px 24px;
-  margin: 20px;
-  border: 1px solid rgba(128, 128, 128, 0.25);
-  border-radius: 24px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  gap: 20px;
-}
-
-.top h1 {
-  flex: 1;
-  text-align: center;
-  margin: 0;
-  font-size: 1.6rem;
-}
-
+/* theme controls panel */
 .theme-controls {
   flex: 0 0 auto;
-  width: fit-content;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  margin: 0;
-  padding: 14px;
-  border: 1px solid rgba(128, 128, 128, 0.22);
-  border-radius: 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  backdrop-filter: blur(4px);
+  gap: 16px;
+  padding: 0;
 }
 
 /* color pickers */
 .pickers {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin: 0;
-
-
+  flex-direction: row;
+  gap: 12px;
 }
 
-.picker {
-  padding: 1px;
+.pickers label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.95rem;
+}
+
+.picker,
+input[type='color'] {
+  width: 20px;
+  height: 20px;
+  padding: 0;
   border: 1px solid currentColor;
+  border-radius: 4px;
   background: transparent;
   cursor: pointer;
-
-  font-weight: 100;
-
 }
 
 /* toggle button styling */
 .toggle {
-  padding: 10px 15px;
+  padding: 10px 16px;
   border: 1px solid currentColor;
   background: transparent;
+  color: inherit;
   cursor: pointer;
-  border-radius: 999px;
-  font-weight: 600;
-  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+  border-radius: 4px;
 }
 
-/* Only do movement on computer with mouse */
-@media (pointer: fine) {
-  .toggle:hover {
-    transform: translateY(-10px);
+.toggle:hover {
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+}
 
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
-  }
+.quiz-container {
+  display: contents;
+}
+
+.quiz-button {
+  padding: 12px 22px;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.dark-mode .quiz-button {
+  background: #ffffff;
+  color: #111111;
+  border-color: #ffffff;
+}
+
+.light-mode .quiz-button {
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+}
+
+.quiz-button:hover {
+  opacity: 0.88;
+}
+
+.games-heading {
+  position: relative;
+  z-index: 10;
+  margin: 8px 48px 12px;
+  font-size: 1.5rem;
+}
+
+.browse-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 48px 16px;
+}
+
+.search {
+  padding: 0;
+  flex: 1 1 220px;
+  min-width: 200px;
+}
+
+.filter-section {
+  z-index: 20;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+/* platform cards styling */
+.platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0 48px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #444444;
+}
+
+.platform {
+  padding: 8px 14px;
+  text-align: center;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+
+.platform h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.platform:hover {
+  background: rgba(128, 128, 128, 0.2);
+}
+
+.active-platform {
+  background: transparent;
+  border-bottom-color: currentColor;
 }
 
 .favorites-toggle-section {
   display: flex;
   justify-content: center; /* centers horizontally */
   align-items: center;
-  margin: 20px 0;
-}
-
-/* intro section styling */
-.intro {
-  margin: 20px;
-  padding: 28px 22px;
-  text-align: center;
-  border: 1px solid rgba(128, 128, 128, 0.22);
-  border-radius: 20px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
-}
-
-.search {
-  padding-bottom: 10px;
-}
-
-/* platform cards styling */
-.platforms {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  padding: 0 20px;
-  margin-bottom: 20px;
-}
-
-.platform {
-  border: 1px solid;
-  padding: 10px;
-  text-align: center;
-  border-radius: 10px;
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.2));
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.active-platform {
-  border: 1px solid currentColor;
-  outline: 2px solid currentColor;
-  outline-offset: -2px;
-  background: rgba(128, 128, 128, 0.15);
-  box-shadow: 0 0 20px currentColor;
-  transform: scale(1.05);
-}
-
-.platform:active {
-  transform: scale(0.95) translateY(0);
+  margin: 12px 0;
 }
 
 /* game section placeholder styling */
 .games-placeholder {
-  margin: 20px;
-  padding: 30px 24px;
+  margin: 0 48px 24px;
+  padding: 0;
   text-align: center;
-  border: 1px solid rgba(128, 128, 128, 0.22);
-  border-radius: 20px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 .games-placeholder h2 {
@@ -720,189 +708,41 @@ export default {
   font-size: 1.5rem;
 }
 
-.games-placeholder p {
-  margin: 0 auto 24px;
-  max-width: 750px;
+.empty-favorites-message {
+  margin: 0 auto 20px;
   opacity: 0.85;
-  line-height: 1.6;
 }
 
 /* grid styling for game links */
 .game-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 columns equal width */
-  gap: 24px;
-  padding: 10px 0 0;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns equal width */
+  gap: 20px;
+  padding-top: 10px;
 }
 
-/* footer styling */
-.footer {
-  margin: 20px;
-  text-align: center;
-  padding: 18px;
-  border: 1px solid rgba(128, 128, 128, 0.22);
-  border-radius: 18px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  font-size: 0.95rem;
-}
-
-/* theme controls panel */
-
-label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  font-size: 0.95rem;
-}
-
-input[type="color"] {
-  width: 20px;
-  height: 20px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  padding: 0;
-  border-radius: 50px;
-
-}
-
-/* Responsive design */
-@media (max-width: 1100px) {
-  .platforms,
-  .game-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 800px) {
-  .top {
-    padding-top: 110px;
-  }
-
-
-}
-
-@media (max-width: 600px) {
-  .header,
-  .intro,
-  .games-placeholder,
-  .footer {
-    margin: 14px;
-  }
-
-  .top {
-    position: relative;
-    padding: 15px;
-    min-height: 80px;
-  }
-
-  .top h1 {
-    font-size: 1.05rem;
-    text-align: left;
-    margin: 0;
-    width: auto;
-    padding-right: 125px;
-    line-height: 1.3;
-    display: block;
-  }
-
-  .header h1 {
-    font-size: 1.2rem;
-  }
-
-  .theme-controls {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    margin: 0;
-    transform: scale(0.65);
-    transform-origin: top right;
-  }
-
-  .pickers {
-    /* flex-direction: row; */
-    gap: 10px;
-  }
-
-  .pickers label {
-    font-size: 0.75rem;
-  }
-
-  .toggle {
-    padding: 6px 12px;
-    font-size: 0.8rem;
-  }
-
-  .spacer {
-    display: none;
-  }
-
-  .platforms {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    padding: 0 10px;
-  }
-
-  .platform h3 {
-    font-size: 0.7rem;
-    margin: 5px 0;
-    padding: 0 2px;
-  }
-
-  .platform p {
-    display: none;
-  }
-
-  .platform {
-    padding-bottom: 0px;
-  }
-
-  .game-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    padding: 0;
-  }
-
-
-}
-
-.quiz-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  padding: 20px;
-  border: 1px solid rgba(128);
-  border-radius: 10px;
-}
-
-.quiz-label {
-  font-size: 20px;
-  font-weight: bold;
-  /* color: #333; */
-  text-align: center;
-}
-
-
-.filter {
-  z-index: 10;
-}
-
-.top, .quiz, .search, .platform, .games-placeholder {
-  position: relative;
-  z-index: 10;
-}
-
-.background-effect {
-  position: absolute;
-  top: 0;
+.favorites-row-section {
   width: 100%;
-  height: 100%;
-  background: radial-gradient(circle at 50% 50%, rgba(97, 64, 196, 0.5), transparent 80%);
-  filter: blur(50px);
-  z-index: 0;
+  margin-bottom: 24px;
+}
+
+.favorites-row-title {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.favorites-scroll-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 16px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 8px 4px 12px;
+}
+
+.favorites-scroll-row > * {
+  flex: 0 0 auto;
 }
 
 .star-div {
@@ -918,78 +758,62 @@ input[type="color"] {
 /* Create stars and make them move across the screen */
 .stars-small {
   background-image:
-    radial-gradient(2px 2px at 20px 30px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(2px 2px at 50px 70px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(2px 2px at 150px 50px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(2px 2px at 300px 250px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(2px 2px at 410px 310px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(2px 2px at 500px 100px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(2px 2px at 700px 400px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(2px 2px at 750px 500px, #fff, rgba(0, 0, 0, 0));
+    radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+    radial-gradient(2px 2px at 50px 70px, #fff, transparent),
+    radial-gradient(2px 2px at 150px 50px, #fff, transparent),
+    radial-gradient(2px 2px at 300px 250px, #fff, transparent),
+    radial-gradient(2px 2px at 410px 310px, #fff, transparent),
+    radial-gradient(2px 2px at 500px 100px, #fff, transparent),
+    radial-gradient(2px 2px at 700px 400px, #fff, transparent),
+    radial-gradient(2px 2px at 750px 500px, #fff, transparent);
   background-size: 800px 800px;
   animation: moveStars 100s linear infinite;
-  opacity: 0.5
+  opacity: 0.45;
 }
 
 .stars-large {
   background-image:
-    radial-gradient(5px 5px at 100px 150px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(5px 5px at 250px 170px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(5px 5px at 400px 350px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(5px 5px at 510px 440px, #fff, rgba(0, 0, 0, 0)),
-    radial-gradient(5px 5px at 600px 100px, #fff, rgba(0, 0, 0, 0));
+    radial-gradient(5px 5px at 100px 150px, #fff, transparent),
+    radial-gradient(5px 5px at 250px 170px, #fff, transparent),
+    radial-gradient(5px 5px at 400px 350px, #fff, transparent),
+    radial-gradient(5px 5px at 510px 440px, #fff, transparent),
+    radial-gradient(5px 5px at 600px 100px, #fff, transparent);
   background-size: 1000px 1000px;
   animation: moveStars 60s linear infinite;
-  opacity: 0.8
+  opacity: 0.5;
+}
+
+.stars-inverted {
+  filter: invert(1);
 }
 
 @keyframes moveStars {
-  from {
-    transform: translate(0, 0);
+  from { transform: translate(0, 0); }
+  to { transform: translate(-400px, -400px); }
+}
+
+/* Responsive design */
+@media (max-width: 1100px) {
+  .game-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  to {
-    transform: translate(-400px, -400px);
+}
+
+@media (max-width: 600px) {
+  .browse-bar,
+  .games-placeholder,
+  .games-heading {
+    margin-left: 20px;
+    margin-right: 20px;
   }
-}
-.favorites-row-section {
-  width: 100%;
-  margin-bottom: 28px;
-}
 
-.favorites-row-title {
-  text-align: center;
-  margin-bottom: 14px;
-}
+  .platforms {
+    padding: 0 14px;
+  }
 
-.favorites-scroll-row {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 16px;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 10px 4px 14px;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-}
-
-.favorites-scroll-row > * {
-  flex: 0 0 auto;
-}
-
-.favorites-scroll-row::-webkit-scrollbar {
-  height: 8px;
-}
-
-.favorites-scroll-row::-webkit-scrollbar-thumb {
-  background: rgba(128, 128, 128, 0.5);
-  border-radius: 999px;
-}
-
-.favorites-scroll-row::-webkit-scrollbar-track {
-  background: transparent;
-
+  .game-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
 }
 </style>
-

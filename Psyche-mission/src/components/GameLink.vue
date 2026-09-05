@@ -172,10 +172,28 @@ export default {
 a {
   text-decoration: none;
   color: inherit;
+  display: block;
+  height: 100%;
 }
 
 .game-link-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #666666;
+}
+
+.game-link-card:hover {
+  border-color: #111111;
+}
+
+.game-title {
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 
 /* favorite button styling */
@@ -216,18 +234,18 @@ a {
 .preview {
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
 }
+
+/*Difficulty bar styling*/
 
 .media {
   width: 100%;
   max-width: 250px;
   height: 150px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 4px;
 }
-
-/*Difficulty bar styling*/
 
 .difficulty-section {
   margin-bottom: 12px;
@@ -256,7 +274,7 @@ a {
 }
 
 
-.compact-card{
+.compact-card {
   width: 180px;
   min-width: 180px;
   padding: 10px;
@@ -286,7 +304,6 @@ a {
   opacity: 1;
   pointer-events: auto;
 }
-
 
 @media (max-width: 600px) {
   .game-title {
