@@ -43,7 +43,10 @@ export default {
 
       quizResults: [], // stores quiz results
 
-      showQuizResults: false
+      showQuizResults: false,
+
+      // Test code for Spring Boot setup
+      statusMessage: "",
     };
   },
   /*==========task 83=========*/
@@ -157,6 +160,9 @@ export default {
     }
     this.loadFavorites();
     window.addEventListener("favorites-updated", this.loadFavorites);
+
+    // Test code for Spring Boot setup
+    this.testStatusEndpoint();
 
   },
   methods: {
@@ -391,6 +397,22 @@ export default {
 
         return sorted.slice(0,3)
     },
+
+    // Test code for Spring Boot setup
+    async testStatusEndpoint() {
+      try {
+        const response = await fetch('/api/test/status');
+
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+
+        const text = await response.text();
+        this.statusMessage = text;
+      } catch (error) {
+        console.error(error.message);
+      }
+    },
   }
 }
 </script>
@@ -399,8 +421,13 @@ export default {
   <!--dynamically adds either the "light" or "dark" class-->
   <!--root container-->
   <div class="main"
-    :class="{ 'dark-mode': isDark, 'light-mode': !isDark }"
-    :style="[{backgroundColor: darkColor},{ color: lightColor}]">
+  :class="{ 'dark-mode': isDark, 'light-mode': !isDark }"
+  :style="[{backgroundColor: darkColor},{ color: lightColor}]">
+
+    <!-- Test code for testing Spring Boot connection -->
+    <div>
+      <h1>{{ this.statusMessage }}</h1>
+    </div>
 
     <!-- Containers for background effects -->
     <div class="background-effect"></div>
