@@ -178,6 +178,164 @@ export default {
     <h2>
       {{ formTitle }}
     </h2>
+
+    <form class="game-form" @submit.prevent="submitForm">
+
+      <div class="form-group">
+        <label for="game-id">Game ID</label>
+        <input
+            id="game-id"
+            v-model="form.id"
+            type="text"
+            :disabled="isEditMode"
+            placeholder="Enter game ID"
+        />
+        <span v-if="errors.id" class="error-message">
+          {{ errors.id }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="game-title">Title</label>
+        <input
+            id="game-title"
+            v-model="form.title"
+            type="text"
+            placeholder="Enter game title"
+        />
+        <span v-if="errors.title" class="error-message">
+          {{ errors.title }}
+        </span>
+      </div>
+
+      <div class="form-group form-group-full">
+        <label for="game-description">Description</label>
+        <textarea
+            id="game-description"
+            v-model="form.description"
+            placeholder="Enter game description"
+        ></textarea>
+        <span v-if="errors.description" class="error-message">
+          {{ errors.description }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="game-difficulty">Difficulty</label>
+        <select id="game-difficulty" v-model="form.difficulty">
+          <option value="" disabled>Select difficulty</option>
+          <option value="Easy">Easy</option>
+          <option value="Medium">Medium</option>
+          <option value="Hard">Hard</option>
+        </select>
+        <span v-if="errors.difficulty" class="error-message">
+          {{ errors.difficulty }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="game-genre">Genre</label>
+        <select id="game-genre" v-model="form.genre">
+          <option value="" disabled>Select genre</option>
+          <option value="Web Based">Web Based</option>
+          <option value="AR Experience">AR Experience</option>
+          <option value="VR Experience">VR Experience</option>
+        </select>
+        <span v-if="errors.genre" class="error-message">
+          {{ errors.genre }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="game-age">Age Group</label>
+        <input
+            id="game-age"
+            v-model="form.age"
+            type="text"
+            placeholder="Example: 10+"
+        />
+        <span v-if="errors.age" class="error-message">
+          {{ errors.age }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="game-class">Class</label>
+        <input
+            id="game-class"
+            v-model="form.class"
+            type="text"
+            placeholder="Enter class/category"
+        />
+        <span v-if="errors.class" class="error-message">
+          {{ errors.class }}
+        </span>
+      </div>
+
+      <div class="form-group">
+        <label for="game-credits">Credits</label>
+        <input
+            id="game-credits"
+            v-model="form.credits"
+            type="text"
+            placeholder="Enter credits"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="game-engine">Engine</label>
+        <input
+            id="game-engine"
+            v-model="form.engine"
+            type="text"
+            placeholder="Enter game engine"
+        />
+      </div>
+
+      <div class="form-group form-group-full">
+        <label for="game-src">Game URL</label>
+        <input
+            id="game-src"
+            v-model="form.src"
+            type="text"
+            placeholder="Enter game URL"
+        />
+        <span v-if="errors.src" class="error-message">
+          {{ errors.src }}
+        </span>
+      </div>
+
+      <div class="form-group form-group-full">
+        <label for="game-thumbnail">Thumbnail URL</label>
+        <input
+            id="game-thumbnail"
+            v-model="form.thumbnail"
+            type="text"
+            placeholder="Enter thumbnail URL"
+        />
+      </div>
+
+      <div class="form-actions form-group-full">
+        <button
+            type="button"
+            class="form-button"
+            :style="{color: textColor, borderColor: textColor}"
+            @click="cancelForm"
+        >
+          Cancel
+        </button>
+
+        <button
+            type="submit"
+            class="form-button submit-button"
+            :style="{color: textColor, borderColor: textColor}"
+        >
+          {{ submitButtonText }}
+        </button>
+      </div>
+
+    </form>
+
   </div>
 </template>
 
