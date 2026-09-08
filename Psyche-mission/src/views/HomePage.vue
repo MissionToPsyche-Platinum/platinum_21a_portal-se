@@ -122,6 +122,47 @@ export default {
         return this.showQuizResults ? this.quizResults :this.sortGames;
     },
 
+    // group the already-filtered/sorted list into genre shelves for display only
+    gameShelves() {
+      const grouped = {};
+
+      for (const game of this.displayGames) {
+        const label = game.genre || "Other";
+        if (!grouped[label]) {
+          grouped[label] = [];
+        }
+        grouped[label].push(game);
+      }
+
+      const preferredOrder = [
+        "Adventure",
+        "Arcade",
+        "Trivia",
+        "Simulation",
+        "Interactive Simulation",
+        "AR Experience",
+        "VR Experience"
+      ];
+
+      const shelves = [];
+      const used = new Set();
+
+      for (const label of preferredOrder) {
+        if (grouped[label] && grouped[label].length > 0) {
+          shelves.push({ label, games: grouped[label] });
+          used.add(label);
+        }
+      }
+
+      for (const label of Object.keys(grouped)) {
+        if (!used.has(label)) {
+          shelves.push({ label, games: grouped[label] });
+        }
+      }
+
+      return shelves;
+    },
+
     featuredGame() {
       if (!this.games || this.games.length === 0) {
         return null;
@@ -513,12 +554,23 @@ export default {
           No favorite games saved yet.
         </p>
       </section>
-      <div class="game-grid">
-        <!--===================task 83==================-->
-        <!--use computed sortGames-->
-        <!--<GameLink v-for="game in sortGames" :key="game.id" :game="game" :isDark="isDark" class="platform"-->
-        <GameLink v-for="game in displayGames" :key="game.id" :game="game" :isDark="isDark"
-                  :textColor="lightColor"/>
+      <div class="game-shelves">
+        <section
+          v-for="shelf in gameShelves"
+          :key="shelf.label"
+          class="game-shelf"
+        >
+          <h2 class="game-shelf-title">{{ shelf.label }}</h2>
+          <div class="favorites-scroll-row shelf-scroll-row">
+            <GameLink
+              v-for="game in shelf.games"
+              :key="game.id"
+              :game="game"
+              :isDark="isDark"
+              :textColor="lightColor"
+            />
+          </div>
+        </section>
       </div>
     </section>
   </div>
@@ -533,6 +585,14 @@ export default {
   transition: background-color 0.3s ease, color 0.3s ease;
   padding-bottom: 20px;
   overflow-x: hidden;
+}
+
+.main.dark-mode {
+  color-scheme: dark;
+}
+
+.main.light-mode {
+  color-scheme: light;
 }
 
 .browse-bar,
@@ -713,12 +773,34 @@ input[type='color'] {
   opacity: 0.85;
 }
 
-/* grid styling for game links */
-.game-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 columns equal width */
-  gap: 20px;
+/* genre shelves for game links */
+.game-shelves {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
   padding-top: 10px;
+  text-align: left;
+  min-width: 0;
+}
+
+.game-shelf {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.game-shelf-title {
+  margin: 0 0 10px;
+  font-size: 1.25rem;
+}
+
+.shelf-scroll-row {
+  scroll-snap-type: x mandatory;
+}
+
+.shelf-scroll-row > * {
+  flex: 0 0 220px;
+  width: 220px;
+  scroll-snap-align: start;
 }
 
 .favorites-row-section {
@@ -739,10 +821,39 @@ input[type='color'] {
   overflow-x: auto;
   overflow-y: hidden;
   padding: 8px 4px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, currentColor 55%, transparent) transparent;
 }
 
 .favorites-scroll-row > * {
   flex: 0 0 auto;
+}
+
+.favorites-scroll-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.favorites-scroll-row::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.favorites-scroll-row::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, currentColor 45%, transparent);
+  border-radius: 999px;
+}
+
+.favorites-scroll-row::-webkit-scrollbar-thumb:hover {
+  background: currentColor;
+}
+
+.favorites-scroll-row::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.favorites-scroll-row::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 .star-div {
@@ -794,8 +905,9 @@ input[type='color'] {
 
 /* Responsive design */
 @media (max-width: 1100px) {
-  .game-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .shelf-scroll-row > * {
+    flex: 0 0 200px;
+    width: 200px;
   }
 }
 
@@ -811,9 +923,9 @@ input[type='color'] {
     padding: 0 14px;
   }
 
-  .game-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+  .shelf-scroll-row > * {
+    flex: 0 0 180px;
+    width: 180px;
   }
 }
 </style>
