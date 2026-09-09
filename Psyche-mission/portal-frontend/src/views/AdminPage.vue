@@ -1,5 +1,6 @@
 <script>
 import GameForm from "../components/GameForm.vue";
+import { createGame } from "../utils/gameService.js";
 export default {
   name: "AdminPage",
 
@@ -75,9 +76,27 @@ export default {
       this.activeSection = section;
     },
 
-    handleGameSubmit(game) {
-      console.log("Game submitted:", game);
-      this.changeSection("games");
+    async handleGameSubmit(game) {
+
+      try {
+
+        const savedGame = await createGame(game);
+
+        console.log(
+            "Game saved successfully:",
+            savedGame
+        );
+
+        this.changeSection("games");
+
+      } catch (error) {
+
+        console.error(
+            "Failed to save game:",
+            error
+        );
+
+      }
     }
   }
 }
