@@ -1,6 +1,11 @@
 <script>
+import GameForm from "../components/GameForm.vue";
 export default {
   name: "AdminPage",
+
+  components: {
+    GameForm
+  },
 
   data() {
     return {
@@ -68,9 +73,14 @@ export default {
 
     changeSection(section) {
       this.activeSection = section;
+    },
+
+    handleGameSubmit(game) {
+      console.log("Game submitted:", game);
+      this.changeSection("games");
     }
   }
-};
+}
 </script>
 
 
@@ -350,23 +360,11 @@ export default {
           </p>
 
 
-          <div
-              class="admin-placeholder"
-              :style="{
-                borderColor: lightColor
-              }"
-          >
-
-            <h3>
-              Game Submission Form
-            </h3>
-
-            <p>
-              The game submission form
-              will be implemented here.
-            </p>
-
-          </div>
+          <GameForm
+              :textColor="lightColor"
+              @submit-game="handleGameSubmit"
+              @cancel="changeSection('dashboard')"
+          />
 
         </section>
 
