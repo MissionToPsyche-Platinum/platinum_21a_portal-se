@@ -4,13 +4,39 @@ export default {
         return {
             username: "",
             email: "",
-            password: ""
+            password: "",
+            confirmedPassword: "",
+            message: ""
         }
     },
     methods: {
         handleSubmit(event) {
             event.preventDefault()
+
+            this.message = ""
+
+            if (!this.username || !this.email || !this.password) {
+                this.message = "Please enter a username, email, and password.";
+
+                return;
+            }
+
+            if (this.password.length < 8) {
+                this.message = "Password must be at least 8 characters";
+
+                return;
+            }
+
+            if (this.password !== this.confirmedPassword) {
+                this.message = "Passwords do not match. Please try again.";
+
+                return;
+            }
+
             console.log("Sign Up button pressed")
+            console.log("Username: " + this.username)
+
+            this.message = "Account creation successful!"
         }
     }
 }
@@ -24,7 +50,9 @@ export default {
             <input type="text" v-model="username" placeholder="Username" />
             <input type="email" v-model="email" placeholder="Email" />
             <input type="password" v-model="password" placeholder="Password" />
+            <input type="password" v-model="confirmedPassword" placeholder="Confirm Password" />
             <button type="submit" class="submit-button">Sign Up</button>
+            <p v-if="message">{{ message }}</p>
             <router-link to="/login" class="login-button">Already have an account? Login</router-link>
         </div>
     </form>
