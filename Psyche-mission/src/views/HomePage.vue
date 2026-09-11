@@ -794,13 +794,47 @@ input[type='color'] {
 }
 
 .shelf-scroll-row {
+  align-items: stretch;
   scroll-snap-type: x mandatory;
 }
 
 .shelf-scroll-row > * {
+  box-sizing: border-box;
   flex: 0 0 220px;
   width: 220px;
+  height: 320px;
   scroll-snap-align: start;
+}
+
+.shelf-scroll-row :deep(.game-link-card) {
+  box-sizing: border-box;
+  height: 100%;
+  overflow: hidden;
+}
+
+.shelf-scroll-row :deep(.game-title) {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  line-height: 1.2;
+  min-height: 2.4em;
+}
+
+.shelf-scroll-row :deep(.preview) {
+  flex: 1;
+  min-height: 0;
+}
+
+.shelf-scroll-row :deep(.media) {
+  width: 100%;
+  max-width: none;
+  height: 150px;
+}
+
+.shelf-scroll-row :deep(.favorite-container) {
+  margin-top: auto;
 }
 
 .favorites-row-section {
