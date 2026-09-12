@@ -595,12 +595,16 @@ export default {
   color-scheme: light;
 }
 
-.browse-bar,
 .platforms,
 .games-placeholder,
 .games-heading {
   position: relative;
   z-index: 10;
+}
+
+.browse-bar {
+  position: relative;
+  z-index: 40;
 }
 
 /* theme controls panel */
@@ -706,7 +710,8 @@ input[type='color'] {
 }
 
 .filter-section {
-  z-index: 20;
+  position: relative;
+  z-index: 50;
   display: flex;
   flex-direction: row;
   align-items: center;
