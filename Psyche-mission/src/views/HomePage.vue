@@ -48,7 +48,8 @@ export default {
       showQuizResults: false,
 
       hoveredGame: null,      // the current game the user's mouse is hovering over
-      mousePos: {x: 0, y: 0}  // the location to display the GamePreview hover drop down
+      mousePos: {x: 0, y: 0},  // the location to display the GamePreview hover drop down
+      previewTimer: null,     // a timer for the preview drop down
     };
   },
   /*==========task 83=========*/
@@ -439,8 +440,17 @@ export default {
     // event handler for when a mouse enters a GameLink component
     // used for GamePreview drop down
     handleMouseEnter(game, event) {
-      this.hoveredGame = game;
       this.updatePos(event);
+
+      // clear preview card timer when a new item is moused over
+      if (this.previewTimer) {
+        clearTimeout(this.previewTimer);
+      }
+
+      // sets a delay before showing preview drop down card
+      this.previewTimer = setTimeout(() => {
+        this.hoveredGame = game;
+      }, 500);
     },
 
     // event handler for mouse movement used to move the GamePreview card with the mouse
@@ -450,6 +460,13 @@ export default {
 
     // event handler for when the mouse pointer is no longer pointing at a GameCard
     handleMouseLeave() {
+
+      // clear timer for drop down preview when leaving a game card
+      if (this.previewTimer) {
+        clearTimeout(this.previewTimer)
+        this.previewTimer = null;
+      }
+
       this.hoveredGame = null;
     },
 
@@ -577,9 +594,9 @@ export default {
                 :isDark="isDark"
                 :textColor="lightColor"
                 :compact="true"
-                @mouseenter.native="handleMouseEnter(game, $event)"
-                @mousemove.native="handleMouseMove($event)"
-                @mouseleave.native="handleMouseLeave"
+                @mouseenter="handleMouseEnter(game, $event)"
+                @mousemove="handleMouseMove($event)"
+                @mouseleave="handleMouseLeave"
             />
           </div>
         </section>
@@ -602,6 +619,10 @@ export default {
               :game="game"
               :isDark="isDark"
               :textColor="lightColor"
+              @mouseenter="handleMouseEnter(game, $event)"
+              @mousemove="handleMouseMove($event)"
+              @mouseleave="handleMouseLeave"
+            />
             />
           </div>
         </section>
@@ -609,17 +630,19 @@ export default {
     </section>
 
     <!-- Div for holding the GamePreview hover drop down -->
-    <div
-      v-if="hoveredGame"
-      class="preview-dropdown"
-      :style="{ left: mousePos.x + 'px', top: mousePos.y + 'px' }"
-    >
-      <GamePreview
-        :game="hoveredGame"
-        :isDark="isDark"
-        :textColor="lightColor" 
-      />
-    </div>
+     <Transition name="preview-fade">
+      <div
+        v-if="hoveredGame"
+        class="preview-dropdown"
+        :style="{ left: mousePos.x + 'px', top: mousePos.y + 'px' }"
+      >
+        <GamePreview
+          :game="hoveredGame"
+          :isDark="isDark"
+          :textColor="lightColor" 
+        />
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -1046,11 +1069,35 @@ input[type='color'] {
 
 }
 
+
+/* styling for drop down preview */
 .preview-dropdown {
   position: fixed;
   z-index: 1000;
   pointer-events: none;
-  transition: top 0.05s ease-out, left 0.05s ease out;
-  opacity: 0.9;
+  transition: top 0.05s ease-out, left 0.05s ease-out;
 }
+
+/* creates a more subtle popup */
+.preview-fade-enter-active {
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+
+/* removes popup quickly on exit */
+.preview-fade-leave-active {
+  transition: opacity 0.15s ease-in;
+}
+
+/* starting state */
+.preview-fade-enter-from {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+/* ending state */
+.preview-fade-leave-to {
+  opacity: 0;
+}
+/* end of styling for drop down preview */
+
 </style>
