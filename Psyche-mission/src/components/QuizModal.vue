@@ -107,41 +107,61 @@ import { ref, computed } from 'vue'
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.6);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 1100;
 }
 .modal-content {
-    background: whitesmoke;
-    color: black;
+    background: #ffffff;
+    color: #000000;
     padding: 24px;
-    border-radius: 10px;
+    border-radius: 8px;
     text-align: center;
     width: 400px;
     max-width: 90%;
 }
+.modal-content h2 {
+    margin: 0 0 8px;
+}
 .modal-actions {
     display: flex;
     justify-content: space-between;
+    gap: 12px;
     margin-top: 20px;
 }
-.button:disabled {
+.btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid #111111;
+    background: #111111;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 600;
+}
+.btn:last-child {
+    background: #111111;
+}
+.btn:first-child {
+    background: #ffffff;
+    color: #111111;
+}
+.btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 .progress-container {
-    background-color: #2c2c2c;
+    background-color: #dddddd;
     width: 100%;
-    height: 10px;
-    border-radius: 20px;
+    height: 8px;
+    border-radius: 4px;
     overflow: hidden;
     margin: 10px 0 5px;
 }
 .progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, #00c6ff, #00c6ff);
+    background: #111111;
     transition: width 0.3s ease;
 }
 .progres-text {
@@ -160,14 +180,13 @@ import { ref, computed } from 'vue'
 }
 .option-button {
     padding: 10px;
-    border-radius: 8px;
-    border: none;
+    border-radius: 6px;
+    border: 1px solid #cccccc;
     cursor: pointer;
-    background: #eee;
-    transition: 0.2s;
+    background: #f5f5f5;
 }
 .option-button:hover {
-    background: #ddd;
-    transform: scale(1.02);
+    background: #ececec;
+    border-color: #111111;
 }
 </style>
