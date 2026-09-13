@@ -1,5 +1,7 @@
 package com.psyche.portal_backend.model;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class User {
     private static final AtomicInteger idGenerator = new AtomicInteger(1);
     private final int userId;

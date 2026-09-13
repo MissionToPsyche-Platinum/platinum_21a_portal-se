@@ -1,6 +1,5 @@
 package com.psyche.portal_backend.model;
 
-<<<<<<< HEAD
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -55,21 +54,5 @@ public class Game {
     public void setThumbnail(String thumbnail) { this.thumbnail = thumbnail; }
     public void setVideo(String video) { this.video = video; }
     public void setGameSrc(String src) { this.src = src; }
-=======
-public class Game {
-    private String id;  // will probably want to change to a number once DB is running
-    private String title;
-    private String genre;
-    private String difficulty;
-    private String description;
-    private String ageGroup;
-    private String className;
-    private String credits;
-    private String gtype;
-    private String thumbnail;   //URL
-    private String video;       //URL
-    private String gameSrc;     //URL
 
-    public Game() {}
->>>>>>> dev-backend
 }
