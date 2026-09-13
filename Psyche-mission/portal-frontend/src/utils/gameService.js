@@ -45,3 +45,19 @@ export const getSuggestions = (gameId) => {
 
     return suggestions;
 }
+
+export const createGame = async (game) => {
+    const response = await fetch("http://localhost:8080/api/games", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(game)
+    });
+
+    if (!response.ok) {
+        throw new Error(`Failed to create game: ${response.status}`);
+    }
+
+    return await response.json();
+};
