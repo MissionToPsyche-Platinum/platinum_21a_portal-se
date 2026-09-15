@@ -53,7 +53,7 @@ export default {
 </script>
 
 <template>
-  <div class="rating-box" :style="{borderColor: backGround}">
+  <div class="rating-box">
     <h3 class="rating-title">Rate this game</h3>
 
     <!-- loop and generate 5 stars (button), apply active class if star is selected or hovered
@@ -97,28 +97,28 @@ export default {
   </div>
 </template>
 
-<style>
+<style scoped>
 .rating-box {
   margin-top: 20px;
   padding: 16px;
-  border: 2px solid #330066;
-  border-radius: 12px;
+  border: 1px solid #666666;
+  border-radius: 4px;
   text-align: center;
   max-width: 320px;
 }
 
-
 .rating-title {
-  margin-bottom: 10px;
+  margin: 0 0 10px;
+  font-size: 1rem;
 }
-/*star container*/
+
 .stars {
   display: flex;
   justify-content: center;
   gap: 8px;
   margin-bottom: 10px;
 }
-/* star styling*/
+
 .star-button {
   background: transparent;
   border: none;
@@ -126,14 +126,11 @@ export default {
   cursor: pointer;
   opacity: 0.35;
   transition: transform 0.2s ease, opacity 0.2s ease;
-
 }
 
-/*star appearance*/
 .star-button.active {
   opacity: 1;
   transform: scale(1.1);
-
 }
 
 .rating-text {
@@ -142,20 +139,17 @@ export default {
 }
 
 .clear-button {
-  padding: 10px 15px;
+  padding: 10px 16px;
   border: 1px solid currentColor;
   background: transparent;
   cursor: pointer;
-  border-radius: 999px;
+  border-radius: 4px;
   font-weight: 600;
-  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
-
-
 }
+
 .clear-button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
 }
-
-
 </style>
