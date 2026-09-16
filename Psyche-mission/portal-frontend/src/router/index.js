@@ -7,6 +7,7 @@ import Login from "@/views/Login.vue";
 
 import AdminPage from "../views/AdminPage.vue"
 import SignUpPage from "@/views/SignUpPage.vue";
+import UserProfilePage from "@/views/UserProfilePage.vue";
 
 const routes = [
     {path: "/", component: HomePage},
@@ -18,6 +19,8 @@ const routes = [
     {path: "/admin", name: "Admin", component: AdminPage},
 
     {path: "/signup", name:SignUpPage, component: SignUpPage},
+
+    {path: "/profile", name:UserProfilePage, component: UserProfilePage},
 
     {
         path: "/:path(.*)*", // Must be at end of routes. Checks for any url path that has not been defined above
