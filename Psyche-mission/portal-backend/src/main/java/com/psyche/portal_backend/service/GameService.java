@@ -5,6 +5,7 @@ import com.psyche.portal_backend.repository.GameRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GameService {
@@ -16,5 +17,9 @@ public class GameService {
 
     public List<Game> getAllGames() {
         return gameRepository.findAll();
+    }
+
+    public Optional<Game> findById(Long id) {
+        return gameRepository.findById(id);
     }
 }

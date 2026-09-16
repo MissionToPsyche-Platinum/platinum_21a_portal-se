@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       isDark: true,// variable to track if dark mode is active
-      games: gameData.games, // creates an array of game objects from JSON file
+      games: [], // an array of games that will be fetched from the backend
       darkColor: "#000000",// variable for selected dark mode color with a default value
       lightColor: "#ffffff",// variable for selected light mode color with a default value
       activeFilters: {
@@ -44,9 +44,6 @@ export default {
       quizResults: [], // stores quiz results
 
       showQuizResults: false,
-
-      // Test code for Spring Boot setup
-      statusMessage: "",
     };
   },
   /*==========task 83=========*/
@@ -142,7 +139,7 @@ export default {
       return this.games[idx]
     }
   },
-  mounted() {
+  async mounted() {
     // get the previously saved mode from the browser local storage
     const savedMode = localStorage.getItem("savedMode");
     //check if previous mode is a dark mode, enable dark mode on page load
@@ -161,8 +158,8 @@ export default {
     this.loadFavorites();
     window.addEventListener("favorites-updated", this.loadFavorites);
 
-    // Test code for Spring Boot setup
-    this.testStatusEndpoint();
+    // fetch games from backend at startup
+    await this.fetchGames();
 
   },
   methods: {
@@ -398,19 +395,16 @@ export default {
         return sorted.slice(0,3)
     },
 
-    // Test code for Spring Boot setup
-    async testStatusEndpoint() {
+    // method for fetching games from backend
+    async fetchGames() {
       try {
-        const response = await fetch('/api/test/status');
-
+        const response = await fetch('/api/games');
         if (!response.ok) {
-          throw new Error(`HTTP Error: ${response.status}`);
+          throw new Error('Game Retrieval Error Status: ${response.status}');
         }
-
-        const text = await response.text();
-        this.statusMessage = text;
-      } catch (error) {
-        console.error(error.message);
+        this.games = await response.json();
+      } catch (err) {
+        console.error('Failed to load games from server:', err);
       }
     },
   }
@@ -423,11 +417,6 @@ export default {
   <div class="main"
   :class="{ 'dark-mode': isDark, 'light-mode': !isDark }"
   :style="[{backgroundColor: darkColor},{ color: lightColor}]">
-
-    <!-- Test code for testing Spring Boot connection -->
-    <div>
-      <h1>{{ this.statusMessage }}</h1>
-    </div>
 
     <!-- Containers for background effects -->
     <div class="background-effect"></div>
