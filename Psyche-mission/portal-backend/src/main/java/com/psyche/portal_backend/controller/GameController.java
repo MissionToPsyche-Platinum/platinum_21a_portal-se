@@ -22,7 +22,7 @@ public class GameController {
         return gameService.getAllGames();
     }
 
-    @GetMapping("/{id")
+    @GetMapping("/{id}")
     public ResponseEntity<Game> getGameById(@PathVariable Long id) {
         return gameService.findById(id)
                 .map(ResponseEntity::ok)
