@@ -5,6 +5,7 @@ import com.psyche.portal_backend.service.GameService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/games")
@@ -15,8 +16,12 @@ public class GameController {
         this.gameService = gameService;
     }
 
-    @GetMapping
-    public List<Game> getAllGames() {
-        return gameService.getAllGames();
+    @PostMapping("/game")
+    public Map<String, Object> createGame(
+            @RequestBody Map<String, Object> game) {
+
+        System.out.println("Received game: " + game);
+
+        return game;
     }
 }
