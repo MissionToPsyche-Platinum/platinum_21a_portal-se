@@ -18,6 +18,11 @@ public class GameController {
         this.gameService = gameService;
     }
 
+    @GetMapping
+    public List<Game> getAllGames() {
+        return gameService.getAllGames();
+    }
+
     @PostMapping("/game")
     public Map<String, Object> createGame(
             @RequestBody Map<String, Object> game) {
@@ -28,7 +33,7 @@ public class GameController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Game> getGameById(@PathVariable Long id) {
+    public ResponseEntity<Game> getGameById(@PathVariable String id) {
         return gameService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

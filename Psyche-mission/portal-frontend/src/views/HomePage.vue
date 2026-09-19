@@ -1,5 +1,4 @@
 <script>
-import gameData from '../assets/games.json'
 import GameLink from '../components/GameLink.vue'
 import Filter from '../components/Filter.vue'
 import SearchBar from '../components/SearchBar.vue'

@@ -19,7 +19,7 @@ public class GameService {
         return gameRepository.findAll();
     }
 
-    public Optional<Game> findById(Long id) {
+    public Optional<Game> findById(String id) {
         return gameRepository.findById(id);
     }
 }

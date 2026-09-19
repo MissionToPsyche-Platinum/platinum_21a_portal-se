@@ -1,8 +1,7 @@
 package com.psyche.portal_backend.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -11,24 +10,36 @@ import jakarta.persistence.Table;
 public class Game {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     private String title;
     private String genre;
     private String difficulty;
-    private String description;
     private String age;
     private String className;
     private String credits;
     private String gtype;
+    private String engine;
+
+    // Annotations needed to allow more than the 255 character limit
+    // JPA maps String to VARCHAR(255)
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(columnDefinition = "TEXT")
     private String thumbnail;   //URL
+
+    @Column(columnDefinition = "TEXT")
     private String video;       //URL
+
+    @Column(columnDefinition = "TEXT")
     private String src;     //URL
+
+    
 
     public Game() {}
 
-    public Long getId() { return id; }
+    public String getId() { return id; }
     public String getTitle() { return title; }
     public String getGenre() { return genre; }
     public String getDifficulty() { return difficulty; }
@@ -40,9 +51,10 @@ public class Game {
     public String getThumbnail() { return thumbnail; }
     public String getVideo() { return video; }
     public String getSrc() { return src; }
+    public String getEngine() { return engine; }
 
 
-    public void setId(Long id) { this.id = id; }
+    public void setId(String id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
     public void setGenre(String genre) { this.genre = genre; }
     public void setDifficulty(String difficulty) { this.difficulty = difficulty; }
@@ -54,5 +66,6 @@ public class Game {
     public void setThumbnail(String thumbnail) { this.thumbnail = thumbnail; }
     public void setVideo(String video) { this.video = video; }
     public void setGameSrc(String src) { this.src = src; }
+    public void setEngine(String engine) { this.engine = engine; }
 
 }
