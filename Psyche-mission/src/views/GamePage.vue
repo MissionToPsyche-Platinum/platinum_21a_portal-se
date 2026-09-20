@@ -297,19 +297,15 @@ export default {
 
         <!--favorite button that change color dynamically and prevent navigation when clicked.-->
         <div class="favorite-container">
-          <p>{{ isFavorite ? "Saved" : "" }} </p>
-
           <button
               class="favorite-btn"
-              :style="{ color: foreGround }"
               :class="{ saved: isFavorite }"
               @click.prevent.stop="toggleFavorite"
               :aria-label="isFavorite ? 'Remove from favorites' : 'Save to favorites'"
-              :title="isFavorite ? 'Unsave game' : 'Save game'"
+              :title="isFavorite ? 'Remove from favorites' : 'Save to favorites'"
           >
-            {{ isFavorite ? "\u2665" : "\u2661" }} <!--heart icon changes based on the state-->
-
-
+            <span class="favorite-icon">{{ isFavorite ? "\u2665" : "\u2661" }}</span>
+            <span class="favorite-label">{{ isFavorite ? "Saved to favorites" : "Add to favorites" }}</span>
           </button>
         </div>
 
@@ -576,24 +572,45 @@ input[type="color"] {
 
 .favorite-container {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
-  gap: 8px;
-  margin-top: 12px;
+  margin-top: 16px;
 }
 
 .favorite-btn {
-  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid currentColor;
   background: transparent;
-  font-size: 24px;
+  color: inherit;
   cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.favorite-icon {
+  font-size: 1.15rem;
+  line-height: 1;
 }
 
 .favorite-btn:hover {
-  transform: scale(1.1);
-  opacity: 0.85;
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
+}
+
+.favorite-btn.saved {
+  border-color: #e8c547;
+  color: #e8c547;
+}
+
+.favorite-btn.saved:hover {
+  background: rgba(232, 197, 71, 0.12);
+  color: #e8c547;
+  border-color: #e8c547;
 }
 
 .more-games-title {
