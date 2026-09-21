@@ -346,6 +346,46 @@ export default {
   color-scheme: light;
 }
 
+.main-container,
+.game-iframe iframe {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, currentColor 55%, transparent) transparent;
+}
+
+.main-container::-webkit-scrollbar,
+.game-iframe iframe::-webkit-scrollbar {
+  width: 10px;
+  height: 8px;
+}
+
+.main-container::-webkit-scrollbar-track,
+.game-iframe iframe::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.main-container::-webkit-scrollbar-thumb,
+.game-iframe iframe::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, currentColor 45%, transparent);
+  border-radius: 999px;
+}
+
+.main-container::-webkit-scrollbar-thumb:hover,
+.game-iframe iframe::-webkit-scrollbar-thumb:hover {
+  background: currentColor;
+}
+
+.main-container::-webkit-scrollbar-button,
+.game-iframe iframe::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.main-container::-webkit-scrollbar-corner,
+.game-iframe iframe::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 .theme-controls {
   position: absolute;
   top: 20px;
