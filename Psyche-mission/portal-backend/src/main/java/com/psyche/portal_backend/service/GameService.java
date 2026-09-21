@@ -22,4 +22,8 @@ public class GameService {
     public Optional<Game> findById(String id) {
         return gameRepository.findById(id);
     }
+
+    public Game saveGame(Game game) {
+            return gameRepository.save(game);
+        }
 }

@@ -26,12 +26,10 @@ export default {
         title: "",
         description: "",
         difficulty: "",
-        genre: "",
+        gtype: "",
         age: "",
-        class: "",
+        className: "",
         credits: "",
-        src: "",
-        thumbnail: "",
         engine: ""
       },
 
@@ -66,12 +64,10 @@ export default {
             title: newGame.title || "",
             description: newGame.description || "",
             difficulty: newGame.difficulty || "",
-            genre: newGame.genre || "",
+            gtype: newGame.gtype || "",
             age: newGame.age || "",
-            class: newGame.class || "",
+            className: newGame.className || "",
             credits: newGame.credits || "",
-            src: newGame.src || "",
-            thumbnail: newGame.thumbnail || "",
             engine: newGame.engine || ""
           };
 
@@ -95,12 +91,10 @@ export default {
         title: "",
         description: "",
         difficulty: "",
-        genre: "",
+        gtype: "",
         age: "",
-        class: "",
+        className: "",
         credits: "",
-        src: "",
-        thumbnail: "",
         engine: ""
       };
 
@@ -127,20 +121,16 @@ export default {
         errors.difficulty = "Difficulty is required.";
       }
 
-      if (!this.form.genre) {
-        errors.genre = "Genre is required.";
+      if (!this.form.gtype) {
+        errors.gtype = "Genre is required.";
       }
 
       if (!this.form.age) {
         errors.age = "Age group is required.";
       }
 
-      if (!this.form.class) {
-        errors.class = "Class is required.";
-      }
-
-      if (!this.form.src.trim()) {
-        errors.src = "Game URL is required.";
+      if (!this.form.className) {
+        errors.className = "Class is required.";
       }
 
       this.errors = errors;
@@ -235,14 +225,14 @@ export default {
 
       <div class="form-group">
         <label for="game-genre">Genre</label>
-        <select id="game-genre" v-model="form.genre">
+        <select id="game-genre" v-model="form.gtype">
           <option value="" disabled>Select genre</option>
           <option value="Web Based">Web Based</option>
           <option value="AR Experience">AR Experience</option>
           <option value="VR Experience">VR Experience</option>
         </select>
-        <span v-if="errors.genre" class="error-message">
-          {{ errors.genre }}
+        <span v-if="errors.gtype" class="error-message">
+          {{ errors.gtype }}
         </span>
       </div>
 
@@ -263,12 +253,12 @@ export default {
         <label for="game-class">Class</label>
         <input
             id="game-class"
-            v-model="form.class"
+            v-model="form.className"
             type="text"
             placeholder="Enter class/category"
         />
-        <span v-if="errors.class" class="error-message">
-          {{ errors.class }}
+        <span v-if="errors.className" class="error-message">
+          {{ errors.className }}
         </span>
       </div>
 
@@ -292,28 +282,6 @@ export default {
         />
       </div>
 
-      <div class="form-group form-group-full">
-        <label for="game-src">Game URL</label>
-        <input
-            id="game-src"
-            v-model="form.src"
-            type="text"
-            placeholder="Enter game URL"
-        />
-        <span v-if="errors.src" class="error-message">
-          {{ errors.src }}
-        </span>
-      </div>
-
-      <div class="form-group form-group-full">
-        <label for="game-thumbnail">Thumbnail URL</label>
-        <input
-            id="game-thumbnail"
-            v-model="form.thumbnail"
-            type="text"
-            placeholder="Enter thumbnail URL"
-        />
-      </div>
 
       <div class="form-actions form-group-full">
         <button

@@ -7,10 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/games")
+@CrossOrigin(origins = "http://localhost:5173")
 public class GameController {
     private final GameService gameService;
 
@@ -23,13 +24,16 @@ public class GameController {
         return gameService.getAllGames();
     }
 
-    @PostMapping("/game")
-    public Map<String, Object> createGame(
-            @RequestBody Map<String, Object> game) {
+    @PostMapping
+    public ResponseEntity<Game> createGame(@RequestBody Game game) {
 
-        System.out.println("Received game: " + game);
+        System.out.println("Received game: " + game.getTitle());
 
-        return game;
+         Game savedGame = gameService.saveGame(game);
+
+         System.out.println("Saved game ID: " + savedGame.getId());
+
+        return ResponseEntity.ok(savedGame);
     }
 
     @GetMapping("/{id}")
