@@ -1,6 +1,6 @@
-package com.psyche.portal-backend.repository;
+package com.psyche.portal_backend.repository;
 
-import com.psyche.portal-backend.model.User;
+import com.psyche.portal_backend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 

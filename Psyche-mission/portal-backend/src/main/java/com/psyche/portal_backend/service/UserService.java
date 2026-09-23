@@ -1,7 +1,7 @@
 package com.psyche.portal_backend.service;
 
-import com.psyche.portal-backend.model.User;
-import com.psyche.portal-backend.repository.UserRepository;
+import com.psyche.portal_backend.model.User;
+import com.psyche.portal_backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 
