@@ -24,6 +24,8 @@ export default {
                 height: 18,
                 rotationSpeed: 0.07 // adjust as needed
             },
+
+            projectile: null,
             
             keys: {
                 left: false,
@@ -53,6 +55,9 @@ export default {
             if (e.code === 'KeyD') {
             this.keys.right = true;
             }
+            if (e.code == 'Space') {
+                this.fireProjectile();
+            }
         },
         handleKeyUp(e) {
             if (e.code === 'KeyA') {
@@ -63,6 +68,22 @@ export default {
             }
         },
         
+        fireProjectile() {
+            const projectileSpeed = 5;
+            this.projectile = {
+                // starting location
+                x: this.ship.x,
+                y: this.ship.y,
+
+                // velocity
+                vx: Math.cos(this.ship.angle) * projectileSpeed,
+                vy: Math.sin(this.ship.angle) * projectileSpeed,
+
+                // size of projectile
+                radius: 3
+            }
+        },
+        
         gameLoop() {
             this.update();    // update state
             this.draw();      // draw new frame
@@ -70,19 +91,40 @@ export default {
         },
         
         update() {
-            // rotate left
+            // rotate ship left
             if (this.keys.left) {
                 this.ship.angle -= this.ship.rotationSpeed;
             }
-            // rotate right
+            // rotate ship right
             if (this.keys.right) {
                 this.ship.angle += this.ship.rotationSpeed;
+            }
+
+            // move the projectile if it has been fired
+            if (this.projectile != null) {
+                this.projectile.x += this.projectile.vx;
+                this.projectile.y += this.projectile.vy;
+
+                // remove the projectile once it goes out of the window
+                if (this.projectile.x > this.width || this.projectile.x < 0 || 
+                    this.projectile.y > this.height || this.projectile.y < 0) {
+                        this.projectile = null;
+                    }
             }
         },
         
         draw() {
             // clear frame
             this.context.clearRect(0, 0, this.width, this.height);
+
+            // draw the projectile if it exists
+            if (this.projectile != null) {
+                // arc draws a circle with the x, y, radius specified in projectile object
+                this.context.beginPath();
+                this.context.fillStyle = '#00ffff'
+                this.context.arc(this.projectile.x, this.projectile.y, this.projectile.radius, 0, Math.PI * 2);
+                this.context.fill();
+            }
 
             // save current coordinate grid
             this.context.save();
