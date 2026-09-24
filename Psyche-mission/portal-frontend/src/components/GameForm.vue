@@ -24,13 +24,18 @@ export default {
       form: {
         id: "",
         title: "",
+        genre: "",
         description: "",
         difficulty: "",
         gtype: "",
         age: "",
         className: "",
         credits: "",
-        engine: ""
+        engine: "",
+        thumbnail: "",
+        video: "",
+        src: ""
+
       },
 
       errors: {}
@@ -60,15 +65,19 @@ export default {
         if (newGame) {
 
           this.form = {
-            id: newGame.id || "",
+            id: newGame.id ?? "",
             title: newGame.title || "",
+            genre: newGame.genre || "",
             description: newGame.description || "",
             difficulty: newGame.difficulty || "",
             gtype: newGame.gtype || "",
             age: newGame.age || "",
             className: newGame.className || "",
             credits: newGame.credits || "",
-            engine: newGame.engine || ""
+            engine: newGame.engine || "",
+            thumbnail: newGame.thumbnail || "",
+            video: newGame.video || "",
+            src: newGame.src || ""
           };
 
         } else {
@@ -89,13 +98,17 @@ export default {
       this.form = {
         id: "",
         title: "",
+        genre: "",
         description: "",
         difficulty: "",
         gtype: "",
         age: "",
         className: "",
         credits: "",
-        engine: ""
+        engine: "",
+        thumbnail: "",
+        video: "",
+        src: ""
       };
 
       this.errors = {};
@@ -198,6 +211,19 @@ export default {
         </span>
       </div>
 
+      <div class="form-group">
+        <label for="game-genre">Genre</label>
+        <input
+            id="game-genre"
+            v-model="form.genre"
+            type="text"
+            placeholder="Enter game genre"
+        />
+        <span v-if="errors.genre" class="error-message">
+          {{ errors.genre }}
+        </span>
+      </div>
+
       <div class="form-group form-group-full">
         <label for="game-description">Description</label>
         <textarea
@@ -224,9 +250,9 @@ export default {
       </div>
 
       <div class="form-group">
-        <label for="game-genre">Genre</label>
+        <label for="game-genre">type</label>
         <select id="game-genre" v-model="form.gtype">
-          <option value="" disabled>Select genre</option>
+          <option value="" disabled>Select type</option>
           <option value="Web Based">Web Based</option>
           <option value="AR Experience">AR Experience</option>
           <option value="VR Experience">VR Experience</option>
@@ -270,6 +296,10 @@ export default {
             type="text"
             placeholder="Enter credits"
         />
+
+        <span v-if="errors.className" class="error-message">
+          {{ errors.className }}
+        </span>
       </div>
 
       <div class="form-group">
@@ -279,6 +309,36 @@ export default {
             v-model="form.engine"
             type="text"
             placeholder="Enter game engine"
+        />
+      </div>
+
+      <div class="form-group form-group-full">
+        <label for="game-thumbnail">Thumbnail URL</label>
+        <input
+            id="game-thumbnail"
+            v-model="form.thumbnail"
+            type="text"
+            placeholder="Enter thumbnail URL"
+        />
+      </div>
+
+      <div class="form-group form-group-full">
+        <label for="game-video">Video URL</label>
+        <input
+            id="game-video"
+            v-model="form.video"
+            type="text"
+            placeholder="Enter video URL"
+        />
+      </div>
+
+      <div class="form-group form-group-full">
+        <label for="game-src">Game Source URL</label>
+        <input
+            id="game-src"
+            v-model="form.src"
+            type="text"
+            placeholder="Enter game source URL"
         />
       </div>
 

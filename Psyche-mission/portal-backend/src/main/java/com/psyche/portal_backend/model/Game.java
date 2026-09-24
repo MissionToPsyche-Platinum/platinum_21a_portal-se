@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 @Entity
 @Table(name = "games")
@@ -11,7 +13,6 @@ public class Game {
 
     @Id
     private String id;
-
     private String title;
     private String genre;
     private String difficulty;
