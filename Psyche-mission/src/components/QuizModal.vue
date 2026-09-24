@@ -28,7 +28,9 @@ import { ref, computed } from 'vue'
         answers.value[keyMap[currentQuestionIdx.value]] = option
 
         if (currentQuestionIdx.value < questions.length - 1) {
-            currentQuestionIdx.value++
+            window.setTimeout(() => {
+                currentQuestionIdx.value++
+            }, 280)
         }
     }
     const isFinished = ref(false)
@@ -61,10 +63,25 @@ import { ref, computed } from 'vue'
 <template>
     <div class="modal" @click="closeModal">
         <div class="modal-content" @click.stop>
+            <p class="quiz-kicker">Find your game</p>
             <h2>Quiz</h2>
             <div class="progress-container">
                 <div class="progress-bar" :style="{ width: progress + '%' }"></div>
             </div>
+
+            <ol class="quiz-steps">
+                <li
+                    v-for="(question, index) in questions"
+                    :key="index"
+                    class="quiz-step"
+                    :class="{
+                        current: index === currentQuestionIdx,
+                        done: [answers.device, answers.difficulty, answers.fun, answers.interest][index]
+                    }"
+                >
+                    <span class="quiz-step-num">{{ index + 1 }}</span>
+                </li>
+            </ol>
 
             <p class="progres-text">Question {{ currentQuestionIdx + 1 }} of {{ questions.length }}</p>
 
@@ -77,7 +94,8 @@ import { ref, computed } from 'vue'
                     <button v-for="(option, index) in questions[currentQuestionIdx].options"
                     :key="index"
                     @click="selectAnswer(option)"
-                    class="option-button">
+                    class="option-button"
+                    :class="{ selected: [answers.device, answers.difficulty, answers.fun, answers.interest][currentQuestionIdx] === option }">
                         {{ option }}
                     </button>
                 </div>
@@ -94,7 +112,7 @@ import { ref, computed } from 'vue'
 
             <div class="modal-actions">
                 <button class="btn" @click="closeModal">Close</button>
-                <button class="btn" :disabled="!isQuizComplete()" @click="submitAndViewResults">View Results</button>
+                <button class="btn btn-primary" :disabled="!isQuizComplete()" @click="submitAndViewResults">View Results</button>
             </div>
         </div>
     </div>
@@ -107,86 +125,206 @@ import { ref, computed } from 'vue'
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.78);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1100;
+    padding: 20px;
+    box-sizing: border-box;
 }
+
 .modal-content {
-    background: #ffffff;
-    color: #000000;
+    background: #000000;
+    color: #ffffff;
     padding: 24px;
-    border-radius: 8px;
-    text-align: center;
-    width: 400px;
-    max-width: 90%;
+    border: 1px solid #666666;
+    border-radius: 4px;
+    text-align: left;
+    width: 480px;
+    max-width: 100%;
+    max-height: min(90vh, 720px);
+    overflow-y: auto;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, currentColor 55%, transparent) transparent;
 }
+
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: #666666;
+    border-radius: 999px;
+}
+
+.modal-content::-webkit-scrollbar-button {
+    display: none;
+}
+
+.quiz-kicker {
+    margin: 0 0 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.55;
+}
+
 .modal-content h2 {
-    margin: 0 0 8px;
+    margin: 0 0 16px;
+    font-size: 1.5rem;
 }
+
+.quiz-steps {
+    display: flex;
+    gap: 8px;
+    margin: 0 0 12px;
+    padding: 0;
+    list-style: none;
+}
+
+.quiz-step {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.quiz-step-num {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #444444;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.55;
+}
+
+.quiz-step.current .quiz-step-num {
+    border-color: currentColor;
+    opacity: 1;
+}
+
+.quiz-step.done .quiz-step-num {
+    border-color: #ffd60a;
+    color: #ffd60a;
+    opacity: 1;
+}
+
 .modal-actions {
     display: flex;
     justify-content: space-between;
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 24px;
 }
+
 .btn {
-    padding: 8px 16px;
-    border-radius: 6px;
-    border: 1px solid #111111;
-    background: #111111;
-    color: #ffffff;
+    padding: 10px 16px;
+    border-radius: 4px;
+    border: 1px solid currentColor;
+    background: transparent;
+    color: inherit;
     cursor: pointer;
     font-weight: 600;
 }
-.btn:last-child {
+
+.btn:hover {
     background: #111111;
+    color: #ffffff;
+    border-color: #111111;
 }
-.btn:first-child {
+
+.btn-primary {
     background: #ffffff;
     color: #111111;
+    border-color: #ffffff;
 }
+
+.btn-primary:hover {
+    opacity: 0.88;
+    background: #ffffff;
+    color: #111111;
+    border-color: #ffffff;
+}
+
 .btn:disabled {
-    opacity: 0.5;
+    opacity: 0.45;
     cursor: not-allowed;
 }
-.progress-container {
-    background-color: #dddddd;
-    width: 100%;
-    height: 8px;
-    border-radius: 4px;
-    overflow: hidden;
-    margin: 10px 0 5px;
+
+.btn:disabled:hover {
+    background: #ffffff;
+    color: #111111;
+    border-color: #ffffff;
+    opacity: 0.45;
 }
+
+.progress-container {
+    background-color: #222222;
+    width: 100%;
+    height: 4px;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 0 0 14px;
+}
+
 .progress-bar {
     height: 100%;
-    background: #111111;
+    background: #e8c547;
     transition: width 0.3s ease;
 }
+
 .progres-text {
     font-size: 12px;
     opacity: 0.7;
-    margin-bottom: 10px;
+    margin: 0 0 16px;
 }
+
 .quiz-body {
-    margin-top: 10px;
+    margin-top: 4px;
 }
+
+.quiz-body h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.35;
+}
+
 .options {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: 15px;
+    gap: 8px;
+    margin-top: 16px;
 }
+
 .option-button {
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #cccccc;
+    padding: 12px 14px;
+    border-radius: 4px;
+    border: 1px solid #666666;
     cursor: pointer;
-    background: #f5f5f5;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    font: inherit;
 }
+
 .option-button:hover {
-    background: #ececec;
-    border-color: #111111;
+    border-color: #ffd60a;
+    background: rgba(255, 214, 10, 0.08);
+}
+
+.option-button:active,
+.option-button.selected {
+    border-color: #ffd60a;
+    background: rgba(255, 214, 10, 0.2);
+    color: #ffd60a;
 }
 </style>
