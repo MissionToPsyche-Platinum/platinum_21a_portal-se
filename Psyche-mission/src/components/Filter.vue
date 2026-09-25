@@ -128,7 +128,7 @@
     flex-direction: row;
     gap: 12px;
     min-width: max-content;
-    z-index: 100;
+    z-index: 200;
 }
 
 .filter-title {
