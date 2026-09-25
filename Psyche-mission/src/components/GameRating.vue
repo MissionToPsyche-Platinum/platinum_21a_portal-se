@@ -53,7 +53,8 @@ export default {
 </script>
 
 <template>
-  <div class="rating-box" :style="{borderColor: backGround}">
+  <div class="rating-box" :class="{ dark: isDark, rated: currentRating > 0 }">
+    <p class="rating-kicker">Mission feedback</p>
     <h3 class="rating-title">Rate this game</h3>
 
     <!-- loop and generate 5 stars (button), apply active class if star is selected or hovered
@@ -64,98 +65,138 @@ export default {
           :key="star"
           type="button"
           class="star-button"
-          :style="{ color: foreGround }"
           :class="{ active: star <= (hoverRating || currentRating) }"
           @click="setRating(star)"
           @mouseover="hoverRating = star"
           @mouseleave="hoverRating = 0"
           :aria-label="`Rate ${star} star${star > 1 ? 's' : ''}`"
-
       >
-        &#9733 <!-- unicode for star character -->
+        <span class="star-icon">{{ star <= (hoverRating || currentRating) ? "\u2605" : "\u2606" }}</span>
+        <span class="star-num">{{ star }}</span>
       </button>
     </div>
 
-    <p class="rating-text" :style="{ color: foreGround }">
-      <!-- if user selected a rating -->
-      <span v-if="currentRating > 0"> Your rating: {{ currentRating }}/5</span>
-      <!-- otherwise no rating yet -->
-      <span v-else>No rating yet</span>
-
+    <p class="rating-text">
+      <span v-if="currentRating > 0">{{ currentRating }} out of 5</span>
+      <span v-else>Tap a star to rate</span>
     </p>
     <button
         v-if="currentRating > 0"
         type="button"
         class="clear-button"
         @click="clearRating"
-        :style="{ color: foreGround, borderColor: foreGround }"
-
     >
-      Clear Rating
+      Clear rating
     </button>
 
   </div>
 </template>
 
-<style>
+<style scoped>
 .rating-box {
-  margin-top: 20px;
-  padding: 16px;
-  border: 2px solid #330066;
-  border-radius: 12px;
-  text-align: center;
-  max-width: 320px;
+  margin-top: 28px;
+  padding: 18px 0 4px;
+  border: none;
+  border-top: 1px solid #444444;
+  text-align: left;
+  max-width: none;
 }
 
+.rating-kicker {
+  margin: 0 0 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
 
 .rating-title {
-  margin-bottom: 10px;
+  margin: 0 0 14px;
+  font-size: 1.25rem;
 }
-/*star container*/
+
 .stars {
   display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 10px;
+  justify-content: flex-start;
+  gap: 4px;
+  margin-bottom: 12px;
 }
-/* star styling*/
+
 .star-button {
+  flex: 1;
+  max-width: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px 6px;
   background: transparent;
-  border: none;
-  font-size: 32px;
+  border: 1px solid #444444;
+  color: inherit;
+  font-size: 26px;
+  line-height: 1;
   cursor: pointer;
-  opacity: 0.35;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-
+  opacity: 1;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
 
-/*star appearance*/
-.star-button.active {
-  opacity: 1;
-  transform: scale(1.1);
+.star-icon {
+  color: inherit;
+  opacity: 0.4;
+}
 
+.star-num {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  opacity: 0.45;
+}
+
+.star-button:hover,
+.star-button.active {
+  border-color: #e8c547;
+  background: rgba(232, 197, 71, 0.12);
+}
+
+.star-button.active .star-icon,
+.star-button:hover .star-icon {
+  color: #e8c547;
+  opacity: 1;
+}
+
+.star-button.active .star-num,
+.star-button:hover .star-num {
+  color: #e8c547;
+  opacity: 1;
 }
 
 .rating-text {
-  margin: 8px 0;
+  margin: 0 0 8px;
+  font-size: 0.9rem;
   font-weight: 600;
+  opacity: 0.8;
 }
 
 .clear-button {
-  padding: 10px 15px;
-  border: 1px solid currentColor;
+  padding: 0;
+  border: none;
   background: transparent;
+  color: inherit;
   cursor: pointer;
-  border-radius: 999px;
+  font-size: 0.8rem;
   font-weight: 600;
-  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
-
-
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  opacity: 0.7;
 }
+
 .clear-button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  opacity: 1;
+  background: transparent;
+  color: inherit;
+  border-color: transparent;
 }
-
-
 </style>

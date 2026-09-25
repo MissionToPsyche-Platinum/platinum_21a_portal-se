@@ -128,6 +128,28 @@ export default {
         return this.showQuizResults ? this.quizResults :this.sortGames;
     },
 
+    activeFilterChips() {
+      const labels = {
+        class: "Class",
+        genre: "Genre",
+        age: "Age"
+      };
+      const genreLabels = {
+        "Web Based": "Web Games",
+        "AR Experience": "AR Experiences",
+        "VR Experience": "VR Experiences"
+      };
+      return Object.keys(labels)
+        .filter(key => this.activeFilters[key])
+        .map(key => ({
+          key,
+          label: labels[key],
+          value: key === "genre"
+            ? (genreLabels[this.activeFilters[key]] || this.activeFilters[key])
+            : this.activeFilters[key]
+        }));
+    },
+
     // group the already-filtered/sorted list into genre shelves for display only
     gameShelves() {
       const grouped = {};
@@ -239,6 +261,14 @@ export default {
 
     handleFilters(filters) {
       this.activeFilters = filters;
+    },
+
+    clearFilterChip(key) {
+      this.activeFilters[key] = "";
+      const panel = this.$refs.filterPanel;
+      if (panel && panel.filters && panel.filters[key]) {
+        panel.filters[key] = "";
+      }
     },
 
     openQuiz() {
@@ -540,7 +570,7 @@ export default {
         <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
       </section>
       <section class="filter-section">
-        <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
+        <Filter ref="filterPanel" :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
         <button
             class="toggle"
             :style="[
@@ -552,6 +582,20 @@ export default {
           {{ favoritesOnly ? `Show All Games ${favoritesCount}` : `Show Favorite Games ${favoritesCount}` }}
         </button>
       </section>
+    </div>
+
+    <div v-if="activeFilterChips.length" class="filter-chips">
+      <button
+        v-for="chip in activeFilterChips"
+        :key="chip.key"
+        class="filter-chip"
+        type="button"
+        :aria-label="'Remove ' + chip.label + ' filter'"
+        @click="clearFilterChip(chip.key)"
+      >
+        <span>{{ chip.label }}: {{ chip.value }}</span>
+        <span class="filter-chip-remove" aria-hidden="true">×</span>
+      </button>
     </div>
 
     <!--  main platforms section can be used to filter the displayed games -->
@@ -665,12 +709,16 @@ export default {
   color-scheme: light;
 }
 
-.browse-bar,
 .platforms,
 .games-placeholder,
 .games-heading {
   position: relative;
   z-index: 10;
+}
+
+.browse-bar {
+  position: relative;
+  z-index: 40;
 }
 
 /* theme controls panel */
@@ -776,11 +824,47 @@ input[type='color'] {
 }
 
 .filter-section {
-  z-index: 20;
+  position: relative;
+  z-index: 50;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 8px;
+}
+
+.filter-chips {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -4px 48px 16px;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.filter-chip:hover {
+  border-color: #ffd60a;
+  color: #ffd60a;
+}
+
+.filter-chip-remove {
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.7;
 }
 
 /* platform cards styling */
@@ -1018,7 +1102,8 @@ input[type='color'] {
 @media (max-width: 600px) {
   .browse-bar,
   .games-placeholder,
-  .games-heading {
+  .games-heading,
+  .filter-chips {
     margin-left: 20px;
     margin-right: 20px;
   }
