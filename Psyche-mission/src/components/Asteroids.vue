@@ -22,10 +22,10 @@ export default {
                 angle: 0,           // radians
                 width: 36,
                 height: 18,
-                rotationSpeed: 0.07 // adjust as needed
+                rotationSpeed: 0.03 // adjust as needed
             },
 
-            projectile: null,
+            projectiles: [], // array of projectiles on screen
             
             keys: {
                 left: false,
@@ -70,7 +70,7 @@ export default {
         
         fireProjectile() {
             const projectileSpeed = 5;
-            this.projectile = {
+            this.projectiles.push({
                 // starting location
                 x: this.ship.x,
                 y: this.ship.y,
@@ -81,7 +81,7 @@ export default {
 
                 // size of projectile
                 radius: 3
-            }
+            });
         },
         
         gameLoop() {
@@ -100,16 +100,18 @@ export default {
                 this.ship.angle += this.ship.rotationSpeed;
             }
 
-            // move the projectile if it has been fired
-            if (this.projectile != null) {
-                this.projectile.x += this.projectile.vx;
-                this.projectile.y += this.projectile.vy;
+            // move the projectiles
+            for (let i = this.projectiles.length - 1; i >= 0; i--) {
+                const projectile = this.projectiles[i];
 
+                projectile.x += projectile.vx;
+                projectile.y += projectile.vy;
+                
                 // remove the projectile once it goes out of the window
-                if (this.projectile.x > this.width || this.projectile.x < 0 || 
-                    this.projectile.y > this.height || this.projectile.y < 0) {
-                        this.projectile = null;
-                    }
+                if (projectile.x > this.width || projectile.x < 0 || 
+                    projectile.y > this.height || projectile.y < 0) {
+                    this.projectiles.splice(i, 1);
+                }
             }
         },
         
@@ -117,12 +119,12 @@ export default {
             // clear frame
             this.context.clearRect(0, 0, this.width, this.height);
 
-            // draw the projectile if it exists
-            if (this.projectile != null) {
-                // arc draws a circle with the x, y, radius specified in projectile object
+            // draw the projectiles
+            // arc draws a circle with the x, y, radius specified in projectile object
+            for (const projectile of this.projectiles) {
                 this.context.beginPath();
-                this.context.fillStyle = '#00ffff'
-                this.context.arc(this.projectile.x, this.projectile.y, this.projectile.radius, 0, Math.PI * 2);
+                this.context.fillStyle = '#00ffff';
+                this.context.arc(projectile.x, projectile.y, projectile.radius, 0, Math.PI * 2);
                 this.context.fill();
             }
 
