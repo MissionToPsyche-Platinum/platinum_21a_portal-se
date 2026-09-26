@@ -1,8 +1,14 @@
 <script>
+import GameUploadForm from "@/components/GameUploadForm.vue";
+
 export default {
+    components: {
+        GameUploadForm
+    },
     data() {
         return {
-            username: "Test Username"
+            username: "Test Username",
+            showUploadForm: false
         }
     }
 }
@@ -16,7 +22,8 @@ export default {
     <div class="upload-section">
         <h2>Game Upload Request</h2>
         <p>Submit a request to add a new game to the portal.</p>
-        <button>Submit New Game Request</button>
+        <button @click="showUploadForm = true">Submit New Game Request</button>
+        <GameUploadForm v-if="showUploadForm" />
     </div>
 </div>
 </template>
