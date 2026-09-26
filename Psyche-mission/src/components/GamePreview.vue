@@ -8,7 +8,7 @@ export default {
       default: () => ({
       })
     }
-  }
+  },
 }
 </script>
 
@@ -16,18 +16,17 @@ export default {
   <div class="game-preview">
 
     <div class="video-container">
-        <!-- Implement later once I have videos -->
-      <!-- <video
-        v-if="game.videoUrl"
-        :src="game.videoUrl"
-        autoplay
-        loop
-        muted
-        playsinline
-        class="preview-video"
-      ></video> -->
-      <h1>Video</h1>
+      <iframe
+        v-if="game.video"
+        :src="game.video"
+        class="preview-iframe"
+        frameborder="0"
+        allow="autoplay; encrypted-media"
+      ></iframe>
       
+      <div v-else class="preview-placeholder">
+        <span>No Preview Available</span>
+      </div>
     </div>
 
     <div class="preview-game-details">
@@ -46,7 +45,7 @@ export default {
 
 <style scoped>
 .game-preview {
-  width: 280px;
+  width: 340px;
   background-color: #1e1e24;
   color: #ffffff;
   border-radius: 8px;
@@ -66,10 +65,19 @@ export default {
   overflow: hidden;
 }
 
-.preview-video {
+.preview-iframe {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: 190px;
+  border: none;
+  pointer-events: none;
+}
+
+.preview-placeholder {
+  color: #888899;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .preview-game-details {
