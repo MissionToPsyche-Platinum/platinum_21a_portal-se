@@ -1,22 +1,32 @@
 package com.psyche.portal_backend.model;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name="game-upload-requests")
 public class GameUploadRequest {
-    private static final AtomicInteger idGenerator = new AtomicInteger(1);
-    private final int requestId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long requestId;
+
+    @OneToOne
     private Game game;
+
+    @ManyToOne
     private User submittedBy;
+
+    @Enumerated(EnumType.STRING)
     private RequestStatus status;
 
+    public GameUploadRequest() {}
+
     public GameUploadRequest(Game game, User user) {
-        this.requestId = idGenerator.getAndIncrement();
         this.game = game;
         this.submittedBy = user;
         this.status = RequestStatus.PENDING;
     }
 
-    public int getRequestId() {
+    public long getRequestId() {
         return this.requestId;
     }
 

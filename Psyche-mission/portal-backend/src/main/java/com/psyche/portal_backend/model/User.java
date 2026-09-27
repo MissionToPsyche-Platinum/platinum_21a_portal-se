@@ -1,6 +1,5 @@
 package com.psyche.portal_backend.model;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import jakarta.persistence.*;
 
 @Entity
