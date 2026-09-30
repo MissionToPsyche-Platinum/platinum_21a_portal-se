@@ -5,5 +5,5 @@ import com.psyche.portal_backend.model.GameUploadRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GameUploadRequestRepository extends JpaRepository<GameUploadRequest, Long> {
-    Optional<GameUploadRequest> findBySubmittedBy_Username(String username);
+    Optional<GameUploadRequest> findBySubmittedByUsername(String username);
 }
