@@ -26,6 +26,16 @@ export default {
             },
 
             projectiles: [], // array of projectiles on screen
+
+            // single asteroid object to start with. 
+            // Plan is to have an array with multiple depending on level
+            asteroid: {
+                x: 0,
+                y: 0,
+                vx: 0,
+                vy: 0,
+                radius: 20
+            },
             
             keys: {
                 left: false,
@@ -40,6 +50,8 @@ export default {
         // ship located in center
         this.ship.x = this.width / 2;
         this.ship.y = this.height / 2;
+
+        this.spawnAsteroid();
 
         window.addEventListener('keydown', this.handleKeyDown);
         window.addEventListener('keyup', this.handleKeyUp);
@@ -65,6 +77,27 @@ export default {
             }
             if (e.code === 'KeyD') {
             this.keys.right = false;
+            }
+        },
+
+        spawnAsteroid() {
+            const side = Math.floor(Math.random() * 4); // 0-4 are the sides of the canvas - top, right, bottom, left
+            const spawnDistance = this.asteroid.radius + 5; // the distance off the edge of the canvas to start spawning
+            let startX; // initial x pos
+            let startY; // initial y pos
+
+            if (side === 0) {
+                startX = Math.random() * this.width;    // random location along the width
+                startY = -spawnDistance;                // spawn above the top of the canvas 
+            } else if (side === 1) {
+                startX = this.width + spawnDistance;    // spawn off to the right side
+                startY = Math.random() * this.height;   // random location along height
+            } else if (side === 2) {
+                startX = Math.random() * this.width;    //random location along width
+                startY = this.height + spawnDistance;   // spawn off bottom of canvas
+            } else if (side === 3) {
+                startX = -spawnDistance;                // spawn off left side of canvas
+                startY = Math.random() * this.height;   // random location along height
             }
         },
         
