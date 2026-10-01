@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GameUploadRequestRepository extends JpaRepository<GameUploadRequest, Long> {
     Optional<GameUploadRequest> findBySubmittedByUsername(String username);
+
+    List<GameUploadRequest> findByStatus(RequestStatus status);
 }
