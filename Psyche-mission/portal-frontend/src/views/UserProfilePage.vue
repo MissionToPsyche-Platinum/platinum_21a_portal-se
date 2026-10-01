@@ -1,13 +1,15 @@
 <script>
 import GameUploadForm from "@/components/GameUploadForm.vue";
+import { getSession } from "@/utils/auth";
 
 export default {
     components: {
         GameUploadForm
     },
     data() {
+        const session = getSession();
         return {
-            username: "Test Username",
+            username: session ? session.username : "Test Username",
             showUploadForm: false
         }
     }
