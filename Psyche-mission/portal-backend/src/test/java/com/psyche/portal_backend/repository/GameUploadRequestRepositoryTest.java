@@ -18,7 +18,7 @@ class GameUploadRequestRepositoryTest {
     void shouldSaveGameUploadRequest() {
 
         GameUploadRequest request = new GameUploadRequest();
-        request.setStatus(RequestStatus.PENDING);
+        request.setRequestStatus(RequestStatus.PENDING);
 
         GameUploadRequest savedRequest =
                 gameUploadRequestRepository.save(request);
