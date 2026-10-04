@@ -99,6 +99,18 @@ export default {
                 startX = -spawnDistance;                // spawn off left side of canvas
                 startY = Math.random() * this.height;   // random location along height
             }
+
+            // calculate angle to aim asteroid at ship
+            const angle = Math.atan2(this.ship.y - startY, this.ship.x - startX);
+
+            // hardcoded for now, should be randomized based on level later
+            const speed = 0.75;
+
+            // set position and velocity for asteroid
+            this.asteroid.x = startX;
+            this.asteroid.y = startY;
+            this.asteroid.vx = Math.cos(angle) * speed;
+            this.asteroid.vy = Math.sin(angle) * speed;
         },
         
         fireProjectile() {
@@ -146,11 +158,30 @@ export default {
                     this.projectiles.splice(i, 1);
                 }
             }
+
+            // move the asteroid
+            this.asteroid.x += this.asteroid.vx;
+            this.asteroid.y += this.asteroid.vy;
+
+            // if asteroid has left screen, spawn new asteroid
+            const offset = this.asteroid.radius + 5;
+            if (this.asteroid.x < -offset || this.asteroid.x > this.width + offset ||
+                this.asteroid.y < -offset || this.asteroid.y > this.height + offset
+            ) {
+                this.spawnAsteroid();
+            }
         },
         
         draw() {
             // clear frame
             this.context.clearRect(0, 0, this.width, this.height);
+
+            // draw asteroid
+            this.context.beginPath();
+            this.context.arc(this.asteroid.x, this.asteroid.y, this.asteroid.radius, 0, Math.PI * 2)
+            this.context.strokeStyle = '#c0cfce';
+            this.context.lineWidth = 2;
+            this.context.stroke();
 
             // draw the projectiles
             // arc draws a circle with the x, y, radius specified in projectile object
