@@ -36,9 +36,23 @@ public class Game {
     @Column(columnDefinition = "TEXT")
     private String src;     //URL
 
-    
-
     public Game() {}
+
+    public Game(String title, String genre, String difficulty, String age, String className, String credits,
+                String gtype, String engine, String description, String thumbnail, String src, String video) {
+        this.title = title;
+        this.genre = genre;
+        this.difficulty = difficulty;
+        this.age = age;
+        this.className = className;
+        this.credits = credits;
+        this.gtype = gtype;
+        this.engine = engine;
+        this.description = description;
+        this.thumbnail = thumbnail;
+        this.src = src;
+        this.video = video;
+    }
 
     public String getId() { return id; }
     public String getTitle() { return title; }

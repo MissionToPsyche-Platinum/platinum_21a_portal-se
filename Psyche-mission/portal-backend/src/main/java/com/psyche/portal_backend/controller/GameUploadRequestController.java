@@ -1,6 +1,7 @@
 package com.psyche.portal_backend.controller;
 
 import com.psyche.portal_backend.model.GameUploadRequest;
+import com.psyche.portal_backend.model.dto.GameUploadRequestDTO;
 import com.psyche.portal_backend.service.GameUploadRequestService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,5 +17,10 @@ public class GameUploadRequestController {
     @GetMapping("/{id}")
     public GameUploadRequest getRequestById(@PathVariable Long id) {
         return service.getRequestById(id);
+    }
+
+    @PostMapping
+    public GameUploadRequest createRequest(@RequestBody GameUploadRequestDTO dto) {
+        return service.createRequest(dto);
     }
 }
