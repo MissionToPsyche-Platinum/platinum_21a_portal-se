@@ -11,15 +11,41 @@
             <a href="/" class="nav-link">Home</a>
             <a href="https://psyche.ssl.berkeley.edu/" class="nav-link" target="_blank" rel="noopener noreferrer">About</a>
 
-        <!--Admin navigation -->
-          <router-link to="/admin" class="nav-link">Admin</router-link>
+            <router-link v-if="!loggedIn" to="/login" class="nav-link">Login</router-link>
+            <router-link v-if="loggedIn" to="/profile" class="nav-link">Profile</router-link>
+            <router-link v-if="admin" to="/admin" class="nav-link">Admin</router-link>
+            <button v-if="loggedIn" type="button" class="nav-link logout-button" @click="logout">Logout</button>
         </div>
     </nav>
  </template>
 
 <script>
+import { isLoggedIn, isAdmin, clearSession } from "@/utils/auth";
+
 export default {
-    name: "NavBar"
+    name: "NavBar",
+    data() {
+        return {
+            loggedIn: isLoggedIn(),
+            admin: isAdmin()
+        };
+    },
+    mounted() {
+        window.addEventListener("session-changed", this.refreshSession);
+    },
+    beforeUnmount() {
+        window.removeEventListener("session-changed", this.refreshSession);
+    },
+    methods: {
+        refreshSession() {
+            this.loggedIn = isLoggedIn();
+            this.admin = isAdmin();
+        },
+        logout() {
+            clearSession();
+            this.$router.push("/");
+        }
+    }
 };
 </script>
 
@@ -60,5 +86,13 @@ export default {
 .logo-link {
    display: flex;
    align-items: center;
+}
+
+.logout-button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font: inherit;
 }
  </style>
