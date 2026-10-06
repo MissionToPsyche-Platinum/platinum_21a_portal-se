@@ -34,10 +34,12 @@ export const setSession = (session) => {
         username: session.username,
         role: session.role
     }));
+    window.dispatchEvent(new Event("session-changed"));
 };
 
 export const clearSession = () => {
     localStorage.removeItem(SESSION_KEY);
+    window.dispatchEvent(new Event("session-changed"));
 };
 
 export const isLoggedIn = () => {

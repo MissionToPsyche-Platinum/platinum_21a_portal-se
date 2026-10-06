@@ -1,4 +1,6 @@
 <script>
+import { setSession } from "@/utils/auth";
+
 export default {
     data() {
         return {
@@ -21,19 +23,56 @@ export default {
             const adminUsername = "admin"
             const adminPassword = "test"
 
-            if (!this.username || !this.password) {
+            const enteredUsername = this.username.trim();
+            const enteredPassword = this.password.trim();
+
+            if (!enteredUsername || !enteredPassword) {
                 this.message = "Please enter a username and password."
                 return;
             }
 
-            if ((this.username === username && this.password === password) ||
-                (this.username === adminUsername && this.password === adminPassword)) {
+            if ((enteredUsername === username && enteredPassword === password) ||
+                (enteredUsername === adminUsername && enteredPassword === adminPassword)) {
                 this.message = "Login successful!"
                 console.log("Login success.")
+
+                const isAdminLogin = enteredUsername === adminUsername && enteredPassword === adminPassword;
+                setSession({
+                    username: enteredUsername,
+                    role: isAdminLogin ? "admin" : "user"
+                });
+                this.$router.push(isAdminLogin ? "/admin" : "/profile");
+                return;
             }
-            else {
-                this.message = "Invalid credentials."
-            }
+
+            fetch("http://localhost:8080/api/users/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: enteredUsername,
+                    password: enteredPassword
+                })
+            })
+                .then(async (response) => {
+                    if (!response.ok) {
+                        this.message = "Invalid credentials."
+                        return;
+                    }
+
+                    const data = await response.json();
+                    this.message = "Login successful!"
+                    console.log("Login success.")
+                    setSession({
+                        username: data.username,
+                        role: "user"
+                    });
+                    this.$router.push("/profile");
+                })
+                .catch(() => {
+                    this.message = "Could not reach the server. Make sure the backend is running."
+                })
         }
     }
 }
@@ -41,7 +80,7 @@ export default {
 
 <template>
     <h1>Login</h1>
-    <form @submit="handleSubmit" class="login-form">
+    <form @submit.prevent="handleSubmit" class="login-form">
         <div class="input">
             <input type="text" v-model="username" placeholder="Username" required />
             <input type="password" v-model="password" placeholder="Password" required />

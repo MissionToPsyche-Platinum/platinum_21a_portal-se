@@ -33,10 +33,31 @@ export default {
                 return;
             }
 
-            console.log("Sign Up button pressed")
-            console.log("Username: " + this.username)
+            fetch("http://localhost:8080/api/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: this.username,
+                    email: this.email,
+                    password: this.password
+                })
+            })
+                .then(async (response) => {
+                    const data = await response.json().catch(() => ({}));
 
-            this.message = "Account creation successful!"
+                    if (response.status === 201) {
+                        this.message = "Account creation successful!"
+                        this.$router.push("/login");
+                        return;
+                    }
+
+                    this.message = data.error || "Account creation failed.";
+                })
+                .catch(() => {
+                    this.message = "Could not reach the server. Make sure the backend is running."
+                })
         }
     }
 }
