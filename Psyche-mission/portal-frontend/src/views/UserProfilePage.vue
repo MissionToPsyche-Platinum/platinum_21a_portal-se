@@ -25,6 +25,7 @@ export default {
         <h2>Game Upload Request</h2>
         <p>Submit a request to add a new game to the portal.</p>
         <button @click="showUploadForm = true">Submit New Game Request</button>
+      <p>Form visible: {{ showUploadForm }}</p>
         <GameUploadForm v-if="showUploadForm" />
     </div>
 </div>

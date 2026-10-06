@@ -5,6 +5,7 @@ import com.psyche.portal_backend.model.dto.GameUploadRequestDTO;
 import com.psyche.portal_backend.service.GameUploadRequestService;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/game-upload-requests")
 public class GameUploadRequestController {
@@ -21,6 +22,7 @@ public class GameUploadRequestController {
 
     @PostMapping
     public GameUploadRequest createRequest(@RequestBody GameUploadRequestDTO dto) {
+
         return service.createRequest(dto);
     }
 }

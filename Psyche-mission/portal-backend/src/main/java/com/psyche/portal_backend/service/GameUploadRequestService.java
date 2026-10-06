@@ -9,7 +9,7 @@ import com.psyche.portal_backend.repository.GameUploadRequestRepository;
 import com.psyche.portal_backend.repository.UserRepository;
 import com.psyche.portal_backend.repository.GameRepository;
 import org.springframework.stereotype.Service;
-
+import java.util.UUID;
 import java.util.Optional;
 
 @Service
@@ -54,6 +54,8 @@ public class GameUploadRequestService {
                 dto.getAge(), dto.getClassName(), dto.getCredits(), dto.getGtype(),
                 dto.getEngine(), dto.getDescription(), dto.getThumbnail(), dto.getSrc(),
                 dto.getVideo());
+
+                game.setId(UUID.randomUUID().toString());
 
         gameRepository.save(game);
 
