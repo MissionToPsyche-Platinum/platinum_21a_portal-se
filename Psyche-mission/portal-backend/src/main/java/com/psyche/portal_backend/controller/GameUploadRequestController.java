@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/game-upload-requests")
+@CrossOrigin(origins = "http://localhost:5173")
 public class GameUploadRequestController {
     private final GameUploadRequestService service;
 

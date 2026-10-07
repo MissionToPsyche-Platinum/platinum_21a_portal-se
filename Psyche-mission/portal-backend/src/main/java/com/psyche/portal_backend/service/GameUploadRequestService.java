@@ -41,7 +41,9 @@ public class GameUploadRequestService {
                 dto.getAge(), dto.getClassName(), dto.getCredits(), dto.getGtype(),
                 dto.getEngine(), dto.getDescription(), dto.getThumbnail(), dto.getSrc(),
                 dto.getVideo());
+        String gameId = dto.getTitle().toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
 
+        game.setId(gameId);
         gameRepository.save(game);
 
         Optional<User> user = userRepository.findByUsername("test");
