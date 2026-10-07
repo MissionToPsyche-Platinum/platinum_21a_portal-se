@@ -1,5 +1,6 @@
 <script>
 import psycheLogo from '@/assets/PsycheLogo.png'
+import { saveFavoritesToServer } from "@/utils/favoriteService";
 
 export default {
   props: {
@@ -76,6 +77,7 @@ export default {
       }
 
       localStorage.setItem("favoriteGames", JSON.stringify(favorites));
+      saveFavoritesToServer(favorites);
 
       // notify other components that favorites changed
       window.dispatchEvent(new Event("favorites-updated"));

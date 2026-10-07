@@ -1,5 +1,6 @@
 <script>
 import { setSession } from "@/utils/auth";
+import { loadFavoritesFromServer } from "@/utils/favoriteService";
 
 export default {
     data() {
@@ -41,6 +42,7 @@ export default {
                     username: enteredUsername,
                     role: isAdminLogin ? "admin" : "user"
                 });
+                loadFavoritesFromServer();
                 this.$router.push(isAdminLogin ? "/admin" : "/profile");
                 return;
             }
@@ -68,6 +70,7 @@ export default {
                         username: data.username,
                         role: "user"
                     });
+                    loadFavoritesFromServer();
                     this.$router.push("/profile");
                 })
                 .catch(() => {

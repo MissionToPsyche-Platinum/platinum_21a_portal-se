@@ -4,6 +4,7 @@ import Filter from '../components/Filter.vue'
 import SearchBar from '../components/SearchBar.vue'
 import QuizModal from '../components/QuizModal.vue'
 import FeaturedGame from '../components/FeaturedGame.vue'
+import { loadFavoritesFromServer } from "@/utils/favoriteService";
 
 export default {
   name: "HomePage",
@@ -156,6 +157,7 @@ export default {
     }
     this.loadFavorites();
     window.addEventListener("favorites-updated", this.loadFavorites);
+    loadFavoritesFromServer();
 
     // fetch games from backend at startup
     await this.fetchGames();

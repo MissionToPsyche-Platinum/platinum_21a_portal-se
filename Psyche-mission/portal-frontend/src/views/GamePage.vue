@@ -4,6 +4,7 @@ import GameLink from '../components/GameLink.vue'
 import { getSuggestions } from "../utils/gameService.js"
 import QRCode from 'qrcode'
 import GameRating from "../components/GameRating.vue";
+import { saveFavoritesToServer } from "@/utils/favoriteService";
 
 export default {
   name: 'GamePage',
@@ -167,6 +168,7 @@ export default {
       }
 
       localStorage.setItem("favoriteGames", JSON.stringify(favorites));
+      saveFavoritesToServer(favorites);
 
       // notify other components that favorites changed
       window.dispatchEvent(new Event("favorites-updated"));
