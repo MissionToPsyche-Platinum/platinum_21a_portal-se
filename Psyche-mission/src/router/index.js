@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import GamePage from "../views/GamePage.vue"
 import HomePage from "../views/HomePage.vue"
 import NotFound from "../views/NotFound.vue"
+import VrInstructions from '@/views/VrInstructions.vue'
 
 import Login from "@/views/Login.vue";
 
@@ -16,6 +17,8 @@ const routes = [
     {path: "/login", name: "Login", component: Login},
 
     {path: "/admin", name: "Admin", component: AdminPage},
+
+    {path: "/vr-instructions", name: VrInstructions, component: VrInstructions},
 
     {
         path: "/:path(.*)*", // Must be at end of routes. Checks for any url path that has not been defined above

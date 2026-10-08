@@ -244,13 +244,23 @@ export default {
 
     <div class="game">
       <div v-if="game && game.src" class="game-iframe">
-          <a :href="game.src" v-if="game.genre === 'VR Experience'"><h1>{{ game.src }}</h1></a>
-          <div v-else-if="game.genre === 'AR Experience' && displayQr" class="qr-code-div">
+          <div v-if="game.genre === 'AR Experience' && displayQr" class="qr-code-div">
             <img :src="qrCode" />
             <h3>The AR Experiences are optimized for use with a mobile device.</h3>
             <h3>Please Scan the QR code with your mobile device to play!</h3>
             <h3>Or:</h3>
             <button class="load-game-btn" @click="toggleGame">Load Game In The Browser</button>
+          </div>
+          <div v-else-if="game.genre === 'VR Experience'" class="vr-game">
+            <a :href="game.src" v-if="game.genre === 'VR Experience'" class="vr-download-button">
+              Download the game here
+            </a>
+            <div class="instruction-div">
+              <h1>First time installing VR APKs?</h1>
+              <router-link to="/vr-instructions" class="vr-instruction-link">
+                Check out our installation guide
+              </router-link>
+            </div>
           </div>
           <div v-else class="iframe-div">
             <iframe
@@ -548,6 +558,47 @@ input[type="color"] {
   margin: 0;
   font-weight: 500;
   opacity: 0.85;
+}
+
+.vr-game {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 200px;
+}
+
+.vr-download-button {
+  align-items: center;
+  justify-content: center;
+  padding: 20px 40px;
+  margin-top: 100px;
+  background-color: #00bccc;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  border: solid white 2px;
+  cursor: pointer;
+}
+
+.instruction-div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.instruction-div h1 {
+  font-weight: 300;
+  font-size: x-large;
+}
+
+.vr-instruction-link {
+  text-decoration: underline;
+  font-weight: 600;
+  font-size: 1rem;
 }
 
 .load-game-btn {
