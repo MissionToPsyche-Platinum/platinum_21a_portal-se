@@ -15,12 +15,17 @@ export default {
             gtype: "",
             description: "",
             submitted: false,
-            error: ""
+            error: "",
+            submitting: false
         }
     },
     methods: {
         submitGameUploadRequest() {
             console.log("Caleld");
+
+          this.submitting = true;
+          this.submitted = false;
+          this.error = "";
 
             const request = {
                 title: this.title,
@@ -55,6 +60,8 @@ export default {
             }).catch(error => {
                 console.error("Error submitting request: ", error);
                 this.error = "Failed to submit game upload request.";
+            }).finally(() => {
+              this.submitting = false;
             })
         }
     }
