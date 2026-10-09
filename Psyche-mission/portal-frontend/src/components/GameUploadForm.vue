@@ -122,7 +122,9 @@ export default {
             <label for="description">Description</label>
             <input id="description" v-model="description" type="text" required/>
         </div>
-            <button type="submit">Submit Request</button>
+          <button type="submit" :disabled="submitting">
+            {{ submitting ? "Submitting..." : "Submit Request" }}
+          </button>
         </form>
     </div>
 </template>
