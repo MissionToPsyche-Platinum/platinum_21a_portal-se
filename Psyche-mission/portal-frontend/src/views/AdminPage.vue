@@ -1,11 +1,13 @@
 <script>
 import GameForm from "../components/GameForm.vue";
+import PendingUploadRequests from "../components/PendingUploadRequests.vue";
 import { createGame } from "../utils/gameService.js";
 export default {
   name: "AdminPage",
 
   components: {
-    GameForm
+    GameForm,
+    PendingUploadRequests
   },
 
   data() {
@@ -347,14 +349,7 @@ export default {
               }"
           >
 
-            <h3>
-              Game Management
-            </h3>
-
-            <p>
-              Game management functionality
-              will be implemented here.
-            </p>
+            <PendingUploadRequests />
 
           </div>
 

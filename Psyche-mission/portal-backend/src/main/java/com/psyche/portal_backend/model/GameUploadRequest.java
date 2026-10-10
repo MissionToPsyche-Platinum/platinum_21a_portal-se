@@ -1,5 +1,8 @@
 package com.psyche.portal_backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.psyche.portal_backend.model.dto.GameUploadRequestDTO;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,7 +12,7 @@ public class GameUploadRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long requestId;
 
-    @OneToOne
+    @OneToOne(optional = true)
     private Game game;
 
     @ManyToOne
@@ -17,6 +20,9 @@ public class GameUploadRequest {
 
     @Enumerated(EnumType.STRING)
     private RequestStatus status;
+
+    @Column(columnDefinition = "TEXT")
+    private String gameJson;
 
     public GameUploadRequest() {}
 
@@ -36,5 +42,39 @@ public class GameUploadRequest {
 
     public void setRequestStatus(RequestStatus status) {
         this.status = status;
+    }
+
+    public Game getGame() {
+        if (this.game != null) {
+            return this.game;
+        }
+
+        if (this.gameJson == null || this.gameJson.isBlank()) {
+            return null;
+        }
+
+        try {
+            GameUploadRequestDTO dto = new ObjectMapper().readValue(this.gameJson, GameUploadRequestDTO.class);
+            return dto.toGame();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    @JsonIgnore
+    public String getGameJson() {
+        return this.gameJson;
+    }
+
+    public void setGameJson(String gameJson) {
+        this.gameJson = gameJson;
+    }
+
+    public User getSubmittedBy() {
+        return this.submittedBy;
     }
 }
