@@ -19,6 +19,11 @@ public class GameUploadRequestController {
         this.service = service;
     }
 
+    @GetMapping
+    public List<GameUploadRequest> getAllRequests() {
+        return service.getAllRequests();
+    }
+
     @GetMapping("/pending")
     public List<GameUploadRequest> getPendingRequests(@RequestHeader(value = "X-Role", required = false) String role) {
         requireAdmin(role);
