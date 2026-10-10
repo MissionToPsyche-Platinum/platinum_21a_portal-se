@@ -9,6 +9,15 @@ export default {
       })
     }
   },
+  methods: {
+    isYoutube(url) {
+      if (url == "") {
+        return false;
+      }
+
+      return url.includes('youtube.com') || url.includes('youtu.be');
+    },
+  },
 }
 </script>
 
@@ -16,13 +25,26 @@ export default {
   <div class="game-preview">
 
     <div class="video-container">
+      <!--iframe for embedded Youtube videos-->
       <iframe
-        v-if="game.video"
+        v-if="game.video && isYoutube(game.video)"
         :src="game.video"
         class="preview-iframe"
         frameborder="0"
         allow="autoplay; encrypted-media"
       ></iframe>
+
+      <!--video asset stored in public/videos folder-->
+      <video
+        v-else-if="game.video"
+        :src="game.video"
+        class="preview-video"
+        controls
+        muted
+        autoplay
+        loop
+        playsinline
+    ></video>
       
       <div v-else class="preview-placeholder">
         <span>No Preview Available</span>
@@ -70,6 +92,15 @@ export default {
   height: 190px;
   border: none;
   pointer-events: none;
+}
+
+.preview-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border: none;
+    background-color: #000000;
 }
 
 .preview-placeholder {
