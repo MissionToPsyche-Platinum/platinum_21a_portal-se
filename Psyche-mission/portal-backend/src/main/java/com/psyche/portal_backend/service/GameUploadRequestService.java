@@ -9,8 +9,8 @@ import com.psyche.portal_backend.model.dto.GameUploadRequestDTO;
 import com.psyche.portal_backend.repository.GameUploadRequestRepository;
 import com.psyche.portal_backend.repository.UserRepository;
 import com.psyche.portal_backend.repository.GameRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.core.JacksonException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,14 +22,14 @@ public class GameUploadRequestService {
     private final UserRepository userRepository;
     private final GameRepository gameRepository;
     private final GameService gameService;
-    private final ObjectMapper objectMapper;
+    private final JsonMapper jsonMapper;
 
-    public GameUploadRequestService(GameUploadRequestRepository gameUploadRequestRepository, UserRepository userRepository, GameRepository gameRepository, GameService gameService, ObjectMapper objectMapper) {
+    public GameUploadRequestService(GameUploadRequestRepository gameUploadRequestRepository, UserRepository userRepository, GameRepository gameRepository, GameService gameService, JsonMapper jsonMapper) {
         this.gameUploadRequestRepository = gameUploadRequestRepository;
         this.userRepository = userRepository;
         this.gameRepository = gameRepository;
         this.gameService = gameService;
-        this.objectMapper = objectMapper;
+        this.jsonMapper = jsonMapper;
     }
 
     public GameUploadRequest getRequestById(Long id) {
@@ -67,8 +67,8 @@ public class GameUploadRequestService {
 
         GameUploadRequest req = new GameUploadRequest(null, actualUser);
         try {
-            req.setGameJson(objectMapper.writeValueAsString(dto));
-        } catch (JsonProcessingException e) {
+            req.setGameJson(jsonMapper.writeValueAsString(dto));
+        } catch (JacksonException e) {
             throw new RuntimeException("Could not save game upload request");
         }
 

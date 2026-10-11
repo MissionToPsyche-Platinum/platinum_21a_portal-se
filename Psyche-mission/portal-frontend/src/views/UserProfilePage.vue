@@ -8,6 +8,7 @@ export default {
     },
     data() {
         const session = getSession();
+
         return {
             username: session ? session.username : "Test Username",
             showUploadForm: false
@@ -21,11 +22,18 @@ export default {
     <div class="profile-header">
         <h1>Welcome, {{ username }}</h1>
     </div>
-    <div class="upload-section">
-        <h2>Game Upload Request</h2>
-        <p>Submit a request to add a new game to the portal.</p>
-        <button @click="showUploadForm = true">Submit New Game Request</button>
-        <GameUploadForm v-if="showUploadForm" />
+    <div class="profile-actions">
+        <section class="profile-card">
+            <h2>Submit a Game Request</h2>
+            <p>Submit a game for review and possible addition to the Psyche portal.</p>
+            <router-link to="/profile/upload-request">Submit New Game Request</router-link>
+        </section>
+        <section class="profile-card">
+            <h2>My Upload Requests</h2>
+            <p>View the status of your previously submitted upload requests.</p>
+            <button type="button" disabled>View My Requests</button>
+            <p class="coming-soon">Request history is not available yet.</p>
+        </section>
     </div>
 </div>
 </template>
@@ -42,15 +50,15 @@ export default {
     padding: 30px;
     border-bottom: 2px solid black;
 }
-.upload-section {
-    border: 2px solid black;
-    padding: 30px;
-    margin: 30px auto;
-    width: 80%;
+.profile-actions {
     text-align: center;
+    padding: 30px;
+    border-bottom: 1px solid black;
 }
-button {
-    padding: 10px 20px;
-    cursor: pointer;
+.profile-card {
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 24px;
+    text-align: center;
 }
 </style>
