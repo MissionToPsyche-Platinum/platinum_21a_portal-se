@@ -74,57 +74,112 @@ export default {
     <div class="game-upload-form">
         <h1>Submit a Request to Upload a New Game</h1>
         <form @submit.prevent="submitGameUploadRequest" >
-        <div>
+        <div class="form-row">
             <label for="title">Title</label>
             <input id="title" v-model="title" type="text" required />
         </div>
-        <div>
+        <div class="form-row">
             <label for="thumbnail">Thumbnail URL</label>
             <input id="thumbnail" v-model="thumbnail" type="text" />
         </div>
-        <div>
+        <div class="form-row">
             <label for="difficulty">Difficulty [Easy, Medium, Hard]</label>
             <input id="difficulty" v-model="difficulty" type="text" required />
         </div>
-        <div>
-            <label for="genre">Genre [Interactive Simulation, VR Experience, AR Experience, Trivia, Adventure, Arcade, Simulation]</label>
+        <div class="form-row">
+            <label class="long-label" for="genre">Genre [Interactive Simulation, VR Experience, AR Experience, Trivia, Adventure, Arcade, Simulation]</label>
             <input id="genre" v-model="genre" type="text" required/>
         </div>
-        <div>
+        <div class="form-row">
             <label for="age">Age [Elementary, Middle, High]</label>
             <input id="age" v-model="age" type="text" required />
         </div>
-        <div>
+        <div class="form-row">
             <label for="className">Class Name</label>
             <input id="className" v-model="className" type="text" />
         </div>
-            <div>
-                <label for="gtype">gtype</label>
-                <input id="gtype" v-model="gtype" type="text" />
-            </div>
-        <div>
+        <div class="form-row">
+            <label for="gtype">gtype</label>
+            <input id="gtype" v-model="gtype" type="text" />
+        </div>
+        <div class="form-row">
             <label for="video">Video URL</label>
             <input id="video" v-model="video" type="text" />
         </div>
-        <div>
+        <div class="form-row">
             <label for="engine">Engine</label>
             <input id="engine" v-model="engine" type="text"  />
         </div>
-        <div>
+        <div class="form-row">
             <label for="credits">Credits</label>
             <input id="credits" v-model="credits" type="text" required />
         </div>
-        <div>
+        <div class="form-row">
             <label for="src">Game URL</label>
             <input id="src" v-model="src" type="text" required />
         </div>
-        <div>
+        <div class="form-row">
             <label for="description">Description</label>
             <input id="description" v-model="description" type="text" required/>
         </div>
-          <button type="submit" :disabled="submitting">
+        <button type="submit" :disabled="submitting">
             {{ submitting ? "Submitting..." : "Submit Request" }}
-          </button>
+        </button>
         </form>
     </div>
 </template>
+
+<style>
+.game-upload-form {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+}
+.game-upload-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.form-row {
+    display: grid;
+    grid-template-columns: 160px minmax(0, 1fr);
+    align-items: center;
+    gap: 16px;
+}
+.form-row label {
+    text-align: right;
+}
+.form-row input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+}
+.form-row select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+}
+.form-row textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px;
+}
+.form-row .long-label {
+    display: block;
+    width: 160px;
+    white-space: normal;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+    text-align: left;
+}
+
+@media (max-width: 600px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+    }
+    .form-row label {
+        text-align: left;
+    }
+}
+</style>

@@ -8,6 +8,7 @@ import Login from "@/views/Login.vue";
 import AdminPage from "../views/AdminPage.vue"
 import SignUpPage from "@/views/SignUpPage.vue";
 import UserProfilePage from "@/views/UserProfilePage.vue";
+import UserGameUploadRequestPage from "@/views/UserGameUploadRequestPage.vue";
 import { isLoggedIn, isAdmin } from "@/utils/auth";
 
 const routes = [
@@ -28,6 +29,8 @@ const routes = [
         name: "NotFound",
         component: NotFound  // load NotFound page for any url not specified above
     },
+
+    {path: "/profile/upload-request", name: "UserGameUploadRequestPage", component: UserGameUploadRequestPage, meta: { requiresAuth: true }}
 ];
 
 const router = createRouter({

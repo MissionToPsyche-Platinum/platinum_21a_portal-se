@@ -1,7 +1,7 @@
 package com.psyche.portal_backend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import com.psyche.portal_backend.model.dto.GameUploadRequestDTO;
 import jakarta.persistence.*;
 
@@ -54,7 +54,7 @@ public class GameUploadRequest {
         }
 
         try {
-            GameUploadRequestDTO dto = new ObjectMapper().readValue(this.gameJson, GameUploadRequestDTO.class);
+            GameUploadRequestDTO dto = new JsonMapper().builder().build().readValue(this.gameJson, GameUploadRequestDTO.class);
             return dto.toGame();
         } catch (Exception e) {
             return null;
