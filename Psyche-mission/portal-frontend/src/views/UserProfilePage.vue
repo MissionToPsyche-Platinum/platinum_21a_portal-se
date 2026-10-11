@@ -31,8 +31,7 @@ export default {
         <section class="profile-card">
             <h2>My Upload Requests</h2>
             <p>View the status of your previously submitted upload requests.</p>
-            <button type="button" disabled>View My Requests</button>
-            <p class="coming-soon">Request history is not available yet.</p>
+            <router-link to="/profile/requests">View My Requests</router-link>
         </section>
     </div>
 </div>
