@@ -8,6 +8,7 @@ import Login from "@/views/Login.vue";
 import AdminPage from "../views/AdminPage.vue"
 import SignUpPage from "@/views/SignUpPage.vue";
 import UserProfilePage from "@/views/UserProfilePage.vue";
+import UserRequestHistoryPage from "@/views/UserRequestHistoryPage.vue";
 import UserGameUploadRequestPage from "@/views/UserGameUploadRequestPage.vue";
 import { isLoggedIn, isAdmin } from "@/utils/auth";
 
@@ -30,7 +31,9 @@ const routes = [
         component: NotFound  // load NotFound page for any url not specified above
     },
 
-    {path: "/profile/upload-request", name: "UserGameUploadRequestPage", component: UserGameUploadRequestPage, meta: { requiresAuth: true }}
+    {path: "/profile/upload-request", name: "UserGameUploadRequestPage", component: UserGameUploadRequestPage, meta: { requiresAuth: true }},
+
+    {path: "/profile/requests", name: "UserRequestHistory", component: UserRequestHistoryPage, meta: { requiresAuth: true }}
 ];
 
 const router = createRouter({

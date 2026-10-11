@@ -1,4 +1,6 @@
 <script>
+import { getSession } from "@/utils/auth";
+
 export default {
     data() {
         return {
@@ -21,7 +23,7 @@ export default {
     },
     methods: {
         submitGameUploadRequest() {
-            console.log("Caleld");
+          const session = getSession();
 
           this.submitting = true;
           this.submitted = false;
