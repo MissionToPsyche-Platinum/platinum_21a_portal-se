@@ -52,8 +52,13 @@ public class GameUploadRequestController {
     }
 
     @PostMapping
-    public GameUploadRequest createRequest(@RequestBody GameUploadRequestDTO dto) {
-        return service.createRequest(dto);
+    public GameUploadRequest createRequest(@RequestBody GameUploadRequestDTO dto, @RequestHeader("X-Username") String username) {
+        return service.createRequest(dto, username);
+    }
+
+    @GetMapping("/requests")
+    public List<GameUploadRequest> getMyRequests(@RequestHeader("X-Username") String username) {
+        return service.getRequestsByUsername(username);
     }
 
     private void requireAdmin(String role) {
