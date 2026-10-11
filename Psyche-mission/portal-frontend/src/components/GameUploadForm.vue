@@ -46,6 +46,7 @@ export default {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    "X-username": session.username
                 },
                 body: JSON.stringify(request)
             }).then(response => {

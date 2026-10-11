@@ -51,13 +51,12 @@ public class GameUploadRequestService {
         return gameUploadRequestRepository.findAll();
     }
 
-
-
-    public Optional<GameUploadRequest> getRequestByUsername(String username) {
-        return gameUploadRequestRepository.findBySubmittedByUsername(username);
+    public List<GameUploadRequest> getRequestsByUsername(String username) {
+        return gameUploadRequestRepository.findBySubmittedBy_Username(username);
     }
-    public GameUploadRequest createRequest(GameUploadRequestDTO dto) {
-        Optional<User> user = userRepository.findByUsername("test");
+
+    public GameUploadRequest createRequest(GameUploadRequestDTO dto, String username) {
+        Optional<User> user = userRepository.findByUsername(username);
 
         if (user.isEmpty()) {
             throw new RuntimeException("User not found");
