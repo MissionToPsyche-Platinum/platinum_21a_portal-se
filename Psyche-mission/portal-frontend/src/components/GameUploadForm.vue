@@ -23,12 +23,25 @@ export default {
     },
     methods: {
         submitGameUploadRequest() {
-          const session = getSession();
 
-          this.submitting = true;
+          if (this.submitting) return;
+
+          const session = getSession();
           this.submitted = false;
           this.error = "";
 
+          if (!session?.username) {
+            this.error = "Please log in before submitting a game upload request.";
+            return;
+          }
+
+          // validate required fields
+          if (![this.title, this.difficulty, this.genre, this.age,
+            this.credits, this.src, this.description]
+              .every(value => typeof value === "string" && value.trim())) {
+            this.error = "Please complete all required fields.";
+            return;
+          }
             const request = {
                 title: this.title,
                 thumbnail: this.thumbnail,
@@ -43,7 +56,7 @@ export default {
                 credits: this.credits,
                 src: this.src
             }
-
+          this.submitting = true;
             fetch("http://localhost:8080/api/game-upload-requests", {
                 method: "POST",
                 headers: {
@@ -53,7 +66,7 @@ export default {
                 body: JSON.stringify(request)
             }).then(response => {
                 if (!response.ok) {
-                    throw new Error(`Server returned \`${response.status}`);
+                    throw new Error(`Server returned ${response.status}`);
                 }
 
                 return response.json();
@@ -65,7 +78,7 @@ export default {
                 this.error = "Failed to submit game upload request.";
             }).finally(() => {
               this.submitting = false;
-            })
+            });
         }
     }
 }
