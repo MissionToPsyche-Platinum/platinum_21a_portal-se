@@ -128,7 +128,7 @@ export default {
 .hero-media img {
     display: block;
     width: 100%;
-    height: 280px;
+    height: 360px;
     object-fit: cover;
     border: 1px solid currentColor;
 }
@@ -149,7 +149,7 @@ export default {
     }
 
     .hero-media img {
-        height: 200px;
+        height: 260px;
     }
 }
 </style>
