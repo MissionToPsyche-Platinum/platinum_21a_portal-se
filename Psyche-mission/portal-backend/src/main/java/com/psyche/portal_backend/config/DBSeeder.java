@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.psyche.portal_backend.model.Game;
 import com.psyche.portal_backend.model.User;
+import com.psyche.portal_backend.model.Role;
 import com.psyche.portal_backend.repository.UserRepository;
 import com.psyche.portal_backend.repository.GameRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -33,8 +34,15 @@ public class DBSeeder implements CommandLineRunner{
             List<Game> games = objectMapper.readValue(inputStream, new TypeReference<List<Game>>() {});
             gameRepository.saveAll(games);
 
-            User test = new User("test", "test@gmail.com", "pwd");
-            userRepository.save(test);
+            if (userRepository.findByUsername("user").isEmpty()) {
+                User user = new User("user", "test@gmail.com", "pwd");
+                userRepository.save(user);
+            }
+
+            if (userRepository.findByUsername("admin").isEmpty()) {
+                User admin = new User("admin", "admin@gmail.com", "pwd", Role.ADMIN);
+                userRepository.save(admin);
+            }
         } catch(Exception e) {
             System.out.println("Failed to load the games.json file to the database");
         }
