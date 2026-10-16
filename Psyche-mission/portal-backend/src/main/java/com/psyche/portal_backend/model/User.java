@@ -19,12 +19,24 @@ public class User {
     @Column(nullable=false)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     public User() {}
 
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.role = Role.USER;
+    }
+
+    public User(String username, String email, String password, Role role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
     public Long getUserId() {
@@ -42,5 +54,9 @@ public class User {
     @JsonIgnore
     public String getPassword() {
         return this.password;
+    }
+
+    public Role getRole() {
+        return this.role;
     }
 }
