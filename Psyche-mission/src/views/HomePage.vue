@@ -655,8 +655,7 @@ export default {
               :textColor="lightColor"
               @mouseenter="handleMouseEnter(game, $event)"
               @mousemove="handleMouseMove($event)"
-              @mouseleave="handleMouseLeave"
-            />
+                @mouseleave="handleMouseLeave"
             />
           </div>
         </section>
@@ -944,9 +943,9 @@ input[type='color'] {
 
 .shelf-scroll-row > * {
   box-sizing: border-box;
-  flex: 0 0 220px;
-  width: 220px;
-  height: 320px;
+  flex: 0 0 280px;
+  width: 280px;
+  height: 400px;
   scroll-snap-align: start;
 }
 
@@ -974,7 +973,7 @@ input[type='color'] {
 .shelf-scroll-row :deep(.media) {
   width: 100%;
   max-width: none;
-  height: 150px;
+  height: 220px;
 }
 
 .shelf-scroll-row :deep(.favorite-container) {
@@ -1084,8 +1083,8 @@ input[type='color'] {
 /* Responsive design */
 @media (max-width: 1100px) {
   .shelf-scroll-row > * {
-    flex: 0 0 200px;
-    width: 200px;
+    flex: 0 0 250px;
+    width: 250px;
   }
 }
 
@@ -1102,8 +1101,8 @@ input[type='color'] {
   }
 
   .shelf-scroll-row > * {
-    flex: 0 0 180px;
-    width: 180px;
+    flex: 0 0 230px;
+    width: 230px;
   }
 }
 

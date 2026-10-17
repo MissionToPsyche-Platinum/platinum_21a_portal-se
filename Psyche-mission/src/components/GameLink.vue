@@ -241,8 +241,8 @@ a {
 
 .media {
   width: 100%;
-  max-width: 250px;
-  height: 150px;
+  max-width: none;
+  height: 220px;
   object-fit: cover;
   border-radius: 4px;
 }
@@ -275,8 +275,8 @@ a {
 
 
 .compact-card {
-  width: 180px;
-  min-width: 180px;
+  width: 240px;
+  min-width: 240px;
   padding: 10px;
 }
 
@@ -291,8 +291,8 @@ a {
 }
 
 .compact-card .media {
-  height: 95px;
-  max-width: 160px;
+  height: 160px;
+  max-width: none;
 }
 
 .compact-card .favorite-container {
