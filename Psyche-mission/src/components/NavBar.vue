@@ -6,6 +6,8 @@
             <img src="@/assets/PsycheLogo.png" alt="Logo" class="logo"/>
         </router-link>
 
+        <h1 class="main-portal-heading">Psyche Mission Game Portal</h1>
+
         <!-- "Home" and "About" links -->
         <div class="nav-links">
             <router-link to="/" class="nav-link">Home</router-link>

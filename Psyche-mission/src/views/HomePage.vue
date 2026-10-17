@@ -522,6 +522,7 @@ export default {
     <!-- Containers for background effects -->
     <div class="star-div stars-small" :class="{ 'stars-inverted': !isDark }"></div>
     <div class="star-div stars-large" :class="{ 'stars-inverted': !isDark }"></div>
+
     <FeaturedGame v-if="featuredGame" :game="featuredGame" :isDark="isDark" :textColor="lightColor">
       <template #toolbar>
         <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
@@ -550,17 +551,6 @@ export default {
         <button id="quiz-button" class="quiz-button" @click="openQuiz">Take Quiz</button>
       </div>
     </FeaturedGame>
-
-    <!-- page header -->
-    <!-- <header class="header">
-      <h1>Psyche Mission Game Portal AR, VR, and XR</h1>
-    </header> -->
-
-    <!-- place holder for an introduction -->
-    <!-- <section class="intro">
-      <h2>Welcome to the Psyche Mission's Web-Based Portal By Team 1 platinum_21a_portal-se</h2>
-      <p>Discover the latest web-based experiences from the Psyche Mission team.</p>
-    </section> -->
 
     <QuizModal v-if="isQuizOpen" @quiz-complete="handleQuizResults" @close="closeQuiz"/>
 
@@ -805,7 +795,7 @@ input[type='color'] {
 .games-heading {
   position: relative;
   z-index: 10;
-  margin: 8px 48px 12px;
+  margin: 40px 48px 16px;
   font-size: 1.5rem;
 }
 
@@ -1104,8 +1094,7 @@ input[type='color'] {
   .games-placeholder,
   .games-heading,
   .filter-chips {
-    margin-left: 20px;
-    margin-right: 20px;
+    margin: 28px 20px 14px;
   }
 
   .platforms {

@@ -235,7 +235,6 @@ export default {
     </div>
 
     <header class="game-header">
-      <p class="hero-kicker">Psyche Mission Game Portal</p>
       <h1>{{ game ? game.title : "Loading..." }}</h1>
       <p v-if="game" class="hero-meta">
         {{ game.difficulty || "Unknown" }} · {{ game.genre }} · {{ game.age }}
