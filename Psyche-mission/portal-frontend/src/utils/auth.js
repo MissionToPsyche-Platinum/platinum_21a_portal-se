@@ -18,6 +18,7 @@ export const getSession = () => {
 
         return {
             username: session.username,
+            email: session.email || "",
             role: session.role
         };
     } catch {
@@ -32,6 +33,7 @@ export const setSession = (session) => {
 
     localStorage.setItem(SESSION_KEY, JSON.stringify({
         username: session.username,
+        email: session.email || "",
         role: session.role
     }));
     window.dispatchEvent(new Event("session-changed"));

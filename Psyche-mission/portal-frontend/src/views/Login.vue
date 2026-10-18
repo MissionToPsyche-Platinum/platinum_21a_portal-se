@@ -68,6 +68,7 @@ export default {
                     console.log("Login success.")
                     setSession({
                         username: data.username,
+                        email: data.email,
                         role: "user"
                     });
                     loadFavoritesFromServer();
