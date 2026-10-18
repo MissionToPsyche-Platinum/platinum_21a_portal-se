@@ -11,6 +11,8 @@ export default {
 
         return {
             username: session ? session.username : "Test Username",
+            email: session ? session.email : "",
+            role: session ? session.role : "",
             showUploadForm: false
         }
     }
@@ -21,6 +23,12 @@ export default {
 <div class="profile-container">
     <div class="profile-header">
         <h1>Welcome, {{ username }}</h1>
+    </div>
+    <div class="account-info">
+        <h2>Account Information</h2>
+        <p><strong>Username:</strong> {{ username }}</p>
+        <p><strong>Email:</strong> {{ email || "Not available"}}</p>
+        <p><strong>Role:</strong> {{ role || "Not available"}}</p>
     </div>
     <div class="profile-actions">
         <section class="profile-card">
@@ -59,5 +67,9 @@ export default {
     border-radius: 8px;
     padding: 24px;
     text-align: center;
+}
+.account-info {
+    margin: 24px auto;
+    max-width: 500px;
 }
 </style>
