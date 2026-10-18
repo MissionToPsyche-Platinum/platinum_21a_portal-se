@@ -9,6 +9,17 @@ export default {
       })
     }
   },
+  computed: {
+    difficultyLevel() {
+      const difficulty = (this.game.difficulty || "").toLowerCase();
+
+      if (difficulty === "easy") return 1;
+      if (difficulty === "medium") return 2;
+      if (difficulty === "hard") return 3;
+
+      return 0;
+    }
+  },
   methods: {
     isYoutube(url) {
       if (url == "") {
@@ -56,6 +67,17 @@ export default {
       
       <div v-if="game.genre" class="preview-genre-container">
         <span class="genre-badge">{{ game.genre }}</span>
+      </div>
+
+      <div class="difficulty-section">
+        <span class="difficulty-label">
+          Difficulty: {{ game.difficulty || "Unknown" }}
+        </span>
+        <div class="difficulty-bar">
+          <span :style="{ opacity: difficultyLevel >= 1 ? 1 : 0.2 }"></span>
+          <span :style="{ opacity: difficultyLevel >= 2 ? 1 : 0.2 }"></span>
+          <span :style="{ opacity: difficultyLevel >= 3 ? 1 : 0.2 }"></span>
+        </div>
       </div>
 
       <p class="preview-description">
@@ -139,6 +161,30 @@ export default {
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.difficulty-section {
+  text-align: left;
+}
+
+.difficulty-label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.difficulty-bar {
+  display: flex;
+  gap: 6px;
+}
+
+.difficulty-bar span {
+  width: 32px;
+  height: 8px;
+  border-radius: 999px;
+  background-color: #64b5f6;
 }
 
 .preview-description {

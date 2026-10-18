@@ -697,7 +697,7 @@ export default {
   font-family: Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
   padding-bottom: 20px;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .main.dark-mode {
@@ -814,6 +814,7 @@ input[type='color'] {
   align-items: center;
   gap: 10px;
   margin: 0 48px 16px;
+  min-width: 0;
 }
 
 .search {
@@ -827,8 +828,12 @@ input[type='color'] {
   z-index: 50;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   gap: 8px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .filter-chips {
@@ -955,7 +960,7 @@ input[type='color'] {
   box-sizing: border-box;
   flex: 0 0 280px;
   width: 280px;
-  height: 400px;
+  height: 340px;
   scroll-snap-align: start;
 }
 
