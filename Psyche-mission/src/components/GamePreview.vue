@@ -7,6 +7,18 @@ export default {
       required: true,
       default: () => ({
       })
+    },
+    isDark: {
+      type: Boolean,
+      default: true
+    },
+    textColor: {
+      type: String,
+      default: "#ffffff"
+    },
+    bgColor: {
+      type: String,
+      default: "#000000"
     }
   },
   computed: {
@@ -33,10 +45,12 @@ export default {
 </script>
 
 <template>
-  <div class="game-preview">
-
+  <div
+    class="game-preview"
+    :class="{ 'dark-mode': isDark }"
+    :style="{ backgroundColor: bgColor, color: textColor, borderColor: textColor }"
+  >
     <div class="video-container">
-      <!--iframe for embedded Youtube videos-->
       <iframe
         v-if="game.video && isYoutube(game.video)"
         :src="game.video"
@@ -45,38 +59,36 @@ export default {
         allow="autoplay; encrypted-media"
       ></iframe>
 
-      <!--video asset stored in public/videos folder-->
       <video
         v-else-if="game.video"
         :src="game.video"
         class="preview-video"
-        controls
         muted
         autoplay
         loop
         playsinline
-    ></video>
-      
+      ></video>
+
       <div v-else class="preview-placeholder">
-        <span>No Preview Available</span>
+        <span>No preview available</span>
       </div>
     </div>
 
     <div class="preview-game-details">
       <h4 class="preview-title">{{ game.title }}</h4>
-      
-      <div v-if="game.genre" class="preview-genre-container">
-        <span class="genre-badge">{{ game.genre }}</span>
-      </div>
+      <p class="preview-meta">
+        {{ game.genre || "Game" }}
+        <span v-if="game.age"> · {{ game.age }}</span>
+      </p>
 
       <div class="difficulty-section">
         <span class="difficulty-label">
           Difficulty: {{ game.difficulty || "Unknown" }}
         </span>
         <div class="difficulty-bar">
-          <span :style="{ opacity: difficultyLevel >= 1 ? 1 : 0.2 }"></span>
-          <span :style="{ opacity: difficultyLevel >= 2 ? 1 : 0.2 }"></span>
-          <span :style="{ opacity: difficultyLevel >= 3 ? 1 : 0.2 }"></span>
+          <span :style="{ backgroundColor: textColor, opacity: difficultyLevel >= 1 ? 1 : 0.2 }"></span>
+          <span :style="{ backgroundColor: textColor, opacity: difficultyLevel >= 2 ? 1 : 0.2 }"></span>
+          <span :style="{ backgroundColor: textColor, opacity: difficultyLevel >= 3 ? 1 : 0.2 }"></span>
         </div>
       </div>
 
@@ -90,23 +102,21 @@ export default {
 <style scoped>
 .game-preview {
   width: 340px;
-  background-color: #1e1e24;
-  color: #ffffff;
-  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-  border: 1px solid #33333d;
-  font-family: Arial, sans-serif;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .video-container {
   width: 100%;
-  height: 155px;
-  background-color: #0d0d11;
+  height: 170px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  border-bottom: 1px solid currentColor;
+  background: color-mix(in srgb, currentColor 8%, transparent);
 }
 
 .preview-iframe {
@@ -117,24 +127,20 @@ export default {
 }
 
 .preview-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    border: none;
-    background-color: #000000;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border: none;
 }
 
 .preview-placeholder {
-  color: #888899;
   font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
+  opacity: 0.7;
 }
 
 .preview-game-details {
-  padding: 12px 16px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -143,24 +149,14 @@ export default {
 .preview-title {
   margin: 0;
   font-size: 1.1rem;
-  font-weight: 600;
-  color: #ffffff;
+  font-weight: bold;
 }
 
-.preview-genre-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.genre-badge {
-  background-color: #2b384e;
-  color: #64b5f6;
-  font-size: 0.75rem;
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.preview-meta {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  opacity: 0.85;
 }
 
 .difficulty-section {
@@ -170,9 +166,8 @@ export default {
 .difficulty-label {
   display: block;
   margin-bottom: 6px;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: #ffffff;
 }
 
 .difficulty-bar {
@@ -184,15 +179,13 @@ export default {
   width: 32px;
   height: 8px;
   border-radius: 999px;
-  background-color: #64b5f6;
 }
 
 .preview-description {
   margin: 0;
   font-size: 0.85rem;
-  line-height: 1.35;
-  color: #cccccc;
-  /* Line clamping to keep the card uniform */
+  line-height: 1.5;
+  opacity: 0.85;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;

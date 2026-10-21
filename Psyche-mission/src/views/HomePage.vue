@@ -682,7 +682,8 @@ export default {
         <GamePreview
           :game="hoveredGame"
           :isDark="isDark"
-          :textColor="lightColor" 
+          :textColor="lightColor"
+          :bgColor="darkColor"
         />
       </div>
     </Transition>
