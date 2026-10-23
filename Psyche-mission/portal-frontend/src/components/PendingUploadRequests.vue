@@ -399,5 +399,78 @@ export default {
     transform: none;
   }
 }
+
+
+
+/* === Responsive UI Refinements === */
+
+/* prevent content overflow */
+.requests-panel,
+.request-card,
+.request-information {
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* tablet and smaller laptop screens */
+@media (min-width: 721px) and (max-width: 900px) {
+  .request-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+
+  .request-actions {
+    width: 100%;
+  }
+
+  .action-button {
+    flex: 1 1 120px;
+  }
+}
+
+/* mobile screens */
+@media (max-width: 600px) {
+  .requests-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .requests-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .request-card {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .request-title-row {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .request-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .action-button {
+    width: 100%;
+    min-width: 0;
+    min-height: 44px;
+  }
+
+  .empty-state {
+    padding: 32px 16px;
+  }
+}
+
+.request-id {
+  overflow-wrap: anywhere;
+}
+
 </style>
 
