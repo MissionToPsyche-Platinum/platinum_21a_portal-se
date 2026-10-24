@@ -13,10 +13,16 @@ PAGES_BRANCH = "gh-pages"
 IGNORED = {".git", ".tmp_worktree", "node_modules", "dist", "deploy.py"}
 
 # function for running git commands
-def run(command, curr_directory=None):
+def run(command, curr_directory=None, check=True, capture=True):
     cwd_str = str(Path(curr_directory).resolve()) if curr_directory else None
 
-    result = subprocess.run(command, cwd=cwd_str, text=True, capture_output=True, shell=False)
+    result = subprocess.run(command, cwd=cwd_str, text=True, capture_output=capture, shell=True)
+
+    if check and result.returncode != 0:
+        if result.stderr:
+            print(f"\n[ERROR] Command failed: {' '.join(command)}")
+            print(f"Error Details:\n{result.stderr.strip()}")
+        sys.exit(result.returncode)
 
     return result
 
@@ -28,6 +34,9 @@ def create_worktree():
     # if branch_status:
     #     print("Uncommitted changes in this branch. Please commit changes first")
     #     sys.exit(1)    
+
+    # if worktree already exists, destroy it
+    destroy_worktree()
 
     # place deploy branch into worktree
     run(["git", "worktree", "add", str(WORKTREE_DIR), DEPLOY_BRANCH])
@@ -68,7 +77,7 @@ def copy_to_worktree():
 def commit_worktree_changes():
     run(["git", "add", "-A"], WORKTREE_DIR)
     # check to see if anything has been staged
-    diff = run[("git", "diff", "--cached", "--quiet")]
+    diff = run(["git", "diff", "--cached", "--quiet"], WORKTREE_DIR, check=False)
 
     if diff.returncode != 0:
         run(["git", "commit", "-m", "Update deployment branch"], WORKTREE_DIR)
@@ -84,10 +93,10 @@ def build_and_deploy():
     run(["npm", "install"], WORKTREE_DIR)
 
     print("Building...")
-    run(["npm", "run", "build"])
+    run(["npm", "run", "build"], WORKTREE_DIR)
 
     print("Deploying...")
-    run(["npx", "gh-pages", "-d", "dist", "-b"], PAGES_BRANCH)
+    run(["npx", "--yes", "gh-pages", "-d", "../.tmp_worktree/dist", "-b", PAGES_BRANCH], SOURCE_DIR, capture=False)
 
     print("Deployed successfully")
 
@@ -110,13 +119,13 @@ def test():
     # Test removing items from worktree
     print("Cleaning worktree...")
     clean_worktree()
-    cleaning_result = run(["cmd", "/c", "dir", "/a", "/b"], WORKTREE_DIR).stdout.strip()
+    cleaning_result = run(["dir", "/a", "/b"], WORKTREE_DIR).stdout.strip()
     print(f"Files remaining in Worktree: {cleaning_result}")
 
     # Test copying items to worktree
     print("Copying source to worktree...")
     copy_to_worktree()
-    copy_result = run(["cmd", "/c", "dir", "/a", "/b"], WORKTREE_DIR).stdout.strip()
+    copy_result = run(["dir", "/a", "/b"], WORKTREE_DIR).stdout.strip()
     print(f"Files in Worktree: {copy_result}")
 
     # Test deleting worktree
