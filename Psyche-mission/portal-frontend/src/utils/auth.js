@@ -17,6 +17,7 @@ export const getSession = () => {
         }
 
         return {
+            userId: session.userId,
             username: session.username,
             email: session.email || "",
             role: session.role
@@ -32,6 +33,7 @@ export const setSession = (session) => {
     }
 
     localStorage.setItem(SESSION_KEY, JSON.stringify({
+        userId: session.userId,
         username: session.username,
         email: session.email || "",
         role: session.role

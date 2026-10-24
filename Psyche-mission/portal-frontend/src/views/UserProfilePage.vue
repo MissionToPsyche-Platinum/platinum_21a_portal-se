@@ -1,5 +1,5 @@
 <script>
-import { getSession } from "@/utils/auth";
+import { getSession, setSession } from "@/utils/auth";
 
 export default {
     data() {
@@ -7,14 +7,15 @@ export default {
 
         return {
             //Account information data
+            userId: session ? session.userId : null,
             username: session ? session.username : "Test Username",
             email: session ? session.email : "",
             showUploadForm: false,
 
             //Edit Profile data
             isEditing: false,
-            editedUsername: session ? session.username : "",
-            editedEmail: session ? session.email : "",
+            editedUsername: "",
+            editedEmail: "",
             message: ""
         }
     },
@@ -25,8 +26,54 @@ export default {
             this.editedEmail = "";
             this.message = "";
         },
-        saveProfile() {
-            console.log("Save profile to be implemented later.")
+        async saveProfile() {
+            //Get current session
+            const session = getSession();
+
+            console.log("Session on profile page:", session);
+            console.log("User ID:", session ? session.userId : "No session");
+
+            if (!session || !session.userId) {
+                this.message = "Please login."
+
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:8080/api/users/${session.userId}/profile`, {
+                    method: "PUT",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({
+                        username: this.editedUsername, email: this.editedEmail
+                    })
+                })
+                const data = await response.json();
+
+                console.log("Backend login response:", data);
+
+                if (!response.ok) {
+                    this.message = data.error || "Failed to update profile.";
+
+                    return;
+                }
+
+                this.username = data.username;
+                this.email = data.email;
+                this.userId = data.userId;
+
+                setSession({
+                    userId: data.userId,
+                    username: data.username,
+                    email: data.email,
+                    role: data.role.toLowerCase()});
+
+                this.isEditing = false;
+                this.message = "Profile successfully updated!";
+            }
+            catch (error) {
+                console.log(error)
+                this.message = "Could not connect to server. Please try again."
+            }
         },
         cancelEditProfile() {
             this.editedUsername = this.username
@@ -68,8 +115,10 @@ export default {
                 <input id="email" type="email" v-model.trim="editedEmail" :placeholder="email" />
             </div>
 
-            <button type="submit" @click="saveProfile">Save</button>
+            <button type="submit">Save</button>
             <button type="button" @click="cancelEditProfile">Cancel</button>
+
+            <p v-if="message">{{ message }}</p>
         </form>
     </div>
 
