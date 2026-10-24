@@ -12,6 +12,7 @@ export default defineConfig({
     vueDevTools(),
     tailwindcss(),
   ],
+  base: "/platinum_21a_portal-se/",
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

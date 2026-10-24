@@ -8,6 +8,7 @@ SOURCE_DIR = ROOT / "Psyche-mission"
 WORKTREE_DIR = ROOT / ".tmp_worktree"
 
 DEPLOY_BRANCH = "us74-deploy"
+PAGES_BRANCH = "gh-pages"
 
 IGNORED = {".git", ".tmp_worktree", "node_modules", "dist", "deploy.py"}
 
@@ -64,8 +65,32 @@ def copy_to_worktree():
 
 
 # commit changes
+def commit_worktree_changes():
+    run(["git", "add", "-A"], WORKTREE_DIR)
+    # check to see if anything has been staged
+    diff = run[("git", "diff", "--cached", "--quiet")]
+
+    if diff.returncode != 0:
+        run(["git", "commit", "-m", "Update deployment branch"], WORKTREE_DIR)
+        run(["git", "push", "origin", DEPLOY_BRANCH], WORKTREE_DIR)
+        print("Pushed deploy branch changes to remote repo")
+    else:
+        print("Deploy branch is already up to date.")
+
 
 # build and deploy
+def build_and_deploy():
+    print("Installing dependencies in worktree...")
+    run(["npm", "install"], WORKTREE_DIR)
+
+    print("Building...")
+    run(["npm", "run", "build"])
+
+    print("Deploying...")
+    run(["npx", "gh-pages", "-d", "dist", "-b"], PAGES_BRANCH)
+
+    print("Deployed successfully")
+
 
 
 def test():
@@ -77,7 +102,7 @@ def test():
     # Test creating worktree
     print("creating worktree...")
     create_worktree()
-    worktree_result = run(["git", "branch"], str(WORKTREE_DIR)).stdout.strip()
+    worktree_result = run(["git", "branch"], WORKTREE_DIR).stdout.strip()
     print(worktree_result)
     worktree_list = run(["git", "worktree", "list"]).stdout.strip()
     print("git list of worktrees: ", worktree_list)
@@ -85,13 +110,13 @@ def test():
     # Test removing items from worktree
     print("Cleaning worktree...")
     clean_worktree()
-    cleaning_result = run(["cmd", "/c", "dir", "/a", "/b"], str(WORKTREE_DIR)).stdout.strip()
+    cleaning_result = run(["cmd", "/c", "dir", "/a", "/b"], WORKTREE_DIR).stdout.strip()
     print(f"Files remaining in Worktree: {cleaning_result}")
 
     # Test copying items to worktree
     print("Copying source to worktree...")
     copy_to_worktree()
-    copy_result = run(["cmd", "/c", "dir", "/a", "/b"], str(WORKTREE_DIR)).stdout.strip()
+    copy_result = run(["cmd", "/c", "dir", "/a", "/b"], WORKTREE_DIR).stdout.strip()
     print(f"Files in Worktree: {copy_result}")
 
     # Test deleting worktree
@@ -103,9 +128,24 @@ def test():
 
 
 def main():
-    pass
+    print("Setting up worktree...")
+    create_worktree()
+
+    print("Updating worktree with latest changes...")
+    clean_worktree()
+    copy_to_worktree()
+
+    print(f"Committing changes to {DEPLOY_BRANCH}")
+    commit_worktree_changes()
+
+    print(f"Building and deploying to {DEPLOY_BRANCH}")
+    build_and_deploy()
+
+    print("Destroying worktree")
+    destroy_worktree()
+    print("Process complete!")
 
 
 if __name__ == "__main__":
-    test()
-    # main()
+    # test()
+    main()
