@@ -9,6 +9,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -20,7 +26,9 @@ public class SecurityConfig {
                                      "/api/game-upload-requests/*/deny").
                         hasRole("ADMIN").anyRequest().permitAll());
 
-        http.httpBasic(org.springframework.security.config.Customizer.withDefaults());
+        http.httpBasic(Customizer.withDefaults());
+        http.cors(Customizer.withDefaults());
+        http.csrf(csrf -> csrf.disable());
 
         return http.build();
     }
@@ -35,4 +43,28 @@ public class SecurityConfig {
         };
     }
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        List<String> allowedOrigins = new ArrayList<>();
+        List<String> allowedMethods = new ArrayList<>();
+        List<String> allowedHeaders = new ArrayList<>();
+
+        allowedOrigins.add("http://localhost:5173");
+        allowedMethods.add("GET");
+        allowedMethods.add("POST");
+        allowedMethods.add("PUT");
+        allowedMethods.add("DELETE");
+        allowedMethods.add("OPTIONS");
+        allowedHeaders.add("*");
+
+        config.setAllowedOrigins(allowedOrigins);
+        config.setAllowedMethods(allowedMethods);
+        config.setAllowedHeaders(allowedHeaders);
+
+        source.registerCorsConfiguration("/**", config);
+
+        return source;
+    }
 }

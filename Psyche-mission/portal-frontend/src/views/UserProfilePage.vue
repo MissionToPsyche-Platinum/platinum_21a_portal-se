@@ -1,19 +1,38 @@
 <script>
-import GameUploadForm from "@/components/GameUploadForm.vue";
 import { getSession } from "@/utils/auth";
 
 export default {
-    components: {
-        GameUploadForm
-    },
     data() {
         const session = getSession();
 
         return {
+            //Account information data
             username: session ? session.username : "Test Username",
             email: session ? session.email : "",
-            role: session ? session.role : "",
-            showUploadForm: false
+            showUploadForm: false,
+
+            //Edit Profile data
+            isEditing: false,
+            editedUsername: session ? session.username : "",
+            editedEmail: session ? session.email : "",
+            message: ""
+        }
+    },
+    methods: {
+        editProfile() {
+            this.isEditing = true;
+            this.editedUsername = "";
+            this.editedEmail = "";
+            this.message = "";
+        },
+        saveProfile() {
+            console.log("Save profile to be implemented later.")
+        },
+        cancelEditProfile() {
+            this.editedUsername = this.username
+            this.editedEmail = this.email
+            this.isEditing = false;
+            this.message = "";
         }
     }
 }
@@ -26,10 +45,34 @@ export default {
     </div>
     <div class="account-info">
         <h2>Account Information</h2>
-        <p><strong>Username:</strong> {{ username }}</p>
-        <p><strong>Email:</strong> {{ email || "Not available"}}</p>
-        <p><strong>Role:</strong> {{ role || "Not available"}}</p>
+
+        <!--Display current account info and button to edit-->
+        <div v-if="!isEditing">
+            <p><strong>Username:</strong> {{ username }}</p>
+            <p><strong>Email:</strong> {{ email || "Not available"}}</p>
+
+            <button @click="editProfile">Edit Profile</button>
+        </div>
+
+        <!--Display edit profile form-->
+        <form v-else @submit.prevent="saveProfile">
+            <!--Username-->
+            <div>
+                <label for="username">Username</label>
+                <input id="username" type="text" v-model.trim="editedUsername" :placeholder="username" />
+            </div>
+
+            <!--Email-->
+            <div>
+                <label for="email">Email</label>
+                <input id="email" type="email" v-model.trim="editedEmail" :placeholder="email" />
+            </div>
+
+            <button type="submit" @click="saveProfile">Save</button>
+            <button type="button" @click="cancelEditProfile">Cancel</button>
+        </form>
     </div>
+
     <div class="profile-actions">
         <section class="profile-card">
             <h2>Submit a Game Request</h2>
