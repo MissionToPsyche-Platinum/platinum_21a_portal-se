@@ -68,9 +68,9 @@ export default {
 
     <form @submit="handleSubmit" class="sign-up-form">
         <div class="input">
-            <input type="text" v-model="username" placeholder="Username" />
-            <input type="email" v-model="email" placeholder="Email" />
-            <input type="password" v-model="password" placeholder="Password" />
+            <input type="text" v-model="username" placeholder="Username" required />
+            <input type="email" v-model="email" placeholder="Email" required />
+            <input type="password" v-model="password" placeholder="Password" required />
             <input type="password" v-model="confirmedPassword" placeholder="Confirm Password" />
             <button type="submit" class="submit-button">Sign Up</button>
             <p v-if="message">{{ message }}</p>
