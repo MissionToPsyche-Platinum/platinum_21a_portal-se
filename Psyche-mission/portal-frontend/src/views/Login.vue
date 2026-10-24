@@ -1,5 +1,5 @@
 <script>
-import { setSession } from "@/utils/auth";
+import { getSession, setSession } from "@/utils/auth";
 import { loadFavoritesFromServer } from "@/utils/favoriteService";
 
 export default {
@@ -67,6 +67,7 @@ export default {
                     this.message = "Login successful!"
                     console.log("Login success.")
                     setSession({
+                        userId: data.userId,
                         username: data.username,
                         email: data.email,
                         role: "user"

@@ -62,4 +62,45 @@ public class UserService {
 
         return user.get();
     }
+
+    public User updateProfile(Long id, String username, String email) {
+        //Search for existing user
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+
+        //The user exists so verify new username is valid.
+        if (username != null && !username.isBlank()) {
+            String newUsername = username.trim();
+            Optional<User> existingUserWithNewUsername = userRepository.findByUsername(newUsername);
+
+            //Verify new username does not already exist
+            if (existingUserWithNewUsername.isPresent()) {
+                User matchingUser = existingUserWithNewUsername.get();
+
+                if (!matchingUser.getUserId().equals(id)) {
+                    throw new IllegalStateException("Username already exists");
+
+                }
+            }
+
+            user.setUsername(newUsername);
+        }
+
+        //The user exists, so verify new email is valid.
+        if (email != null && !email.isBlank()) {
+            String newEmail = email.trim();
+            Optional<User> existingUserWithNewEmail = userRepository.findByEmail(newEmail);
+
+            if (existingUserWithNewEmail.isPresent()) {
+                User matchingUser = existingUserWithNewEmail.get();
+
+                if (!matchingUser.getUserId().equals(id)) {
+                    throw new IllegalStateException("Email already exists");
+                }
+            }
+
+            user.setEmail(newEmail);
+        }
+
+        return userRepository.save(user);
+    }
 }
