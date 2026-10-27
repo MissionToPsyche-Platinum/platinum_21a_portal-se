@@ -50,6 +50,7 @@ export default {
       hoveredGame: null,      // the current game the user's mouse is hovering over
       mousePos: {x: 0, y: 0},  // the location to display the GamePreview hover drop down
       previewTimer: null,     // a timer for the preview drop down
+      hoverPreviewEnabled: false, // mouse hover preview only; off on touch/mobile
     };
   },
   /*==========task 83=========*/
@@ -223,6 +224,19 @@ export default {
     }
     this.loadFavorites();
     window.addEventListener("favorites-updated", this.loadFavorites);
+
+    this.hoverMediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+    this.updateHoverPreviewEnabled();
+    this.hoverMediaQuery.addEventListener("change", this.updateHoverPreviewEnabled);
+  },
+  beforeUnmount() {
+    window.removeEventListener("favorites-updated", this.loadFavorites);
+    if (this.hoverMediaQuery) {
+      this.hoverMediaQuery.removeEventListener("change", this.updateHoverPreviewEnabled);
+    }
+    if (this.previewTimer) {
+      clearTimeout(this.previewTimer);
+    }
   },
   methods: {
 
@@ -467,9 +481,20 @@ export default {
         return sorted.slice(0,3)
     },
 
+    updateHoverPreviewEnabled() {
+      this.hoverPreviewEnabled = Boolean(this.hoverMediaQuery && this.hoverMediaQuery.matches);
+      if (!this.hoverPreviewEnabled) {
+        this.handleMouseLeave();
+      }
+    },
+
     // event handler for when a mouse enters a GameLink component
     // used for GamePreview drop down
     handleMouseEnter(game, event) {
+      if (!this.hoverPreviewEnabled) {
+        return;
+      }
+
       this.updatePos(event);
 
       // clear preview card timer when a new item is moused over
@@ -485,6 +510,10 @@ export default {
 
     // event handler for mouse movement used to move the GamePreview card with the mouse
     handleMouseMove(event) {
+      if (!this.hoverPreviewEnabled) {
+        return;
+      }
+
       this.updatePos(event);
     },
 
@@ -665,7 +694,7 @@ export default {
     <!-- Div for holding the GamePreview hover drop down -->
      <Transition name="preview-fade">
       <div
-        v-if="hoveredGame"
+        v-if="hoverPreviewEnabled && hoveredGame"
         class="preview-dropdown"
         :style="{ left: mousePos.x + 'px', top: mousePos.y + 'px' }"
       >
@@ -1155,6 +1184,12 @@ input[type='color'] {
   z-index: 1000;
   pointer-events: none;
   transition: top 0.05s ease-out, left 0.05s ease-out;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .preview-dropdown {
+    display: none;
+  }
 }
 
 /* creates a more subtle popup */
