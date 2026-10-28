@@ -1,5 +1,5 @@
 <script>
-import { getSession, setSession } from "@/utils/auth";
+import { setSession } from "@/utils/auth";
 import { loadFavoritesFromServer } from "@/utils/favoriteService";
 
 export default {
@@ -11,41 +11,17 @@ export default {
         }
     },
     methods: {
-        handleSubmit(event) {
-            //Temporary test login
-            //Replace with API call
-            event.preventDefault();
-
-            //User test login
-            const username = "user"
-            const password = "test"
-
-            //Admin test login
-            const adminUsername = "admin"
-            const adminPassword = "test"
+      handleSubmit() {
 
             const enteredUsername = this.username.trim();
-            const enteredPassword = this.password.trim();
+            const enteredPassword = this.password
 
             if (!enteredUsername || !enteredPassword) {
                 this.message = "Please enter a username and password."
                 return;
             }
 
-            if ((enteredUsername === username && enteredPassword === password) ||
-                (enteredUsername === adminUsername && enteredPassword === adminPassword)) {
-                this.message = "Login successful!"
-                console.log("Login success.")
 
-                const isAdminLogin = enteredUsername === adminUsername && enteredPassword === adminPassword;
-                setSession({
-                    username: enteredUsername,
-                    role: isAdminLogin ? "admin" : "user"
-                });
-                loadFavoritesFromServer();
-                this.$router.push(isAdminLogin ? "/admin" : "/profile");
-                return;
-            }
 
             fetch("http://localhost:8080/api/users/login", {
                 method: "POST",
@@ -63,17 +39,30 @@ export default {
                         return;
                     }
 
-                    const data = await response.json();
-                    this.message = "Login successful!"
-                    console.log("Login success.")
-                    setSession({
-                        userId: data.userId,
-                        username: data.username,
-                        email: data.email,
-                        role: "user"
-                    });
+                  const data = await response.json();
+                  const role = String(data.role || "").toLowerCase();
+
+                  if (role !== "admin" && role !== "user") {
+                    this.message = "Invalid account role.";
+                    return;
+                  }
+
+                  this.message = "Login successful!";
+                  console.log("Login success.");
+
+                  setSession({
+                    userId: data.userId,
+                    username: data.username,
+                    email: data.email,
+                    role: role
+                  });
+
+                  if (role === "admin") {
+                    this.$router.push("/admin");
+                  } else {
                     loadFavoritesFromServer();
                     this.$router.push("/profile");
+                  }
                 })
                 .catch(() => {
                     this.message = "Could not reach the server. Make sure the backend is running."
