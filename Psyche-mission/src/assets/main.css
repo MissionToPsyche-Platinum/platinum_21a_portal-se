@@ -11,32 +11,41 @@ html {
   background: #000000;
   color-scheme: dark;
   scrollbar-width: thin;
-  scrollbar-color: #666666 #000000;
+  scrollbar-color: #666666 transparent;
 }
 
-html::-webkit-scrollbar {
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
-html::-webkit-scrollbar-track {
-  background: #000000;
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-html::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
   background: #666666;
   border-radius: 999px;
-  border: 2px solid #000000;
 }
 
-html::-webkit-scrollbar-thumb:hover {
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
   background: #ffffff;
 }
 
-html::-webkit-scrollbar-button {
+html::-webkit-scrollbar-button,
+body::-webkit-scrollbar-button {
   display: none;
   width: 0;
   height: 0;
+}
+
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 body {

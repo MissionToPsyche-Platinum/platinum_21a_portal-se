@@ -128,6 +128,28 @@ export default {
         return this.showQuizResults ? this.quizResults :this.sortGames;
     },
 
+    activeFilterChips() {
+      const labels = {
+        class: "Class",
+        genre: "Genre",
+        age: "Age"
+      };
+      const genreLabels = {
+        "Web Based": "Web Games",
+        "AR Experience": "AR Experiences",
+        "VR Experience": "VR Experiences"
+      };
+      return Object.keys(labels)
+        .filter(key => this.activeFilters[key])
+        .map(key => ({
+          key,
+          label: labels[key],
+          value: key === "genre"
+            ? (genreLabels[this.activeFilters[key]] || this.activeFilters[key])
+            : this.activeFilters[key]
+        }));
+    },
+
     // group the already-filtered/sorted list into genre shelves for display only
     gameShelves() {
       const grouped = {};
@@ -239,6 +261,14 @@ export default {
 
     handleFilters(filters) {
       this.activeFilters = filters;
+    },
+
+    clearFilterChip(key) {
+      this.activeFilters[key] = "";
+      const panel = this.$refs.filterPanel;
+      if (panel && panel.filters && panel.filters[key]) {
+        panel.filters[key] = "";
+      }
     },
 
     openQuiz() {
@@ -492,6 +522,7 @@ export default {
     <!-- Containers for background effects -->
     <div class="star-div stars-small" :class="{ 'stars-inverted': !isDark }"></div>
     <div class="star-div stars-large" :class="{ 'stars-inverted': !isDark }"></div>
+
     <FeaturedGame v-if="featuredGame" :game="featuredGame" :isDark="isDark" :textColor="lightColor">
       <template #toolbar>
         <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
@@ -521,17 +552,6 @@ export default {
       </div>
     </FeaturedGame>
 
-    <!-- page header -->
-    <!-- <header class="header">
-      <h1>Psyche Mission Game Portal AR, VR, and XR</h1>
-    </header> -->
-
-    <!-- place holder for an introduction -->
-    <!-- <section class="intro">
-      <h2>Welcome to the Psyche Mission's Web-Based Portal By Team 1 platinum_21a_portal-se</h2>
-      <p>Discover the latest web-based experiences from the Psyche Mission team.</p>
-    </section> -->
-
     <QuizModal v-if="isQuizOpen" @quiz-complete="handleQuizResults" @close="closeQuiz"/>
 
     <h2 id="games" class="games-heading">Games</h2>
@@ -540,7 +560,7 @@ export default {
         <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
       </section>
       <section class="filter-section">
-        <Filter :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
+        <Filter ref="filterPanel" :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
         <button
             class="toggle"
             :style="[
@@ -552,6 +572,20 @@ export default {
           {{ favoritesOnly ? `Show All Games ${favoritesCount}` : `Show Favorite Games ${favoritesCount}` }}
         </button>
       </section>
+    </div>
+
+    <div v-if="activeFilterChips.length" class="filter-chips">
+      <button
+        v-for="chip in activeFilterChips"
+        :key="chip.key"
+        class="filter-chip"
+        type="button"
+        :aria-label="'Remove ' + chip.label + ' filter'"
+        @click="clearFilterChip(chip.key)"
+      >
+        <span>{{ chip.label }}: {{ chip.value }}</span>
+        <span class="filter-chip-remove" aria-hidden="true">×</span>
+      </button>
     </div>
 
     <!--  main platforms section can be used to filter the displayed games -->
@@ -621,8 +655,7 @@ export default {
               :textColor="lightColor"
               @mouseenter="handleMouseEnter(game, $event)"
               @mousemove="handleMouseMove($event)"
-              @mouseleave="handleMouseLeave"
-            />
+                @mouseleave="handleMouseLeave"
             />
           </div>
         </section>
@@ -639,7 +672,8 @@ export default {
         <GamePreview
           :game="hoveredGame"
           :isDark="isDark"
-          :textColor="lightColor" 
+          :textColor="lightColor"
+          :bgColor="darkColor"
         />
       </div>
     </Transition>
@@ -654,7 +688,7 @@ export default {
   font-family: Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
   padding-bottom: 20px;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .main.dark-mode {
@@ -665,12 +699,16 @@ export default {
   color-scheme: light;
 }
 
-.browse-bar,
 .platforms,
 .games-placeholder,
 .games-heading {
   position: relative;
   z-index: 10;
+}
+
+.browse-bar {
+  position: relative;
+  z-index: 40;
 }
 
 /* theme controls panel */
@@ -757,7 +795,7 @@ input[type='color'] {
 .games-heading {
   position: relative;
   z-index: 10;
-  margin: 8px 48px 12px;
+  margin: 40px 48px 16px;
   font-size: 1.5rem;
 }
 
@@ -767,6 +805,7 @@ input[type='color'] {
   align-items: center;
   gap: 10px;
   margin: 0 48px 16px;
+  min-width: 0;
 }
 
 .search {
@@ -776,11 +815,51 @@ input[type='color'] {
 }
 
 .filter-section {
-  z-index: 20;
+  position: relative;
+  z-index: 50;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.filter-chips {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -4px 48px 16px;
+}
+
+.filter-chip {
+  display: inline-flex;
   align-items: center;
   gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.filter-chip:hover {
+  border-color: #ffd60a;
+  color: #ffd60a;
+}
+
+.filter-chip-remove {
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.7;
 }
 
 /* platform cards styling */
@@ -870,9 +949,9 @@ input[type='color'] {
 
 .shelf-scroll-row > * {
   box-sizing: border-box;
-  flex: 0 0 220px;
-  width: 220px;
-  height: 320px;
+  flex: 0 0 280px;
+  width: 280px;
+  height: 340px;
   scroll-snap-align: start;
 }
 
@@ -900,7 +979,7 @@ input[type='color'] {
 .shelf-scroll-row :deep(.media) {
   width: 100%;
   max-width: none;
-  height: 150px;
+  height: 220px;
 }
 
 .shelf-scroll-row :deep(.favorite-container) {
@@ -1010,17 +1089,17 @@ input[type='color'] {
 /* Responsive design */
 @media (max-width: 1100px) {
   .shelf-scroll-row > * {
-    flex: 0 0 200px;
-    width: 200px;
+    flex: 0 0 250px;
+    width: 250px;
   }
 }
 
 @media (max-width: 600px) {
   .browse-bar,
   .games-placeholder,
-  .games-heading {
-    margin-left: 20px;
-    margin-right: 20px;
+  .games-heading,
+  .filter-chips {
+    margin: 28px 20px 14px;
   }
 
   .platforms {
@@ -1028,8 +1107,8 @@ input[type='color'] {
   }
 
   .shelf-scroll-row > * {
-    flex: 0 0 180px;
-    width: 180px;
+    flex: 0 0 230px;
+    width: 230px;
   }
 }
 

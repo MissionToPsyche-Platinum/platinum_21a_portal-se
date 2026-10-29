@@ -97,6 +97,7 @@
 .filter {
     position: relative;
     display: inline-block;
+    max-width: 100%;
     padding: 0;
     z-index: 100;
 }
@@ -110,6 +111,7 @@
     cursor: pointer;
     font-size: 1rem;
     font-weight: bold;
+    white-space: nowrap;
 }
 
 .filter-toggle:hover {
@@ -118,37 +120,44 @@
 
 .filter-dropdown {
     position: absolute;
-    top: 100%;
-    left: 0;
+    top: calc(100% + 8px);
+    right: 0;
+    left: auto;
+    box-sizing: border-box;
+    width: min(420px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
+    min-width: 0;
     background-color: #1a1a1a;
-    padding: 16px;
+    padding: 14px;
     border: 1px solid #333333;
-    border-radius: 0 4px 4px 4px;
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    min-width: max-content;
-    z-index: 100;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    z-index: 200;
 }
 
 .filter-title {
-   color: #dddddd;
-   font-size: 16px;
-   align-self: center;
+    grid-column: 1 / -1;
+    color: #dddddd;
+    font-size: 16px;
 }
 
 .filter select {
-   color: #ffffff;
-   padding: 8px;
-   border-radius: 4px;
-   background-color: #111111;
-   border: 1px solid #444444;
+    width: 100%;
+    min-width: 0;
+    color: #ffffff;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #111111;
+    border: 1px solid #444444;
 }
 
 @media (max-width: 768px) {
     .filter-dropdown {
-        flex-direction: column;
-        align-items: stretch;
+        grid-template-columns: 1fr;
+        width: min(320px, calc(100vw - 24px));
+        right: 0;
     }
 }
 </style>

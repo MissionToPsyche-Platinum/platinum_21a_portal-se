@@ -1,7 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import GamePage from "../views/GamePage.vue"
 import HomePage from "../views/HomePage.vue"
 import NotFound from "../views/NotFound.vue"
+import VrInstructions from '@/views/VrInstructions.vue'
 
 import Login from "@/views/Login.vue";
 
@@ -17,6 +18,8 @@ const routes = [
 
     {path: "/admin", name: "Admin", component: AdminPage},
 
+    {path: "/vr-instructions", name: VrInstructions, component: VrInstructions},
+
     {
         path: "/:path(.*)*", // Must be at end of routes. Checks for any url path that has not been defined above
         name: "NotFound",
@@ -25,7 +28,7 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes,
     scrollBehavior(to, from, savedPosition) {
         return {top: 0, left: 0};
