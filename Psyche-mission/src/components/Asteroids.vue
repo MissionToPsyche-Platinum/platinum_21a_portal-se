@@ -145,7 +145,7 @@ export default {
                 this.ship.angle += this.ship.rotationSpeed;
             }
 
-            // move the projectiles
+            // move the projectiles and check for asteroid collision
             for (let i = this.projectiles.length - 1; i >= 0; i--) {
                 const projectile = this.projectiles[i];
 
@@ -156,7 +156,29 @@ export default {
                 if (projectile.x > this.width || projectile.x < 0 || 
                     projectile.y > this.height || projectile.y < 0) {
                     this.projectiles.splice(i, 1);
+                    continue;   // no collision check if projectile despawned
                 }
+
+                // check projectile collision with asteroid
+                const dx = this.asteroid.x - projectile.x;  // x distance from center of asteroid and projectile
+                const dy = this.asteroid.y - projectile.y;  // y distance from center of asteroid and projectile
+                const distance = Math.hypot(dx, dy);        // total distance between center of asteroid and projectile
+                if (distance < this.asteroid.radius + projectile.radius) {  // if distance less than combined radii, circles overlap
+                    this.projectiles.splice(i, 1);
+                    this.spawnAsteroid();   // despawn asteroid by creating new one
+                    continue;
+                }
+
+            }
+            
+            // check ship collision with asteroid
+            const shipDx = this.asteroid.x - this.ship.x;       // x distance from center of ship to center of asteroid
+            const shipDy = this.asteroid.y - this.ship.y;       // y distance from center of ship to center of asteroid
+            const shipDistance = Math.hypot(shipDx, shipDy);    // total distance from center of ship to center of asteroid
+            const shipHitBox = 15;                              // simple circular collision box for now
+
+            if (shipDistance < this.asteroid.radius + shipHitBox) {
+                this.spawnAsteroid();
             }
 
             // move the asteroid
