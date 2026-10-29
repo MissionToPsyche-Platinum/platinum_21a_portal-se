@@ -1,5 +1,6 @@
 <script>
 import { setSession } from "@/utils/auth";
+import { setBasicAuth } from "@/utils/basicAuth";
 import { loadFavoritesFromServer } from "@/utils/favoriteService";
 
 export default {
@@ -11,7 +12,7 @@ export default {
         }
     },
     methods: {
-      handleSubmit() {
+       async handleSubmit() {
 
             const enteredUsername = this.username.trim();
             const enteredPassword = this.password
@@ -21,9 +22,7 @@ export default {
                 return;
             }
 
-
-
-            fetch("http://localhost:8080/api/users/login", {
+            await fetch("http://localhost:8080/api/users/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -46,6 +45,8 @@ export default {
                     this.message = "Invalid account role.";
                     return;
                   }
+
+                  setBasicAuth(enteredUsername, enteredPassword);
 
                   this.message = "Login successful!";
                   console.log("Login success.");

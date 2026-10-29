@@ -26,7 +26,6 @@ public class GameUploadRequestController {
 
     @GetMapping("/pending")
     public List<GameUploadRequest> getPendingRequests(@RequestHeader(value = "X-Role", required = false) String role) {
-        requireAdmin(role);
         return service.getPendingRequests();
     }
 
@@ -34,7 +33,6 @@ public class GameUploadRequestController {
     public GameUploadRequest approveRequest(
             @PathVariable Long id,
             @RequestHeader(value = "X-Role", required = false) String role) {
-        requireAdmin(role);
         return service.approveRequest(id);
     }
 
@@ -42,7 +40,6 @@ public class GameUploadRequestController {
     public GameUploadRequest denyRequest(
             @PathVariable Long id,
             @RequestHeader(value = "X-Role", required = false) String role) {
-        requireAdmin(role);
         return service.denyRequest(id);
     }
 
@@ -59,11 +56,5 @@ public class GameUploadRequestController {
     @GetMapping("/requests")
     public List<GameUploadRequest> getMyRequests(@RequestHeader("X-Username") String username) {
         return service.getRequestsByUsername(username);
-    }
-
-    private void requireAdmin(String role) {
-        if (!"admin".equals(role)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Admin only");
-        }
     }
 }
