@@ -1,5 +1,6 @@
 <script>
 import { isAdmin } from "@/utils/auth";
+import { getBasicAuthHeader } from '@/utils/basicAuth'
 
 export default {
     name: "PendingUploadRequests",
@@ -26,7 +27,9 @@ export default {
 
           try {
                 const response = await fetch("http://localhost:8080/api/game-upload-requests/pending", {
-                    headers: this.adminHeaders()
+                    headers: {
+                        Authorization: getBasicAuthHeader()
+                    }
                 });
 
                 if (!response.ok) {
@@ -54,7 +57,9 @@ export default {
                     `http://localhost:8080/api/game-upload-requests/${id}/${action}`,
                     {
                         method: "PUT",
-                        headers: this.adminHeaders()
+                        headers: {
+                            Authorization: getBasicAuthHeader()
+                        }
                     }
                 );
 
