@@ -712,7 +712,6 @@ export default {
 <style scoped>
 /* main container styling */
 .main {
-  min-height: 100vh;
   position: relative;
   font-family: Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
