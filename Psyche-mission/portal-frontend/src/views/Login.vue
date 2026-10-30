@@ -3,6 +3,7 @@ import { setSession } from "@/utils/auth";
 import { setBasicAuth } from "@/utils/basicAuth";
 import { loadFavoritesFromServer } from "@/utils/favoriteService";
 
+
 export default {
     data() {
         return {
@@ -12,7 +13,8 @@ export default {
         }
     },
     methods: {
-       async handleSubmit() {
+
+     async handleSubmit() {
 
             const enteredUsername = this.username.trim();
             const enteredPassword = this.password
@@ -22,17 +24,42 @@ export default {
                 return;
             }
 
-            await fetch("http://localhost:8080/api/users/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: enteredUsername,
-                    password: enteredPassword
-                })
-            })
-                .then(async (response) => {
+       let csrf;
+
+       try {
+         const csrfResponse = await fetch(
+             "http://localhost:8080/api/auth/csrf",
+             {
+               credentials: "include"
+             }
+         );
+
+         if (!csrfResponse.ok) {
+           throw new Error("Could not retrieve CSRF token.");
+         }
+
+         csrf = await csrfResponse.json();
+
+       } catch (error) {
+         console.error("CSRF initialization failed:", error);
+         this.message = "Could not initialize login security.";
+         return;
+       }
+
+
+
+       fetch("http://localhost:8080/api/users/login", {
+         method: "POST",
+         credentials: "include",
+         headers: {
+           "Content-Type": "application/json",
+           [csrf.headerName]: csrf.token
+         },
+         body: JSON.stringify({
+           username: enteredUsername,
+           password: enteredPassword
+         })
+       }).then(async (response) => {
                     if (!response.ok) {
                         this.message = "Invalid credentials."
                         return;
@@ -46,7 +73,29 @@ export default {
                     return;
                   }
 
-                  setBasicAuth(enteredUsername, enteredPassword);
+
+                  const sessionResponse = await fetch(
+                      "http://localhost:8080/api/auth/me",
+                      {
+                        method: "GET",
+                        credentials: "include"
+                      }
+                  );
+
+                  if (!sessionResponse.ok) {
+                    this.message = "Login succeeded, but the authenticated session could not be verified.";
+                    return;
+                  }
+
+                  const sessionUser = await sessionResponse.json();
+
+                  if (
+                      sessionUser.username !== data.username ||
+                      sessionUser.role !== role
+                  ) {
+                    this.message = "Authenticated session does not match the logged-in user.";
+                    return;
+                  }
 
                   this.message = "Login successful!";
                   console.log("Login success.");

@@ -1,81 +1,102 @@
 <script>
-import { isAdmin } from "@/utils/auth";
-import { getBasicAuthHeader } from '@/utils/basicAuth'
 
 export default {
-    name: "PendingUploadRequests",
-    data() {
-      return {
-        requests: [],
-        message: "",
-        loading: false,
-        processingId: null
-      };
-    },
-    mounted() {
-        this.loadPending();
-    },
-    methods: {
-        adminHeaders() {
-            return {
-                "X-Role": isAdmin() ? "admin" : "user"
-            };
-        },
-        async loadPending() {
-            this.message = "";
-          this.loading = true;
+  name: "PendingUploadRequests",
+  data() {
+    return {
+      requests: [],
+      message: "",
+      loading: false,
+      processingId: null
+    };
+  },
+  mounted() {
+    this.loadPending();
+  },
+  methods: {
 
-          try {
-                const response = await fetch("http://localhost:8080/api/game-upload-requests/pending", {
-                    headers: {
-                        Authorization: getBasicAuthHeader()
-                    }
-                });
+    async loadPending() {
+      this.message = "";
+      this.loading = true;
 
-                if (!response.ok) {
-                  this.requests = [];
-                  this.message = "Could not load pending requests.";
-                    return;
-                }
+      try {
+        const response = await fetch("http://localhost:8080/api/game-upload-requests/pending",
+            {
+              method: "GET",
+              credentials: "include"
 
-                this.requests = await response.json();
-            } catch {
-                this.requests = [];
-                this.message = "Could not reach the server.";
-            }finally {
-            this.loading = false;
-          }
-        },
-        async updateRequest(id, action) {
-          if (this.processingId !== null) return;
+            });
 
-          this.processingId = id;
-          this.message = "";
-
-            try {
-                const response = await fetch(
-                    `http://localhost:8080/api/game-upload-requests/${id}/${action}`,
-                    {
-                        method: "PUT",
-                        headers: {
-                            Authorization: getBasicAuthHeader()
-                        }
-                    }
-                );
-
-                if (!response.ok) {
-                    this.message = `Could not ${action} request.`;
-                    return;
-                }
-
-                await this.loadPending();
-            } catch {
-                this.message = "Could not reach the server.";
-            } finally {
-              this.processingId = null;
-            }
+        if (!response.ok) {
+          this.requests = [];
+          this.message = "Could not load pending requests.";
+          return;
         }
+
+        this.requests = await response.json();
+      } catch {
+        this.requests = [];
+        this.message = "Could not reach the server.";
+      } finally {
+        this.loading = false;
+      }
+    },
+    async updateRequest(id, action) {
+      if (this.processingId !== null) return;
+
+      this.processingId = id;
+      this.message = "";
+
+      try {
+
+        const csrfResponse = await fetch(
+            "http://localhost:8080/api/auth/csrf",
+            {
+              credentials: "include"
+            }
+        );
+
+        if (!csrfResponse.ok) {
+          throw new Error("Could not retrieve CSRF token.");
+        }
+
+        const csrf = await csrfResponse.json();
+
+        const response = await fetch(`http://localhost:8080/api/game-upload-requests/${id}/${action}`,
+            {
+              method: "PUT",
+              credentials: "include",
+              headers: {
+                [csrf.headerName]: csrf.token
+              }
+            });
+
+        /* if (!response.ok) {
+             this.message = `Could not ${action} request.`;
+             return;
+         }*/
+        if (!response.ok) {
+          const errorBody = await response.text();
+
+          console.error("Request update failed:", {
+            action,
+            id,
+            status: response.status,
+            response: errorBody
+          });
+
+          this.message = `Could not ${action} request. HTTP ${response.status}`;
+          return;
+        }
+
+        await this.loadPending();
+      } catch {
+        this.message = "Could not complete the request.";
+      } finally {
+        this.processingId = null;
+      }
     }
+  }
 };
 </script>
 
@@ -176,7 +197,6 @@ export default {
 </template>
 
 
-
 <style scoped>
 .requests-panel {
   width: 100%;
@@ -240,10 +260,9 @@ export default {
   background: rgba(127, 127, 127, 0.075);
   border: 1px solid rgba(128, 128, 128, 0.3);
   backdrop-filter: blur(8px);
-  transition:
-      border-color 0.2s ease,
-      box-shadow 0.2s ease,
-      transform 0.2s ease;
+  transition: border-color 0.2s ease,
+  box-shadow 0.2s ease,
+  transform 0.2s ease;
 }
 
 .request-card:hover {
@@ -404,7 +423,6 @@ export default {
     transform: none;
   }
 }
-
 
 
 /* === Responsive UI Refinements === */

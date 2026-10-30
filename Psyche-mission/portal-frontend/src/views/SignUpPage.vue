@@ -10,7 +10,7 @@ export default {
         }
     },
     methods: {
-        handleSubmit(event) {
+        async handleSubmit(event) {
             event.preventDefault()
 
             this.message = ""
@@ -33,10 +33,34 @@ export default {
                 return;
             }
 
+          let csrf;
+
+          try {
+            const csrfResponse = await fetch(
+                "http://localhost:8080/api/auth/csrf",
+                {
+                  credentials: "include"
+                }
+            );
+
+            if (!csrfResponse.ok) {
+              throw new Error("Could not retrieve CSRF token.");
+            }
+
+            csrf = await csrfResponse.json();
+
+          } catch (error) {
+            console.error("CSRF initialization failed:", error);
+            this.message = "Could not initialize signup security.";
+            return;
+          }
+
             fetch("http://localhost:8080/api/users", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
+              credentials: "include",
+              headers: {
+                    "Content-Type": "application/json",
+                  [csrf.headerName]: csrf.token
                 },
                 body: JSON.stringify({
                     username: this.username,
