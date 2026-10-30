@@ -1,5 +1,5 @@
 <script>
-import { isAdmin } from "@/utils/auth";
+
 
 export default {
     name: "PendingUploadRequests",
@@ -15,18 +15,16 @@ export default {
         this.loadPending();
     },
     methods: {
-        adminHeaders() {
-            return {
-                "X-Role": isAdmin() ? "admin" : "user"
-            };
-        },
+
         async loadPending() {
             this.message = "";
           this.loading = true;
 
           try {
-                const response = await fetch("http://localhost:8080/api/game-upload-requests/pending", {
-                    headers: this.adminHeaders()
+            const response = await fetch("http://localhost:8080/api/game-upload-requests/pending",
+                {
+                  method: "GET",
+                  credentials: "include"
                 });
 
                 if (!response.ok) {
@@ -50,22 +48,49 @@ export default {
           this.message = "";
 
             try {
-                const response = await fetch(
-                    `http://localhost:8080/api/game-upload-requests/${id}/${action}`,
-                    {
-                        method: "PUT",
-                        headers: this.adminHeaders()
-                    }
-                );
+              const csrfResponse = await fetch(
+                  "http://localhost:8080/api/auth/csrf",
+                  {
+                    credentials: "include"
+                  }
+              );
 
-                if (!response.ok) {
+              if (!csrfResponse.ok) {
+                throw new Error("Could not retrieve CSRF token.");
+              }
+
+              const csrf = await csrfResponse.json();
+
+              const response = await fetch(`http://localhost:8080/api/game-upload-requests/${id}/${action}`,
+                  {
+                    method: "PUT",
+                    credentials: "include",
+                    headers: {
+                      [csrf.headerName]: csrf.token
+                    }
+                  });
+
+               /* if (!response.ok) {
                     this.message = `Could not ${action} request.`;
                     return;
-                }
+                }*/
+              if (!response.ok) {
+                const errorBody = await response.text();
+
+                console.error("Request update failed:", {
+                  action,
+                  id,
+                  status: response.status,
+                  response: errorBody
+                });
+
+                this.message = `Could not ${action} request. HTTP ${response.status}`;
+                return;
+              }
 
                 await this.loadPending();
             } catch {
-                this.message = "Could not reach the server.";
+                this.message = "Could not complete the request.";
             } finally {
               this.processingId = null;
             }

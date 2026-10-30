@@ -22,7 +22,7 @@ export default {
         }
     },
     methods: {
-        submitGameUploadRequest() {
+     async   submitGameUploadRequest() {
 
           if (this.submitting) return;
 
@@ -56,14 +56,37 @@ export default {
                 credits: this.credits,
                 src: this.src
             }
-          this.submitting = true;
-            fetch("http://localhost:8080/api/game-upload-requests", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-username": session.username
-                },
-                body: JSON.stringify(request)
+       this.submitting = true;
+
+       let csrf;
+
+       try {
+         const csrfResponse = await fetch(
+             "http://localhost:8080/api/auth/csrf",
+             { credentials: "include" }
+         );
+
+         if (!csrfResponse.ok) {
+           throw new Error(`CSRF request failed: ${csrfResponse.status}`);
+         }
+
+         csrf = await csrfResponse.json();
+       } catch (error) {
+         console.error("CSRF initialization failed:", error);
+         this.error = "Could not initialize upload security.";
+         this.submitting = false;
+         return;
+       }
+
+       fetch("http://localhost:8080/api/game-upload-requests", {
+         method: "POST",
+         credentials: "include",
+         headers: {
+           "Content-Type": "application/json",
+           "X-username": session.username,
+           [csrf.headerName]: csrf.token
+         },
+         body: JSON.stringify(request)
             }).then(response => {
                 if (!response.ok) {
                     throw new Error(`Server returned ${response.status}`);

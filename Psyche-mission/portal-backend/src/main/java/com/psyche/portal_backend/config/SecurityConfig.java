@@ -13,6 +13,10 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,15 +24,44 @@ import java.util.List;
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(auth ->
-                auth.requestMatchers("/api/game-upload-requests/pending",
-                                     "/api/game-upload-requests/*/approve",
-                                     "/api/game-upload-requests/*/deny").
-                        hasRole("ADMIN").anyRequest().permitAll());
 
-        http.httpBasic(Customizer.withDefaults());
-        http.cors(Customizer.withDefaults());
-        http.csrf(csrf -> csrf.disable());
+        http
+            .cors(Customizer.withDefaults())
+
+            .csrf(csrf -> csrf
+                .csrfTokenRepository(
+                    CookieCsrfTokenRepository.withHttpOnlyFalse()
+                )
+                .csrfTokenRequestHandler(
+                    new CsrfTokenRequestAttributeHandler()
+                )
+            )
+
+            .securityContext(context -> context
+                .securityContextRepository(
+                    new HttpSessionSecurityContextRepository()
+                )
+            )
+
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/api/auth/csrf",
+                    "/api/users/login"
+                ).permitAll()
+
+                .requestMatchers(
+                    "/api/game-upload-requests/pending",
+                    "/api/game-upload-requests/*/approve",
+                    "/api/game-upload-requests/*/deny"
+                ).hasRole("ADMIN")
+
+                .requestMatchers("/api/auth/me")
+                .authenticated()
+
+                .anyRequest().permitAll()
+            )
+
+            .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
@@ -62,6 +95,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(allowedOrigins);
         config.setAllowedMethods(allowedMethods);
         config.setAllowedHeaders(allowedHeaders);
+        config.setAllowCredentials(true);
 
         source.registerCorsConfiguration("/**", config);
 
