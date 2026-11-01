@@ -30,15 +30,32 @@ export default {
       if (difficulty === "hard") return 3;
 
       return 0;
+    },
+    mediaSrc() {
+      const src = this.game.video || "";
+
+      if (!src || this.isYoutube(src) || src.startsWith("http://") || src.startsWith("https://")) {
+        return src;
+      }
+
+      const base = import.meta.env.BASE_URL || "/";
+      return base.replace(/\/?$/, "/") + src.replace(/^\//, "");
     }
   },
   methods: {
     isYoutube(url) {
-      if (url == "") {
+      if (!url) {
         return false;
       }
 
       return url.includes('youtube.com') || url.includes('youtu.be');
+    },
+    isGif(url) {
+      if (!url) {
+        return false;
+      }
+
+      return url.toLowerCase().split("?")[0].endsWith(".gif");
     },
   },
 }
@@ -59,9 +76,16 @@ export default {
         allow="autoplay; encrypted-media"
       ></iframe>
 
+      <img
+        v-else-if="game.video && isGif(game.video)"
+        :src="mediaSrc"
+        class="preview-video"
+        alt=""
+      />
+
       <video
         v-else-if="game.video"
-        :src="game.video"
+        :src="mediaSrc"
         class="preview-video"
         muted
         autoplay
