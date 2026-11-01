@@ -15,6 +15,12 @@ export default {
     methods: {
         handleImgError(e) {
             e.target.src = psycheLogo
+        },
+        scrollToGames() {
+            const gamesSection = document.getElementById('games');
+            if (gamesSection) {
+                gamesSection.scrollIntoView({ behavior: 'smooth'})
+            }
         }
     }
 }
@@ -58,11 +64,11 @@ export default {
             <div class="hero-actions">
                 <router-link
                     class="hero-play"
-                    :to="{ name: 'GamePage', params: { id: game.id } }"
+                    :to="{ name: 'GamePage', params: { id: game.id } }" 
                 >
                     Play
                 </router-link>
-                <a class="hero-play" href="#games">Browse games</a>
+                <button class="hero-play" @click="scrollToGames">Browse games</button>
                 <slot />
             </div>
         </div>
@@ -95,12 +101,16 @@ export default {
 }
 
 .hero-kicker {
+    display: inline-block;
+    padding: 6px 14px;
+    border: 2px solid currentColor;
+    border-radius: 4px;
     margin: 0 0 8px;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.18em;
-    color: #00bcd4;
+    color: #ef5966;
     text-shadow: 0 0 12px rgba(0, 188, 212, 0.45);
 }
 

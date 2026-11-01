@@ -186,8 +186,8 @@ export default {
 
 .tab-btn.active {
     opacity: 1;
-    border-bottom-color: #00bcd4;
-    color: #00bcd4;
+    border-bottom-color: #f47c33;
+    color: #f47c33;
 }
 
 .instructions-card h2 {
@@ -220,7 +220,7 @@ export default {
     justify-content: center;
     min-width: 32px;
     height: 32px;
-    background: #00bcd4;
+    background: #592651;
     color: #ffffff;
     font-weight: 700;
     font-size: 0.95rem;
