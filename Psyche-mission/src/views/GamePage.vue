@@ -344,7 +344,7 @@ export default {
   font-family: Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
   padding-bottom: 40px;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .main-container.dark-mode {
@@ -572,7 +572,7 @@ input[type="color"] {
   justify-content: center;
   padding: 20px 40px;
   margin-top: 100px;
-  background-color: #00bccc;
+  background-color: #a53f5b;
   color: #ffffff;
   text-decoration: none;
   font-size: 1rem;

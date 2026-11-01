@@ -716,7 +716,10 @@ export default {
   font-family: Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
   padding-bottom: 20px;
-  overflow-x: clip;
+  overflow: clip;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .main.dark-mode {
