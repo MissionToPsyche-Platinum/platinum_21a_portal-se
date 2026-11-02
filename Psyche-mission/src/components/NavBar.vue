@@ -12,9 +12,6 @@
         <div class="nav-links">
             <router-link to="/" class="nav-link">Home</router-link>
             <a href="https://psyche.ssl.berkeley.edu/" class="nav-link" target="_blank" rel="noopener noreferrer">About</a>
-
-        <!--Admin navigation -->
-          <router-link to="/admin" class="nav-link">Admin</router-link>
         </div>
     </nav>
  </template>
