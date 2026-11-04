@@ -207,6 +207,20 @@ export default {
       const idx = days % this.games.length
 
       return this.games[idx]
+    },
+
+    hasSearchOrFilters() {
+      return Boolean(
+        (this.searchRequest && this.searchRequest.trim()) ||
+        this.activeFilters.class ||
+        this.activeFilters.genre ||
+        this.activeFilters.age ||
+        this.activeFilters.difficulty
+      );
+    },
+
+    showNoMatchMessage() {
+      return this.displayGames.length === 0 && this.hasSearchOrFilters;
     }
   },
   mounted() {
@@ -275,6 +289,27 @@ export default {
 
     handleFilters(filters) {
       this.activeFilters = filters;
+    },
+
+    clearSearchAndFilters() {
+      this.searchRequest = "";
+      this.activeFilters = {
+        class: "",
+        genre: "",
+        age: "",
+        difficulty: ""
+      };
+      this.sortBy = "";
+      this.favoritesOnly = false;
+      this.showQuizResults = false;
+
+      if (this.$refs.searchBar && this.$refs.searchBar.clear) {
+        this.$refs.searchBar.clear();
+      }
+
+      if (this.$refs.filterPanel && this.$refs.filterPanel.resetAll) {
+        this.$refs.filterPanel.resetAll();
+      }
     },
 
     clearFilterChip(key) {
@@ -586,7 +621,7 @@ export default {
     <h2 id="games" class="games-heading">Games</h2>
     <div class="browse-bar">
       <section class="search">
-        <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
+        <SearchBar ref="searchBar" :isDark="isDark" @search="searchRequest = $event"/>
       </section>
       <section class="filter-section">
         <Filter ref="filterPanel" :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
@@ -664,11 +699,25 @@ export default {
           </div>
         </section>
 
-        <p v-else-if="favoritesOnly" class="empty-favorites-message">
+        <p v-else-if="favoritesOnly && !hasSearchOrFilters" class="empty-favorites-message">
           No favorite games saved yet.
         </p>
       </section>
-      <div class="game-shelves">
+      <div v-if="showNoMatchMessage" class="empty-results">
+        <p class="empty-results-message">No games match your search</p>
+        <button
+          type="button"
+          class="toggle"
+          :style="[
+            { backgroundColor: isDark ? darkColor : lightColor },
+            { color: isDark ? lightColor : darkColor }
+          ]"
+          @click="clearSearchAndFilters"
+        >
+          Clear filters
+        </button>
+      </div>
+      <div v-else class="game-shelves">
         <section
           v-for="shelf in gameShelves"
           :key="shelf.label"
@@ -950,6 +999,20 @@ input[type='color'] {
 
 .empty-favorites-message {
   margin: 0 auto 20px;
+  opacity: 0.85;
+}
+
+.empty-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 32px 16px 24px;
+}
+
+.empty-results-message {
+  margin: 0;
+  font-size: 1.1rem;
   opacity: 0.85;
 }
 

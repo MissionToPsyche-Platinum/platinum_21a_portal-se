@@ -27,6 +27,16 @@
        methods: {
            updateSort() {  // emit the selected sort option to the HomePage component
                this.$emit("sort-games", this.sortBy);
+           },
+           resetAll() {
+               this.filters = {
+                   class: "",
+                   genre: "",
+                   age: "",
+                   difficulty: ""
+               };
+               this.sortBy = "";
+               this.$emit("sort-games", "");
            }
        }
    };
