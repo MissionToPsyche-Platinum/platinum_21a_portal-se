@@ -591,6 +591,10 @@ export default {
       <template #toolbar>
         <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
         <div class="theme-controls">
+          <router-link to="/background-test" class="toggle" :style="[{ color: isDark ? lightColor : darkColor, borderColor: isDark ? lightColor : darkColor, textDecoration:'none'}]">
+            Background Test Page
+          </router-link>
+
           <button class="toggle"
                   :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
                   @click="toggleMode">
