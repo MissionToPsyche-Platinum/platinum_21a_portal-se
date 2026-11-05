@@ -21,8 +21,10 @@ export default {
       game: null,
       qrCode: null,
       displayQr: true,
-      suggestedGames: null,
-      isFavorite: false, // true if the game is saved in favorite
+      suggestedGames: [],
+      loadingGame: false,
+      gameError: "",
+      isFavorite: false,// true if the game is saved in favorite
     }
   },
   mounted() {
@@ -81,15 +83,67 @@ export default {
     },
 
     // find game data by id
-    findGame() {
-      const gameFound = gameData.games.find(game => game.id == this.id);
 
-      if (!gameFound) {
-        this.$router.replace({ name: "NotFound" });
-      } else {
-        this.game = gameFound;
-        this.suggestedGames = getSuggestions(this.game.id);
-        this.generateQR();
+    async findGame() {
+      const requestedId = this.id;
+
+      this.game = null;
+      this.qrCode = null;
+      this.isFavorite = false;
+      this.suggestedGames = [];
+      this.gameError = "";
+      this.loadingGame = true;
+
+      try {
+        const staticGame = gameData.games.find(
+            game => String(game.id) === String(requestedId)
+        );
+
+        if (staticGame) {
+          this.game = staticGame;
+          this.suggestedGames = getSuggestions(staticGame.id);
+        } else {
+          const response = await fetch(
+              `http://localhost:8080/api/games/${encodeURIComponent(requestedId)}`
+          );
+
+          if (this.id !== requestedId) return;
+
+          if (response.status === 404) {
+            this.$router.replace({ name: "NotFound" });
+            return;
+          }
+
+          if (!response.ok) {
+            throw new Error(`Game retrieval failed: ${response.status}`);
+          }
+
+          const game = await response.json();
+          if (this.id !== requestedId) return;
+
+          this.game = {
+            ...game,
+            class: game.className ?? game.class,
+          };
+        }
+
+        if (this.id !== requestedId) return;
+
+        this.loadFavoriteState();
+
+        if (this.game?.src) {
+          await this.generateQR();
+        }
+      } catch (error) {
+        if (this.id === requestedId) {
+          console.error("Failed to load game:", error);
+          this.gameError =
+              "Could not load this game. Please try again later.";
+        }
+      } finally {
+        if (this.id === requestedId) {
+          this.loadingGame = false;
+        }
       }
     },
 
@@ -151,6 +205,9 @@ export default {
     },
     // check if the current game is saved
     loadFavoriteState() {
+
+      if (!this.game) return;
+
       const favorites = this.getFavoriteGames();
       this.isFavorite = favorites.includes(this.game.id);
     },
@@ -260,12 +317,20 @@ export default {
             </button>
           </div>
       </div>
+      <div v-else-if="loadingGame">
+        <h1>Loading game...</h1>
+      </div>
+
+      <div v-else-if="gameError">
+        <h1>{{ gameError }}</h1>
+      </div>
+
       <div v-else>
         <h1>Unable to Load</h1>
       </div>
     </div>
 
-    <div class="details">
+    <div v-if="game" class="details">
       <div class="description">
         <h3>Game Description</h3>
         <p>{{ game ? game.description : "--"}} </p>
