@@ -10,7 +10,22 @@ export default {
 
     },
     methods: {
-        startBg() {
+        // stop background animation
+        cleanup() {
+            if (this.animationId) {
+                cancelAnimationFrame(this.animationId);
+            }
+
+            // reset background canvas
+            const canvas = this.$refs.bgCanvas;
+            if (canvas) {
+                const context = canvas.getContext('2d');
+                context.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        },
+
+        startBg1() {
+            this.cleanup();
             const canvas = this.$refs.bgCanvas;
             const context = canvas.getContext('2d');
             canvas.width = window.innerWidth;
@@ -52,6 +67,67 @@ export default {
             };
             animate();
         },
+
+        startBg2() {
+            this.cleanup();
+            const canvas = this.$refs.bgCanvas;
+            const context = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const stars = [];
+
+            for (let i = 0; i < 500; i++) {
+                // place stars on sides, top, and bottom of center point
+                stars.push({
+                    x: (Math.random() - 0.5) * canvas.width,
+                    y: (Math.random() - 0.5) * canvas.height,
+                    z: Math.random() * canvas.width
+                })
+            }
+
+            const animate = () => {
+                context.fillStyle = '#000000';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+
+                // center of screen
+                const cx = canvas.width / 2;
+                const cy = canvas.height / 2;
+
+                // star speed
+                const speed = 0.5;
+
+                stars.forEach(star => {
+                    star.z -= speed;
+                    
+                    // reset star if out of view
+                    if (star.z < 1) {
+                        star.x = (Math.random() - 0.5) * canvas.width;
+                        star.y = (Math.random() - 0.5) * canvas.height
+                        star.z = canvas.width;
+                    }
+
+                    // move the stars outward as they approach the screen
+                    const x = (star.x / star.z) * canvas.width + cx;
+                    const y = (star.y / star.z) * canvas.height + cy;
+
+                    // change the size of the star as it approaches the screen
+                    // minimum size of 0.5, maximum size of 3
+                    const radius = Math.max(0.5, (1 - star.z / canvas.width) * 3);
+
+                    context.fillStyle = '#ffffff';
+                    context.beginPath();
+                    context.arc(x, y, radius, 0, Math.PI * 2);
+                    context.fill();
+                });
+
+                this.animationId = requestAnimationFrame(animate);
+            };
+
+            if (this.animationId) {
+                cancelAnimationFrame(this.animationId);
+            }
+            animate();
+        }
     },
 }
 </script>
@@ -62,7 +138,8 @@ export default {
         <div class="ui">
             <h1>Background Test Page</h1>
             <div class="bg-buttons">
-                <button class="bg1-button" @click="startBg">Background 1</button>
+                <button class="bg1-button" @click="startBg1">Background 1</button>
+                <button class="bg2-button" @click="startBg2">Background 2</button>
             </div>
         </div>
     </div>
@@ -92,6 +169,14 @@ export default {
 
 .bg1-button {
     border: 1px solid white;
+    cursor: pointer;
+
+}
+
+.bg2-button {
+    color: purple;
+    border: 1px solid white;
+    cursor: pointer;
 
 }
 </style>
