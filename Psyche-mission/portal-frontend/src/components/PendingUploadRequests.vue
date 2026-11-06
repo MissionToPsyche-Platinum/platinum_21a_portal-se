@@ -25,9 +25,12 @@ export default {
           this.loading = true;
 
           try {
-                const response = await fetch("http://localhost:8080/api/game-upload-requests/pending", {
-                    headers: this.adminHeaders()
-                });
+            const response = await fetch( "http://localhost:8080/api/game-upload-requests/pending",
+                {
+                  credentials: "include",
+                  headers: this.adminHeaders()
+                }
+            );
 
                 if (!response.ok) {
                   this.requests = [];
@@ -53,8 +56,9 @@ export default {
                 const response = await fetch(
                     `http://localhost:8080/api/game-upload-requests/${id}/${action}`,
                     {
-                        method: "PUT",
-                        headers: this.adminHeaders()
+                      method: "PUT",
+                      credentials: "include",
+                      headers: this.adminHeaders()
                     }
                 );
 
