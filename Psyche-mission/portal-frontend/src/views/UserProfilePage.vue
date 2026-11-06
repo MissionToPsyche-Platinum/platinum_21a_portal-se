@@ -93,32 +93,42 @@ export default {
     <UserPortalLayout :username="username">
     <div class="profile-container">
         <div class="account-info">
-            <h2>Account Information</h2>
+            <div class="account-info-header">
+                <h3>Account Information</h3>
+                <span class="account-status">Account Active</span>
+            </div>
 
             <!--Display current account info and button to edit-->
             <div v-if="!isEditing">
-                <p><strong>Username:</strong> {{ username }}</p>
-                <p><strong>Email:</strong> {{ email || "Not available"}}</p>
+                <div class="profile-detail">
+                    <p><strong>Username:</strong> {{ username }}</p>
+                </div>
 
-                <button @click="editProfile">Edit Profile</button>
+                <div class="profile-detail">
+                    <p><strong>Email:</strong> {{ email || "Not available"}}</p>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="button" @click="editProfile">Edit Profile</button>
+                </div>
             </div>
 
             <!--Display edit profile form-->
             <form v-else @submit.prevent="saveProfile">
                 <!--Username-->
-                <div>
+                <div class="profile-detail">
                     <label for="username">Username</label>
                     <input id="username" type="text" v-model.trim="editedUsername" :placeholder="username" />
                 </div>
 
                 <!--Email-->
-                <div>
+                <div class="profile-detail">
                     <label for="email">Email</label>
                     <input id="email" type="email" v-model.trim="editedEmail" :placeholder="email" />
                 </div>
 
-                <button type="submit">Save</button>
-                <button type="button" @click="cancelEditProfile">Cancel</button>
+                <button class="button" type="submit">Save</button>
+                <button class="button" type="button" @click="cancelEditProfile">Cancel</button>
 
                 <p v-if="message">{{ message }}</p>
             </form>
@@ -132,8 +142,66 @@ export default {
     padding: 30px;
 }
 .account-info {
-    margin: 24px auto;
-    max-width: 500px;
+    margin: 0 auto;
+    max-width: 700px;
     text-align: center;
+    padding: 28px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+}
+.account-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.account-info-header h3 {
+    margin: 0;
+}
+.account-status {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #a3e635;
+}
+.profile-detail {
+    margin-bottom: 20px;
+}
+.profile-detail label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+.profile-detail p {
+    margin: 0;
+}
+.profile-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 24px;
+}
+.button {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform;
+}
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+.button:active {
+    transform: translateY(0);
+}
+.button:focus-visible {
+    outline: 3px solid #94a3b8;
+    outline-offset: 3px;
 }
 </style>
