@@ -98,6 +98,8 @@ However, the database itself only needs to be created once. If `psyche_portal` a
 
 ## Current Scope
 
-This setup only creates the PostgreSQL database and initial database schema.
+This script creates the `psyche_portal` database and the initial `games` table.
 
-Connecting the Spring Boot backend to PostgreSQL and saving application data through Spring Data JPA will be handled in separate tasks.
+Spring Boot uses this database. Flyway runs further migrations on startup (for example users and roles). Hibernate is set to validate the schema.
+
+To start the API after the database exists, follow [../README.md](../README.md).
