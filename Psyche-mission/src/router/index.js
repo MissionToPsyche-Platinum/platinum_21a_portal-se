@@ -16,7 +16,7 @@ const routes = [
 
     {path: "/login", name: "Login", component: Login},
 
-    {path: "/vr-instructions", name: VrInstructions, component: VrInstructions},
+    {path: "/vr-instructions", name: "VrInstructions", component: VrInstructions},
 
     {
         path: "/:path(.*)*", // Must be at end of routes. Checks for any url path that has not been defined above
