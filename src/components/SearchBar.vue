@@ -11,6 +11,10 @@ export default {
    methods: {
        emitSearch() {
            this.$emit('search', this.searchRequest)
+       },
+       clear() {
+           this.searchRequest = "";
+           this.emitSearch();
        }
    }
 }

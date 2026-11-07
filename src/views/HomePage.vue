@@ -207,6 +207,20 @@ export default {
       const idx = days % this.games.length
 
       return this.games[idx]
+    },
+
+    hasSearchOrFilters() {
+      return Boolean(
+        (this.searchRequest && this.searchRequest.trim()) ||
+        this.activeFilters.class ||
+        this.activeFilters.genre ||
+        this.activeFilters.age ||
+        this.activeFilters.difficulty
+      );
+    },
+
+    showNoMatchMessage() {
+      return this.displayGames.length === 0 && this.hasSearchOrFilters;
     }
   },
   mounted() {
@@ -275,6 +289,27 @@ export default {
 
     handleFilters(filters) {
       this.activeFilters = filters;
+    },
+
+    clearSearchAndFilters() {
+      this.searchRequest = "";
+      this.activeFilters = {
+        class: "",
+        genre: "",
+        age: "",
+        difficulty: ""
+      };
+      this.sortBy = "";
+      this.favoritesOnly = false;
+      this.showQuizResults = false;
+
+      if (this.$refs.searchBar && this.$refs.searchBar.clear) {
+        this.$refs.searchBar.clear();
+      }
+
+      if (this.$refs.filterPanel && this.$refs.filterPanel.resetAll) {
+        this.$refs.filterPanel.resetAll();
+      }
     },
 
     clearFilterChip(key) {
@@ -537,6 +572,206 @@ export default {
         y: event.clientY + 15
       };
     },
+
+    // stop background animation
+    cleanup() {
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+        }
+
+        // reset background canvas
+        const canvas = this.$refs.bgCanvas;
+        if (canvas) {
+            const context = canvas.getContext('2d');
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    },
+
+    // create background of stars moving down
+    startBg1() {
+        this.cleanup();
+        const canvas = this.$refs.bgCanvas;
+        const context = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const stars = [];
+
+        // add 100 stars in random locations
+        for (let i = 0; i < 100; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                z: Math.random() * 2
+            });
+        }
+
+        const animate = () => {
+            // color background
+            context.fillStyle = '#12031d';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            context.fillStyle = '#f9a000';
+            // move the stars down the screen
+            stars.forEach(star => {
+                star.y += star.z * 0.1;
+                if (star.y > canvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * canvas.width;
+                }
+                // draw the stars
+                context.beginPath();
+                context.arc(star.x, star.y, star.z * 1.2, 0, Math.PI * 2);
+                // change alpha to give depth
+                context.globalAlpha = star.z / 2;
+                context.fill();
+            });
+
+            context.globalAlpha = 1;
+            this.animationId = requestAnimationFrame(animate);
+        };
+        animate();
+    },
+
+    // create background of of travelling through stars
+    startBg2() {
+        this.cleanup();
+        const canvas = this.$refs.bgCanvas;
+        const context = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const stars = [];
+
+        for (let i = 0; i < 500; i++) {
+            // place stars on sides, top, and bottom of center point
+            stars.push({
+                x: (Math.random() - 0.5) * canvas.width,
+                y: (Math.random() - 0.5) * canvas.height,
+                z: Math.random() * canvas.width
+            })
+        }
+
+        const animate = () => {
+            context.fillStyle = '#000000';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            // center of screen
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+
+            // star speed
+            const speed = 0.5;
+
+            context.fillStyle = '#ffffff';
+            stars.forEach(star => {
+                star.z -= speed;
+                
+                // reset star if out of view
+                if (star.z < 1) {
+                    star.x = (Math.random() - 0.5) * canvas.width;
+                    star.y = (Math.random() - 0.5) * canvas.height
+                    star.z = canvas.width;
+                }
+
+                // move the stars outward as they approach the screen
+                const x = (star.x / star.z) * canvas.width + cx;
+                const y = (star.y / star.z) * canvas.height + cy;
+
+                // change the size of the star as it approaches the screen
+                // minimum size of 0.5, maximum size of 3
+                const radius = Math.max(0.5, (1 - star.z / canvas.width) * 3);
+
+                context.beginPath();
+                context.arc(x, y, radius, 0, Math.PI * 2);
+                context.fill();
+            });
+
+            this.animationId = requestAnimationFrame(animate);
+        };
+
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+        }
+        animate();
+    },
+
+    // create background of randomly moving stars
+    startBg3() {
+        this.cleanup();
+        const canvas = this.$refs.bgCanvas;
+        const context = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const stars = [];
+
+        const speed = 0.4;
+        for (let i = 0; i < 150; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                // move stars in random directions
+                vx: (Math.random() - 0.5) * speed,
+                vy: (Math.random() - 0.5) * speed,
+                // radius between 0.5 and 2
+                radius: Math.random() * 1.5 + 0.5,
+                // alpha between 0.2 and 1
+                alpha: Math.random() * 0.8 + 0.2 
+            });
+        }
+
+        const animate = () => {
+            context.fillStyle = '#000000';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            context.fillStyle = '#ffffff';
+            stars.forEach(star => {
+                star.x += star.vx;
+                star.y += star.vy;
+
+                // move stars to opposite side once they exit the screen
+                if (star.x < 0) {star.x = canvas.width;}
+                if (star.x > canvas.width) {star.x = 0;}
+                if (star.y < 0) {star.y = canvas.height;}
+                if (star.y > canvas.height) {star.y = 0;}
+
+                context.globalAlpha = star.alpha;
+                context.beginPath();
+                context.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                context.fill();
+            });
+
+            context.globalAlpha = 1;
+            this.animationId = requestAnimationFrame(animate);
+        };
+
+        animate();
+    },
+
+    // create background of unmoving stars
+    startBg4() {
+      this.cleanup();
+      const canvas = this.$refs.bgCanvas;
+      const context = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      context.fillStyle = '#000000';
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
+      context.fillStyle = '#ffffff';
+      for (let i = 0; i < 200; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const radius = Math.random() * 1.5 + 0.5;
+        const alpha = Math.random() * 0.8 + 0.2;
+
+        context.globalAlpha = alpha;
+        context.beginPath();
+        context.arc(x, y, radius, 0, Math.PI * 2);
+        context.fill();
+      }
+
+      context.globalAlpha = 1;
+    }
   },
 }
 </script>
@@ -549,13 +784,23 @@ export default {
     :style="[{backgroundColor: darkColor},{ color: lightColor}]">
 
     <!-- Containers for background effects -->
-    <div class="star-div stars-small" :class="{ 'stars-inverted': !isDark }"></div>
-    <div class="star-div stars-large" :class="{ 'stars-inverted': !isDark }"></div>
+    <!-- <div class="star-div stars-small" :class="{ 'stars-inverted': !isDark }"></div>
+    <div class="star-div stars-large" :class="{ 'stars-inverted': !isDark }"></div> -->
+
+    <canvas ref="bgCanvas" class="animated-bg"></canvas>
 
     <FeaturedGame v-if="featuredGame" :game="featuredGame" :isDark="isDark" :textColor="lightColor">
       <template #toolbar>
         <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
         <div class="theme-controls">
+
+          <div class="bg-buttons">
+              <button class="toggle" @click="startBg1">Background 1</button>
+              <button class="toggle" @click="startBg2">Background 2</button>
+              <button class="toggle" @click="startBg3">Background 3</button>
+              <button class="toggle" @click="startBg4">Background 4</button>
+          </div>
+
           <button class="toggle"
                   :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
                   @click="toggleMode">
@@ -586,7 +831,7 @@ export default {
     <h2 id="games" class="games-heading">Games</h2>
     <div class="browse-bar">
       <section class="search">
-        <SearchBar :isDark="isDark" @search="searchRequest = $event"/>
+        <SearchBar ref="searchBar" :isDark="isDark" @search="searchRequest = $event"/>
       </section>
       <section class="filter-section">
         <Filter ref="filterPanel" :isDark="isDark" @update-filter="handleFilters" @sort-games="handleSort"/>
@@ -664,11 +909,25 @@ export default {
           </div>
         </section>
 
-        <p v-else-if="favoritesOnly" class="empty-favorites-message">
+        <p v-else-if="favoritesOnly && !hasSearchOrFilters" class="empty-favorites-message">
           No favorite games saved yet.
         </p>
       </section>
-      <div class="game-shelves">
+      <div v-if="showNoMatchMessage" class="empty-results">
+        <p class="empty-results-message">No games match your search</p>
+        <button
+          type="button"
+          class="toggle"
+          :style="[
+            { backgroundColor: isDark ? darkColor : lightColor },
+            { color: isDark ? lightColor : darkColor }
+          ]"
+          @click="clearSearchAndFilters"
+        >
+          Clear filters
+        </button>
+      </div>
+      <div v-else class="game-shelves">
         <section
           v-for="shelf in gameShelves"
           :key="shelf.label"
@@ -953,6 +1212,20 @@ input[type='color'] {
   opacity: 0.85;
 }
 
+.empty-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 32px 16px 24px;
+}
+
+.empty-results-message {
+  margin: 0;
+  font-size: 1.1rem;
+  opacity: 0.85;
+}
+
 /* genre shelves for game links */
 .game-shelves {
   display: flex;
@@ -1115,6 +1388,22 @@ input[type='color'] {
 @keyframes moveStars {
   from { transform: translate(0, 0); }
   to { transform: translate(-400px, -400px); }
+}
+
+.animated-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bg-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 /* Responsive design */

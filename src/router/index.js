@@ -6,7 +6,7 @@ import VrInstructions from '@/views/VrInstructions.vue'
 
 import Login from "@/views/Login.vue";
 
-import AdminPage from "../views/AdminPage.vue"
+
 
 
 const routes = [
@@ -16,9 +16,7 @@ const routes = [
 
     {path: "/login", name: "Login", component: Login},
 
-    {path: "/admin", name: "Admin", component: AdminPage},
-
-    {path: "/vr-instructions", name: VrInstructions, component: VrInstructions},
+    {path: "/vr-instructions", name: "VrInstructions", component: VrInstructions},
 
     {
         path: "/:path(.*)*", // Must be at end of routes. Checks for any url path that has not been defined above

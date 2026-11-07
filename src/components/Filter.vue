@@ -27,6 +27,16 @@
        methods: {
            updateSort() {  // emit the selected sort option to the HomePage component
                this.$emit("sort-games", this.sortBy);
+           },
+           resetAll() {
+               this.filters = {
+                   class: "",
+                   genre: "",
+                   age: "",
+                   difficulty: ""
+               };
+               this.sortBy = "";
+               this.$emit("sort-games", "");
            }
        }
    };
@@ -43,11 +53,20 @@
             <span class="filter-title">Filter by</span>
             <select v-model="filters.class">
                 <option value="">Class</option>
-                <option value="Iridium - 2025">Iridium - 2025</option>
-                <option value="Tungsten - 2024">Tungsten - 2024</option>
-                <option value="Silver - 2023">Silver - 2023</option>
-                <option value="Copper - 2022">Copper - 2022</option>
-                <option value="Nickel - 2021">Nickel - 2021</option>
+                <option value="Sulfur - 2030-2031">Sulfur - 2030-2031</option>
+                <option value="Phosphorus - 2029-2030">Phosphorus - 2029-2030</option>
+                <option value="Silicon - 2028-2029">Silicon - 2028-2029</option>
+                <option value="Palladium - 2027-2028">Palladium - 2027-2028</option>
+                <option value="Gold - 2026-2027">Gold - 2026-2027</option>
+                <option value="Platinum - 2025-2026">Platinum - 2025-2026</option>
+                <option value="Iridium - 2024-2025">Iridium - 2024-2025</option>
+                <option value="Tungsten - 2023-2024">Tungsten - 2023-2024</option>
+                <option value="Silver - 2022-2023">Silver - 2022-2023</option>
+                <option value="Copper - 2021-2022">Copper - 2021-2022</option>
+                <option value="Nickel - 2020-2021">Nickel - 2020-2021</option>
+                <option value="Cobalt - 2019-2020">Cobalt - 2019-2020</option>
+                <option value="Iron - 2018-2019">Iron - 2018-2019</option>
+                <option value="Titanium - 2017-2018">Titanium - 2017-2018</option>
             </select>
 
 
