@@ -1,0 +1,9 @@
+{
+  "name": "platinum_21a_portal-se",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix Psyche-mission run dev",
+    "test": "npm --prefix Psyche-mission test",
+    "test:run": "npm --prefix Psyche-mission run test:run"
+  }
+}

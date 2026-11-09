@@ -36,3 +36,19 @@ npm run dev
 ```sh
 npm run build
 ```
+
+### Tests
+
+Vitest is set up for this Vue app. Add new files next to the code as `*.spec.js` (see `src/utils/gameService.spec.js` and `src/components/SearchBar.spec.js`).
+
+From this folder (`Psyche-mission`), or from the repo root:
+
+```sh
+npm run test:run
+```
+
+Watch mode:
+
+```sh
+npm test
+```
