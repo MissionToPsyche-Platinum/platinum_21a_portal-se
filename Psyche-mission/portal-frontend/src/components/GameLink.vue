@@ -22,20 +22,7 @@ export default {
   },
 
 
-  //==================== task 93====================
-
-  // compute numeric difficulty level, easy=1, medium=2, hard=3
   computed: {
-    difficultyLevel() {
-      const difficulty = (this.game.difficulty || "").toLowerCase();
-
-      if (difficulty === "easy") return 1;// easy
-      if (difficulty === "medium") return 2;// medium
-      if (difficulty === "hard") return 3;// hard
-
-      return 0; // if undefined
-    },
-
     gameImage() {
       if (this.game.thumbnail && this.game.thumbnail !== "None") {
         return this.game.thumbnail;
@@ -100,43 +87,6 @@ export default {
 
       <h2 class="game-title">{{ game.title }}</h2>
 
-
-      <!-- ==================== task 92====================-->
-
-      <!--Difficulty bar UI on game card-->
-      <div class="difficulty-section">
-      <span class="difficulty-label"> <!-- difficulty text label -->
-        Difficulty: {{ game.difficulty || "Unknown" }}
-      </span>
-
-        <div class="difficulty-bar"><!-- visual difficulty bar -->
-
-          <!-- easy -->
-          <span
-              :style="{
-          backgroundColor: textColor,
-          opacity: difficultyLevel >= 1 ? 1 : 0.2
-        }"
-          ></span>
-
-          <!-- medium -->
-          <span
-              :style="{
-          backgroundColor: textColor,
-          opacity: difficultyLevel >= 2 ? 1 : 0.2
-        }"
-          ></span>
-
-          <!-- hard -->
-          <span
-              :style="{
-          backgroundColor: textColor,
-          opacity: difficultyLevel >= 3 ? 1 : 0.2
-        }"
-          ></span>
-        </div>
-      </div>
-
       <!--      play is removed since images is now clickable-->
       <!--      <h3 :class="{'dark-link': isDark}" class="game-link">Play</h3>-->
       <div class="preview">
@@ -174,10 +124,28 @@ export default {
 a {
   text-decoration: none;
   color: inherit;
+  display: block;
+  height: 100%;
 }
 
 .game-link-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 12px;
+  border-radius: 4px;
+  border: 1px solid #666666;
+}
+
+.game-link-card:hover {
+  border-color: #111111;
+}
+
+.game-title {
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 
 /* favorite button styling */
@@ -218,49 +186,20 @@ a {
 .preview {
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
 }
 
 .media {
   width: 100%;
-  max-width: 250px;
-  height: 150px;
+  max-width: none;
+  height: 220px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 4px;
 }
 
-/*Difficulty bar styling*/
-
-.difficulty-section {
-  margin-bottom: 12px;
-  text-align: center;
-}
-
-.difficulty-label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 14px;
-  font-weight: 600;
-}
-
-.difficulty-bar {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-bottom: 6px;
-}
-
-.difficulty-bar span {
-  width: 32px;
-  height: 8px;
-  border-radius: 999px;
-  transition: all 0.3s ease;
-}
-
-
-.compact-card{
-  width: 180px;
-  min-width: 180px;
+.compact-card {
+  width: 240px;
+  min-width: 240px;
   padding: 10px;
 }
 
@@ -270,13 +209,9 @@ a {
   margin-bottom: 8px;
 }
 
-.compact-card .difficulty-section {
-  display: none;
-}
-
 .compact-card .media {
-  height: 95px;
-  max-width: 160px;
+  height: 160px;
+  max-width: none;
 }
 
 .compact-card .favorite-container {
@@ -289,18 +224,9 @@ a {
   pointer-events: auto;
 }
 
-
 @media (max-width: 600px) {
   .game-title {
     font-size: 1.1rem;
-  }
-
-  .difficulty-label {
-    font-size: 0.7rem;
-  }
-
-  .difficulty-bar {
-    transform: scale(0.8);
   }
 }
 </style>

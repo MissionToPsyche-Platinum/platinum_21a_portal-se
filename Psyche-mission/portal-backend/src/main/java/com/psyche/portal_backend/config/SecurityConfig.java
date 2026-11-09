@@ -84,7 +84,12 @@ public class SecurityConfig {
         List<String> allowedMethods = new ArrayList<>();
         List<String> allowedHeaders = new ArrayList<>();
 
+        config.setAllowCredentials(true);
+
+
         allowedOrigins.add("http://localhost:5173");
+        allowedOrigins.add("http://localhost:5174");
+
         allowedMethods.add("GET");
         allowedMethods.add("POST");
         allowedMethods.add("PUT");

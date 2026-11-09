@@ -3,13 +3,16 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
+import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     vueDevTools(),
+    tailwindcss(),
   ],
+
   server: {
     // used to allow communication with Spring Boot backend on port 8080
     // requests starting with /api endpoint will be routed to Spring Boot
@@ -21,6 +24,9 @@ export default defineConfig({
       }
     }
   },
+
+  base: "/platinum_21a_portal-se/",
+
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
