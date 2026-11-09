@@ -21,24 +21,26 @@
 
 <style scoped>
 .footer {
-    background: white;
+    background: #111111;
     padding: 20px;
     text-align: center;
+    color: #dddddd;
+    border-top: 1px solid #2a2a2a;
 }
 .footer i {
-    font-size: 50px;
-    padding: 10px;
+    font-size: 22px;
+    padding: 8px;
+    color: #aaaaaa;
 }
-.footer i.fa-facebook {
-    color: #1877f2;
+.footer a {
+    color: inherit;
 }
-.footer i.fa-instagram {
-    color: #e1306c;
+.footer a:hover i {
+    color: #ffffff;
 }
-.footer i.fa-x-twitter {
-    color: #1da1f2;
-}
-.footer i.fa-youtube {
-    color: #ff0000;
+.copyright {
+    margin: 8px 0 0;
+    font-size: 0.9rem;
+    color: #888888;
 }
 </style>

@@ -32,7 +32,6 @@
    };
 </script>
 
-
 <template>
    <div class="filter" :class="{ dark: isDark }">
 
@@ -94,58 +93,71 @@
    </div>
 </template>
 
-
 <style scoped>
 .filter {
     position: relative;
     display: inline-block;
-    padding: 20px;
+    max-width: 100%;
+    padding: 0;
     z-index: 100;
 }
 
 .filter-toggle {
-    background-color: #330066;
+    background-color: #111111;
     color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
+    padding: 10px 18px;
+    border: 1px solid #333333;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: bold;
+    white-space: nowrap;
+}
+
+.filter-toggle:hover {
+    background-color: #333333;
 }
 
 .filter-dropdown {
     position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #330066;
-    padding: 20px;
-    border-radius: 0 8px 8px 8px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: row;
-    gap: 15px;
-    min-width: max-content;
-    z-index: 100;    
+    top: calc(100% + 8px);
+    right: 0;
+    left: auto;
+    box-sizing: border-box;
+    width: min(420px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
+    min-width: 0;
+    background-color: #1a1a1a;
+    padding: 14px;
+    border: 1px solid #333333;
+    border-radius: 4px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    z-index: 200;
 }
 
 .filter-title {
-   color: white;
-   font-size: 20px;
+    grid-column: 1 / -1;
+    color: #dddddd;
+    font-size: 16px;
 }
 
-
 .filter select {
-   color: #ffffff;
-   padding: 10px;
-   border-radius: 5px;
-   background-color: #10071a;
+    width: 100%;
+    min-width: 0;
+    color: #ffffff;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #111111;
+    border: 1px solid #444444;
 }
 
 @media (max-width: 768px) {
     .filter-dropdown {
-        flex-direction: column;
-        align-items: stretch;
+        grid-template-columns: 1fr;
+        width: min(320px, calc(100vw - 24px));
+        right: 0;
     }
 }
 </style>
