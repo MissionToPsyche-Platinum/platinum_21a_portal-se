@@ -22,14 +22,16 @@ export default {
 
           try {
 
-            const response = await fetch( "http://localhost:8080/api/game-upload-requests/pending",
+            const response = await fetch(
+                "http://localhost:8080/api/game-upload-requests/pending",
                 {
-                  credentials: "include",
-                  headers: this.adminHeaders()
+                  method: "GET",
+                  credentials: "include"
                 }
             );
 
-                if (!response.ok) {
+
+            if (!response.ok) {
                   this.requests = [];
                   this.message = "Could not load pending requests.";
                     return;
@@ -51,14 +53,16 @@ export default {
 
             try {
 
-                const response = await fetch(
-                    `http://localhost:8080/api/game-upload-requests/${id}/${action}`,
-                    {
-                      method: "PUT",
-                      credentials: "include",
-                      headers: this.adminHeaders()
-                    }
-                );
+
+              const csrfResponse = await fetch(
+                  "http://localhost:8080/api/auth/csrf",
+                  {
+                    method: "GET",
+                    credentials: "include"
+                  }
+              );
+
+
 
               if (!csrfResponse.ok) {
                 throw new Error("Could not retrieve CSRF token.");

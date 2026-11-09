@@ -50,7 +50,8 @@ export default {
               method: "POST",
               credentials: "include",
               headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                [csrf.headerName]: csrf.token
               },
                 body: JSON.stringify({
                     username: enteredUsername,
