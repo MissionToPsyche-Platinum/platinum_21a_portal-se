@@ -46,18 +46,18 @@ export default {
 
 
 
-       fetch("http://localhost:8080/api/users/login", {
-         method: "POST",
-         credentials: "include",
-         headers: {
-           "Content-Type": "application/json",
-           [csrf.headerName]: csrf.token
-         },
-         body: JSON.stringify({
-           username: enteredUsername,
-           password: enteredPassword
-         })
-       })
+        fetch("http://localhost:8080/api/users/login", {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json"
+              },
+                body: JSON.stringify({
+                    username: enteredUsername,
+                    password: enteredPassword
+                })
+            })
+
                 .then(async (response) => {
                     if (!response.ok) {
                         this.message = "Invalid credentials."
