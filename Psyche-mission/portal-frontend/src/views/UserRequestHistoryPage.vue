@@ -248,4 +248,63 @@ export default {
     color: #856404;
     background: #fff3cd;
 }
+
+@media (max-width: 800px) {
+    .requests-page {
+        padding: 20px;
+        margin: 1.5rem auto;
+    }
+    .requests-section {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .requests-page {
+        padding: 12px;
+        margin: 1rem auto;
+    }
+    .page-header {
+        margin-bottom: 20px;
+    }
+    .page-header h1 {
+        font-size: 1.5rem;
+    }
+    .page-header p {
+        font-size: 0.875rem;
+    }
+    .requests-section {
+        padding: 16px;
+    }
+    .section-heading {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .section-heading h2 {
+        font-size: 1.1rem;
+    }
+    .request-card {
+        padding: 16px;
+    }
+    .request-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    .request-header h3 {
+        overflow-wrap: anywhere;
+        font-size: 1rem;
+    }
+    .status-badge {
+        min-width: 90px;
+    }
+    .request-details {
+        overflow-wrap: anywhere;
+        font-size: 0.875rem;
+    }
+    .empty {
+        padding: 28px 14px;
+    }
+}
 </style>
