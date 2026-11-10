@@ -382,13 +382,42 @@ export default {
     opacity: 0.6;
     cursor: not-allowed;
 }
+@media (max-width: 800px) {
+    .game-upload-form {
+        padding: 24px;
+    }
+    .form-grid {
+        gap: 16px;
+    }
+}
 @media (max-width: 600px) {
-    .form-row {
+    .game-upload-form {
+        padding: 20px 16px;
+    }
+    .form-heading {
+        margin-bottom: 24px;
+    }
+    .form-heading h2 {
+        font-size: 20px
+    }
+    .form-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .form-row {
         gap: 6px;
     }
     .form-row label {
         text-align: left;
+    }
+    .form-section {
+        padding: 20px 0;
+    }
+    .section-heading h3 {
+        font-size: 16px;
+    }
+    .game-upload-form .button {
+        width: 100%;
     }
 }
 </style>

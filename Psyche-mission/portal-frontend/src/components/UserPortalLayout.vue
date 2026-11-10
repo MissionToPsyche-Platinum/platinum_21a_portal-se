@@ -102,16 +102,49 @@ export default {
     min-width: 0;
 }
 @media (max-width: 800px) {
+    .user-portal {
+        width: calc(100% - 24px);
+        margin: 16px auto;
+    }
+    .portal-header {
+        padding: 20px 16px;
+        margin-bottom: 16px;
+    }
+    .portal-header h1 {
+        font-size: 24px;
+        text-align: center;
+        overflow-wrap: anywhere;
+    }
+    .eyebrow {
+        text-align: center;
+        font-size: 10px;
+    }
+    .subtitle {
+        font-size: 14px;
+    }
     .portal-layout {
         flex-direction: column;
+        gap: 16px;
     }
     .portal-sidebar {
+        padding: 16px;
         width: 100%;
         box-sizing: border-box;
     }
+    .portal-sidebar h3 {
+        margin-bottom: 12px;
+    }
     .portal-sidebar nav {
-        flex-direction: row;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 6px;
+        padding-bottom: 4px;
+    }
+    .portal-sidebar a {
+        flex: 0 0 auto;
+        padding: 10px 12px;
+        font-size: 13px;
+        white-space: nowrap;
     }
 }
 </style>
