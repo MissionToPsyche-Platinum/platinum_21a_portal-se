@@ -4,12 +4,14 @@ import GameLink from '../components/GameLink.vue'
 import { getSuggestions } from "../utils/gameService.js"
 import QRCode from 'qrcode'
 import GameRating from "../components/GameRating.vue";
+import StarBackground from "@/components/StarBackground.vue";
 
 export default {
   name: 'GamePage',
   components: { 
     GameRating,
     GameLink,
+    StarBackground,
   },
   props: ['id'], // ID of game passed to this component
   data() {
@@ -198,8 +200,7 @@ export default {
       { color: foreGround }
     ]"
   >
-    <div class="star-div stars-small" :class="{ 'stars-inverted': !gameIsDark }"></div>
-    <div class="star-div stars-large" :class="{ 'stars-inverted': !gameIsDark }"></div>
+    <StarBackground :starColor="foreGround"></StarBackground>
 
     <div class="theme-controls">
       <button
@@ -706,47 +707,6 @@ input[type="color"] {
 .more-games-title {
   margin: 8px 48px 16px;
   font-size: 1.5rem;
-}
-
-.star-div {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 200%;
-  height: 200%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.stars-small {
-  background-image:
-    radial-gradient(2px 2px at 20px 30px, #fff, transparent),
-    radial-gradient(2px 2px at 50px 70px, #fff, transparent),
-    radial-gradient(2px 2px at 150px 50px, #fff, transparent),
-    radial-gradient(2px 2px at 300px 250px, #fff, transparent),
-    radial-gradient(2px 2px at 410px 310px, #fff, transparent),
-    radial-gradient(2px 2px at 500px 100px, #fff, transparent),
-    radial-gradient(2px 2px at 700px 400px, #fff, transparent),
-    radial-gradient(2px 2px at 750px 500px, #fff, transparent);
-  background-size: 800px 800px;
-  animation: moveStars 100s linear infinite;
-  opacity: 0.45;
-}
-
-.stars-large {
-  background-image:
-    radial-gradient(5px 5px at 100px 150px, #fff, transparent),
-    radial-gradient(5px 5px at 250px 170px, #fff, transparent),
-    radial-gradient(5px 5px at 400px 350px, #fff, transparent),
-    radial-gradient(5px 5px at 510px 440px, #fff, transparent),
-    radial-gradient(5px 5px at 600px 100px, #fff, transparent);
-  background-size: 1000px 1000px;
-  animation: moveStars 60s linear infinite;
-  opacity: 0.5;
-}
-
-.stars-inverted {
-  filter: invert(1);
 }
 
 @keyframes moveStars {
