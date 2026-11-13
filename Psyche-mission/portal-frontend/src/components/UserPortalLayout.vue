@@ -5,18 +5,71 @@ export default {
             type: String,
             default: "User"
         }
+    },
+    data() {
+        return {
+            isDark: true,
+            darkColor: "#000000",
+            lightColor: "#ffffff"
+        }
+    },
+    mounted() {
+        const savedMode = localStorage.getItem("savedMode");
+
+        if (savedMode === "Dark") {
+            this.isDark = true;
+        }
+        else if (savedMode === "Light") {
+            this.isDark = false;
+        }
+
+        const savedDarkColor = localStorage.getItem("savedDarkColor");
+        const savedLightColor = localStorage.getItem("savedLightColor");
+
+        if (savedDarkColor) {
+            this.darkColor = savedDarkColor;
+        }
+
+        if (savedLightColor) {
+            this.lightColor = savedLightColor;
+        }
+    },
+    methods: {
+        toggleMode() {
+            this.isDark = !this.isDark;
+
+            if (this.isDark) {
+                this.darkColor = "#000000";
+                this.lightColor = "#ffffff";
+
+                localStorage.setItem("savedMode", "Dark");
+            }
+            else {
+                this.darkColor = "#ffffff";
+                this.lightColor = "#000000";
+
+                localStorage.setItem("savedMode", "Light");
+            }
+
+            localStorage.setItem("savedDarkColor", this.darkColor);
+            localStorage.setItem("savedLightColor", this.lightColor);
+        }
     }
 }
 </script>
 
 <template>
-    <div class="user-portal">
-        <header class="portal-header">
+    <div class="user-portal" :class="isDark ? 'dark-mode' : 'light-mode'" :style="{backgroundColor: darkColor, color: lightColor}">
+        <header class="portal-header" :class="isDark ? 'dark-mode' : 'light-mode'" :style="{backgroundColor: darkColor, color: lightColor}">
             <div>
                 <p class="eyebrow">PSYCHE PORTAL / USER</p>
                 <h1>Welcome, {{ username }}</h1>
                 <p class="subtitle">Manage your account and game submissions.</p>
             </div>
+
+            <button class="theme-toggle" @click="toggleMode">
+                {{ isDark ? "Switch to Light" : "Switch to Dark" }}
+            </button>
         </header>
 
         <div class="portal-layout">
@@ -47,6 +100,10 @@ export default {
     margin-bottom: 24px;
     border: 1px solid #ddd;
     border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
 }
 .eyebrow {
     font-size: 12px;
@@ -101,6 +158,20 @@ export default {
     flex: 1;
     min-width: 0;
 }
+.theme-toggle {
+    padding: 10px 15px;
+    border: 1px solid currentColor;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    border-radius: 999px;
+    font-weight: 600;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+.theme-toggle:hover {
+    transform: translateY(-2px);
+}
+
 @media (max-width: 800px) {
     .user-portal {
         width: calc(100% - 24px);
