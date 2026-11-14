@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import gameData from '../assets/games.json'
 import { getSuggestions } from './gameService'
 
 describe('getSuggestions', () => {
@@ -16,4 +17,13 @@ describe('getSuggestions', () => {
 
     expect(new Set(ids).size).toBe(ids.length)
   })
+
+  it('uses the local gif for Jolt\'s Journey hover media', () => {
+    const jolts = gameData.games.find((game) => game.id === 'jolts-journey')
+
+    expect(jolts).toBeTruthy()
+    expect(jolts.video).toBe('/gif/jolts_journey.gif')
+    expect(jolts.class).toBe('Nickel - 2020-2021')
+  })
 })
+

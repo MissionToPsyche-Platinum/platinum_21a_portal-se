@@ -33,4 +33,14 @@ describe('GamePreview', () => {
     expect(wrapper.find('img.preview-video').exists()).toBe(false)
     expect(wrapper.find('iframe').exists()).toBe(false)
   })
+
+  it('shows Hard difficulty with a filled three-segment bar', () => {
+    const wrapper = mount(GamePreview, {
+      props: { game: baseGame }
+    })
+
+    expect(wrapper.get('.difficulty-label').text()).toContain('Hard')
+    expect(wrapper.vm.difficultyLevel).toBe(3)
+  })
 })
+

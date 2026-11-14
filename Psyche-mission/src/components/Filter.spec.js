@@ -27,4 +27,15 @@ describe('Filter', () => {
     expect(wrapper.vm.sortBy).toBe('')
     expect(wrapper.emitted('sort-games').at(-1)[0]).toBe('')
   })
+
+  it('emits update-filter when a class is selected', async () => {
+    const wrapper = mount(Filter)
+
+    await wrapper.get('.filter-toggle').trigger('click')
+    await wrapper.findAll('select').at(0).setValue('Iridium - 2024-2025')
+
+    expect(wrapper.emitted('update-filter')).toBeTruthy()
+    expect(wrapper.emitted('update-filter').at(-1)[0].class).toBe('Iridium - 2024-2025')
+  })
 })
+
