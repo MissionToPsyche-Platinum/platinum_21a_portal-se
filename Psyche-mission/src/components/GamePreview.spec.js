@@ -42,5 +42,20 @@ describe('GamePreview', () => {
     expect(wrapper.get('.difficulty-label').text()).toContain('Hard')
     expect(wrapper.vm.difficultyLevel).toBe(3)
   })
+
+  it('embeds a YouTube preview when the video URL is YouTube', () => {
+    const wrapper = mount(GamePreview, {
+      props: {
+        game: {
+          ...baseGame,
+          video: 'https://www.youtube.com/embed/r60lcfc1aAA'
+        }
+      }
+    })
+
+    expect(wrapper.get('iframe.preview-iframe').attributes('src')).toContain('youtube.com')
+    expect(wrapper.find('img.preview-video').exists()).toBe(false)
+  })
 })
+
 

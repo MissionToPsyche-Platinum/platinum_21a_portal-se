@@ -23,4 +23,12 @@ describe('SearchBar', () => {
     expect(wrapper.get('input').element.value).toBe('')
     expect(wrapper.emitted('search').at(-1)[0]).toBe('')
   })
+
+  it('applies the dark class in dark mode', () => {
+    const wrapper = mount(SearchBar, {
+      props: { isDark: true }
+    })
+
+    expect(wrapper.get('.searchBar').classes()).toContain('dark')
+  })
 })
