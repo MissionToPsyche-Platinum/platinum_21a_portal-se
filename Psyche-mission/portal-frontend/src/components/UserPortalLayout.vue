@@ -60,32 +60,34 @@ export default {
 
 <template>
     <div class="user-portal" :class="isDark ? 'dark-mode' : 'light-mode'" :style="{backgroundColor: darkColor, color: lightColor}">
-        <header class="portal-header" :class="isDark ? 'dark-mode' : 'light-mode'" :style="{backgroundColor: darkColor, color: lightColor}">
-            <div>
-                <p class="eyebrow">PSYCHE PORTAL / USER</p>
-                <h1>Welcome, {{ username }}</h1>
-                <p class="subtitle">Manage your account and game submissions.</p>
+        <div v-if="isDark" class="background-effect"></div>
+            <header class="portal-header" :class="isDark ? 'dark-mode' : 'light-mode'" :style="{backgroundColor: darkColor, color: lightColor}">
+                <div>
+                    <p class="eyebrow">PSYCHE PORTAL / USER</p>
+                    <h1>Welcome, {{ username }}</h1>
+                    <p class="subtitle">Manage your account and game submissions.</p>
+                </div>
+
+                <button class="theme-toggle" @click="toggleMode">
+                    {{ isDark ? "Switch to Light" : "Switch to Dark" }}
+                </button>
+            </header>
+
+            <div class="portal-layout">
+                <aside class="portal-sidebar">
+                    <h3>Actions</h3>
+                    <nav>
+                        <router-link to="/profile">Dashboard</router-link>
+                        <router-link to="/profile/upload-request">Submit a Game</router-link>
+                        <router-link to="/profile/requests">My Requests</router-link>
+                    </nav>
+                </aside>
+
+                <main class="portal-content">
+                    <slot />
+                </main>
             </div>
 
-            <button class="theme-toggle" @click="toggleMode">
-                {{ isDark ? "Switch to Light" : "Switch to Dark" }}
-            </button>
-        </header>
-
-        <div class="portal-layout">
-            <aside class="portal-sidebar">
-                <h3>Actions</h3>
-                <nav>
-                    <router-link to="/profile">Dashboard</router-link>
-                    <router-link to="/profile/upload-request">Submit a Game</router-link>
-                    <router-link to="/profile/requests">My Requests</router-link>
-                </nav>
-            </aside>
-
-            <main class="portal-content">
-                <slot />
-            </main>
-        </div>
     </div>
 </template>
 
@@ -94,6 +96,26 @@ export default {
     width: 90%;
     max-width: 1200px;
     margin: 30px auto;
+    position: relative;
+    isolation: isolate;
+    min-height: 100vh;
+}
+.background-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: radial-gradient(
+        circle at 50% 50%,
+        rgba(97, 64, 196, 0.5),
+        transparent 80%
+    );
+
+    filter: blur(50px);
+    z-index: 0;
+    pointer-events: none;
 }
 .portal-header {
     padding: 30px;
@@ -104,6 +126,11 @@ export default {
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+    position: relative;
+    z-index: 1;
+    background: rgba(127, 127, 127, 0.06);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 .eyebrow {
     font-size: 12px;
@@ -131,6 +158,11 @@ export default {
     padding: 24px;
     border: 1px solid #ddd;
     border-radius: 12px;
+    background: rgba(127, 127, 127, 0.055);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    position: relative;
+    z-index: 1;
 }
 .portal-sidebar h3 {
     margin-top: 0;
