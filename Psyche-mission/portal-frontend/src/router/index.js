@@ -25,19 +25,19 @@ const routes = [
 
     {path: "/profile", name:UserProfilePage, component: UserProfilePage, meta: { requiresAuth: true }},
 
+    {path: "/profile/upload-request", name: "UserGameUploadRequestPage", component: UserGameUploadRequestPage, meta: { requiresAuth: true }},
+
+    {path: "/profile/requests", name: "UserRequestHistory", component: UserRequestHistoryPage, meta: { requiresAuth: true }},
+
     {
         path: "/:path(.*)*", // Must be at end of routes. Checks for any url path that has not been defined above
         name: "NotFound",
         component: NotFound  // load NotFound page for any url not specified above
     },
-
-    {path: "/profile/upload-request", name: "UserGameUploadRequestPage", component: UserGameUploadRequestPage, meta: { requiresAuth: true }},
-
-    {path: "/profile/requests", name: "UserRequestHistory", component: UserRequestHistoryPage, meta: { requiresAuth: true }}
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes,
     scrollBehavior(to, from, savedPosition) {
         return {top: 0, left: 0};
