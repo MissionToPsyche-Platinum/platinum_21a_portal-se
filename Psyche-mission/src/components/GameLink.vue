@@ -20,6 +20,9 @@ export default {
     window.addEventListener("favorites-updated", this.loadFavoriteState);
   },
 
+  beforeUnmount() {
+    window.removeEventListener("favorites-updated", this.loadFavoriteState);
+  },
 
   computed: {
     gameImage() {
