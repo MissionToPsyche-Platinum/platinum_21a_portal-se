@@ -46,6 +46,9 @@ export default {
     window.addEventListener("favorites-updated", this.loadFavoriteState);
 
   },
+  beforeUnmount() {
+    window.removeEventListener("favorites-updated", this.loadFavoriteState);
+  },
   methods: {
     // toggle between black/white dark-light defaults
     toggleMode() {

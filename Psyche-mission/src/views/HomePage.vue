@@ -135,7 +135,8 @@ export default {
       const labels = {
         class: "Class",
         genre: "Genre",
-        age: "Age"
+        age: "Age",
+        difficulty: "Difficulty"
       };
       const genreLabels = {
         "Web Based": "Web Games",
@@ -491,7 +492,7 @@ export default {
         const q3Config = quizConfig.fun[answers.fun]
 
         if (q3Config) {
-            if (q3Config.genres.includes(games.genre)) {
+            if (q3Config.genres.includes(game.genre)) {
                 score += 2
             }
 
