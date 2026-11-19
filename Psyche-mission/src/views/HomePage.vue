@@ -228,15 +228,18 @@ export default {
   mounted() {
     // get the previously saved mode from the browser local storage
     const savedMode = localStorage.getItem("savedMode");
+    const savedBg = localStorage.getItem("savedBgColor");
+    const savedText = localStorage.getItem("savedTextColor");
+
     //check if previous mode is a dark mode, enable dark mode on page load
     if (savedMode === "Light") {
       this.isDark = false;
-      this.darkColor = "#ffffff";
-      this.lightColor = "#000000";
+      this.darkColor = savedBg || "#ffffff";
+      this.lightColor = savedText || "#000000";
     } else {
       this.isDark = true;
-      this.darkColor = "#000000";
-      this.lightColor = "#ffffff";
+      this.darkColor = savedBg || "#000000";
+      this.lightColor = savedText || "#ffffff";
     }
     this.loadFavorites();
     window.addEventListener("favorites-updated", this.loadFavorites);
@@ -275,18 +278,18 @@ export default {
         this.lightColor = "#000000";
         localStorage.setItem("savedMode", "Light");// save light mode in local storage
       }
-      localStorage.setItem("savedDarkColor", this.darkColor);
-      localStorage.setItem("savedLightColor", this.lightColor);
+      localStorage.setItem("savedBgColor", this.darkColor);
+      localStorage.setItem("savedTextColor", this.lightColor);
     },
 
     // these function update the localstorage with the current colors selection
     updateDarkColor() {
 
-      localStorage.setItem("savedDarkColor", this.darkColor);
+      localStorage.setItem("savedBgColor", this.darkColor);
     },
 
     updateLightColor() {
-      localStorage.setItem("savedLightColor", this.lightColor);
+      localStorage.setItem("savedTextColor", this.lightColor);
     },
 
     handleFilters(filters) {

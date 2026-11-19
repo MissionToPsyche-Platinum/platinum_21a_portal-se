@@ -28,7 +28,7 @@ export default {
   },
   mounted() {
     // restore saved mode
-    const savedMode = localStorage.getItem("gameSavedMode");
+    const savedMode = localStorage.getItem("savedMode");
     if (savedMode === "Light") {
       this.gameIsDark = false;
     } else {
@@ -36,20 +36,12 @@ export default {
     }
 
     // restore saved colors
-    const savedBackGround = localStorage.getItem("gameSavedBackGround");
-    const savedForeGround = localStorage.getItem("gameSavedForeGround");
+    const savedBg = localStorage.getItem("savedBgColor");
+    const savedText = localStorage.getItem("savedTextColor");
 
-    if (savedBackGround) {
-      this.backGround = savedBackGround;
-    } else {
-      this.backGround = this.gameIsDark ? "#000000" : "#ffffff";
-    }
+    this.backGround = savedBg || (this.gameIsDark ? "#000000" : "#ffffff");
+    this.foreGround = savedText || (this.gameIsDark ? "#ffffff" : "#000000");
 
-    if (savedForeGround) {
-      this.foreGround = savedForeGround;
-    } else {
-      this.foreGround = this.gameIsDark ? "#ffffff" : "#000000";
-    }
     this.loadFavoriteState();
     window.addEventListener("favorites-updated", this.loadFavoriteState);
 
@@ -62,25 +54,25 @@ export default {
       if (this.gameIsDark) {
         this.backGround = "#000000";
         this.foreGround = "#ffffff";
-        localStorage.setItem("gameSavedMode", "Dark");
+        localStorage.setItem("savedMode", "Dark");
       } else {
         this.backGround = "#ffffff";
         this.foreGround = "#000000";
-        localStorage.setItem("gameSavedMode", "Light");
+        localStorage.setItem("savedMode", "Light");
       }
 
-      localStorage.setItem("gameSavedBackGround", this.backGround);
-      localStorage.setItem("gameSavedForeGround", this.foreGround);
+      localStorage.setItem("savedBgColor", this.backGround);
+      localStorage.setItem("savedTextColor", this.foreGround);
     },
 
     // save selected background color
     updateBackGround() {
-      localStorage.setItem("gameSavedBackGround", this.backGround);
+      localStorage.setItem("savedBgColor", this.backGround);
     },
 
     // save selected foreground/text color
     updateForeGround() {
-      localStorage.setItem("gameSavedForeGround", this.foreGround);
+      localStorage.setItem("savedTextColor", this.foreGround);
     },
 
     // find game data by id
