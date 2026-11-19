@@ -725,7 +725,7 @@ export default {
           class="game-shelf"
         >
           <h2 class="game-shelf-title">{{ shelf.label }}</h2>
-          <div class="favorites-scroll-row shelf-scroll-row">
+          <div class="shelf-scroll-row">
             <GameLink
               v-for="game in shelf.games"
               :key="game.id"
@@ -1021,7 +1021,7 @@ input[type='color'] {
 .game-shelves {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 100px;
   padding-top: 10px;
   text-align: left;
   min-width: 0;
@@ -1032,22 +1032,31 @@ input[type='color'] {
   max-width: 100%;
 }
 
-.game-shelf-title {
-  margin: 0 0 10px;
-  font-size: 1.25rem;
+.games-placeholder .game-shelf-title {
+  display: flex;
+  align-items: center;
+  margin: 0 0 16px;
+  padding-left: 14px;
+  padding-bottom: 8px;
+  font-size: 3.0rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  border-left: 4px solid #f47c33;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 20%, transparent);
 }
 
 .shelf-scroll-row {
-  align-items: stretch;
-  scroll-snap-type: x mandatory;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  width: 100%;
+  padding: 8px 0 12px;
 }
 
 .shelf-scroll-row > * {
   box-sizing: border-box;
-  flex: 0 0 280px;
-  width: 280px;
+  width: 100%;
   height: 340px;
-  scroll-snap-align: start;
 }
 
 .shelf-scroll-row :deep(.game-link-card) {
@@ -1135,14 +1144,7 @@ input[type='color'] {
 }
 
 /* Responsive design */
-@media (max-width: 1100px) {
-  .shelf-scroll-row > * {
-    flex: 0 0 250px;
-    width: 250px;
-  }
-}
-
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .browse-bar,
   .games-placeholder,
   .games-heading,
@@ -1154,48 +1156,54 @@ input[type='color'] {
     padding: 0 14px;
   }
 
+  .shelf-scroll-row {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px 4px 14px;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, currentColor 55%, transparent) transparent;
+  }
+
   .shelf-scroll-row > * {
     flex: 0 0 230px;
     width: 230px;
+    height: 340px;
+    scroll-snap-align: start;
+  }
+
+  .shelf-scroll-row::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .shelf-scroll-row::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .shelf-scroll-row::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, currentColor 45%, transparent);
+    border-radius: 999px;
+  }
+
+  .shelf-scroll-row::-webkit-scrollbar-thumb:hover {
+    background: currentColor;
+  }
+
+  .shelf-scroll-row::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .shelf-scroll-row::-webkit-scrollbar-corner {
+    background: transparent;
   }
 }
-
-.favorites-row-title {
-  text-align: center;
-  margin-bottom: 14px;
-}
-
-.favorites-scroll-row {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 16px;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 10px 4px 14px;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-}
-
-.favorites-scroll-row > * {
-  flex: 0 0 auto;
-}
-
-.favorites-scroll-row::-webkit-scrollbar {
-  height: 8px;
-}
-
-.favorites-scroll-row::-webkit-scrollbar-thumb {
-  background: rgba(128, 128, 128, 0.5);
-  border-radius: 999px;
-}
-
-.favorites-scroll-row::-webkit-scrollbar-track {
-  background: transparent;
-
-}
-
 
 /* styling for drop down preview */
 .preview-dropdown {
