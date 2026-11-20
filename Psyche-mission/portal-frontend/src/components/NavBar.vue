@@ -17,7 +17,7 @@
             <router-link v-if="!loggedIn" to="/login" class="nav-link">Login</router-link>
           <router-link v-if="!loggedIn" to="/admin/login" class="nav-link">Admin</router-link>
             <router-link v-if="loggedIn" to="/profile" class="nav-link">Profile</router-link>
-            <router-link v-if="admin" to="/admin" class="nav-link">Admin</router-link>
+
             <button v-if="loggedIn" type="button" class="nav-link logout-button" @click="logout">Logout</button>
 
         </div>
