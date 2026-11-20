@@ -45,4 +45,21 @@ describe('GameLink', () => {
     expect(wrapper.vm.isFavorite).toBe(true)
     expect(JSON.parse(localStorage.getItem('favoriteGames'))).toContain('jolts-journey')
   })
+
+  it('unsaves the game when the heart is clicked again', async () => {
+    const wrapper = mount(GameLink, {
+      props: { game, textColor: '#ffffff' },
+      ...routerStub
+    })
+
+    await wrapper.get('.favorite-btn').trigger('click')
+    expect(JSON.parse(localStorage.getItem('favoriteGames'))).toContain('jolts-journey')
+
+    await wrapper.get('.favorite-btn').trigger('click')
+
+    expect(wrapper.vm.isFavorite).toBe(false)
+    expect(JSON.parse(localStorage.getItem('favoriteGames'))).not.toContain('jolts-journey')
+    expect(wrapper.get('.favorite-btn').attributes('aria-label')).toBe('Save to favorites')
+  })
 })
+
