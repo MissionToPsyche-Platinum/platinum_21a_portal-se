@@ -28,7 +28,7 @@ export default {
   },
   mounted() {
     // restore saved mode
-    const savedMode = localStorage.getItem("gameSavedMode");
+    const savedMode = localStorage.getItem("savedMode");
     if (savedMode === "Light") {
       this.gameIsDark = false;
     } else {
@@ -36,51 +36,66 @@ export default {
     }
 
     // restore saved colors
-    const savedBackGround = localStorage.getItem("gameSavedBackGround");
-    const savedForeGround = localStorage.getItem("gameSavedForeGround");
+    const savedBg = localStorage.getItem("savedBgColor");
+    const savedText = localStorage.getItem("savedTextColor");
 
-    if (savedBackGround) {
-      this.backGround = savedBackGround;
-    } else {
-      this.backGround = this.gameIsDark ? "#000000" : "#ffffff";
-    }
+    this.backGround = savedBg || (this.gameIsDark ? "#000000" : "#ffffff");
+    this.foreGround = savedText || (this.gameIsDark ? "#ffffff" : "#000000");
 
-    if (savedForeGround) {
-      this.foreGround = savedForeGround;
-    } else {
-      this.foreGround = this.gameIsDark ? "#ffffff" : "#000000";
-    }
     this.loadFavoriteState();
     window.addEventListener("favorites-updated", this.loadFavoriteState);
 
   },
+  beforeUnmount() {
+    window.removeEventListener("favorites-updated", this.loadFavoriteState);
+  },
+  computed: {
+    // check if background and text colors have been changed
+    isCustomColor() {
+      const bg = this.backGround.toLowerCase();
+      const text = this.foreGround.toLowerCase();
+      const isDefaultDark = bg === "#000000" && text === "#ffffff";
+      const isDefaultLight = bg ==="#ffffff" && text === "#000000";
+      return !isDefaultDark && !isDefaultLight;  
+    },
+  },
   methods: {
     // toggle between black/white dark-light defaults
     toggleMode() {
+      if (this.isCustomColor) {
+        this.gameIsDark = true;
+        this.backGround = "#000000";
+        this.foreGround = "#ffffff";
+        localStorage.setItem("savedMode", "Dark");
+        localStorage.setItem("savedBgColor", this.backGround);
+        localStorage.setItem("savedTextColor", this.foreGround);
+        return;
+      }
+
       this.gameIsDark = !this.gameIsDark;
 
       if (this.gameIsDark) {
         this.backGround = "#000000";
         this.foreGround = "#ffffff";
-        localStorage.setItem("gameSavedMode", "Dark");
+        localStorage.setItem("savedMode", "Dark");
       } else {
         this.backGround = "#ffffff";
         this.foreGround = "#000000";
-        localStorage.setItem("gameSavedMode", "Light");
+        localStorage.setItem("savedMode", "Light");
       }
 
-      localStorage.setItem("gameSavedBackGround", this.backGround);
-      localStorage.setItem("gameSavedForeGround", this.foreGround);
+      localStorage.setItem("savedBgColor", this.backGround);
+      localStorage.setItem("savedTextColor", this.foreGround);
     },
 
     // save selected background color
     updateBackGround() {
-      localStorage.setItem("gameSavedBackGround", this.backGround);
+      localStorage.setItem("savedBgColor", this.backGround);
     },
 
     // save selected foreground/text color
     updateForeGround() {
-      localStorage.setItem("gameSavedForeGround", this.foreGround);
+      localStorage.setItem("savedTextColor", this.foreGround);
     },
 
     // find game data by id
@@ -205,10 +220,9 @@ export default {
     <div class="theme-controls">
       <button
           class="toggle"
-          :style="{ color: foreGround, borderColor: foreGround }"
           @click="toggleMode"
       >
-        {{ gameIsDark ? "Switch to Light" : "Switch to Dark" }}
+        {{ isCustomColor ? "Reset" : (gameIsDark ? "Switch to Light" : "Switch to Dark") }}
       </button>
 
       <div class="pickers">
@@ -410,18 +424,18 @@ export default {
 
 .toggle {
   padding: 10px 16px;
-  border: 1px solid currentColor;
-  background: transparent;
-  color: inherit;
+  border: 1px solid #ffffff;
+  background-color: #000000;
+  color: #ffffff;
   cursor: pointer;
   border-radius: 4px;
   font-weight: 600;
 }
 
 .toggle:hover {
-  background: #111111;
+  background: #222222;
   color: #ffffff;
-  border-color: #111111;
+  border-color: #ffffff;
 }
 
 .pickers {

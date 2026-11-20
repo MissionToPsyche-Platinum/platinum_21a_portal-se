@@ -135,7 +135,8 @@ export default {
       const labels = {
         class: "Class",
         genre: "Genre",
-        age: "Age"
+        age: "Age",
+        difficulty: "Difficulty"
       };
       const genreLabels = {
         "Web Based": "Web Games",
@@ -223,20 +224,32 @@ export default {
 
     showNoMatchMessage() {
       return this.displayGames.length === 0 && this.hasSearchOrFilters;
-    }
+    },
+
+    // check if background and text colors have been changed
+    isCustomColor() {
+      const bg = this.darkColor.toLowerCase();
+      const text = this.lightColor.toLowerCase();
+      const isDefaultDark = bg === "#000000" && text === "#ffffff";
+      const isDefaultLight = bg ==="#ffffff" && text === "#000000";
+      return !isDefaultDark && !isDefaultLight;  
+    },
   },
   mounted() {
     // get the previously saved mode from the browser local storage
     const savedMode = localStorage.getItem("savedMode");
+    const savedBg = localStorage.getItem("savedBgColor");
+    const savedText = localStorage.getItem("savedTextColor");
+
     //check if previous mode is a dark mode, enable dark mode on page load
     if (savedMode === "Light") {
       this.isDark = false;
-      this.darkColor = "#ffffff";
-      this.lightColor = "#000000";
+      this.darkColor = savedBg || "#ffffff";
+      this.lightColor = savedText || "#000000";
     } else {
       this.isDark = true;
-      this.darkColor = "#000000";
-      this.lightColor = "#ffffff";
+      this.darkColor = savedBg || "#000000";
+      this.lightColor = savedText || "#ffffff";
     }
     this.loadFavorites();
     window.addEventListener("favorites-updated", this.loadFavorites);
@@ -265,6 +278,17 @@ export default {
 
     //this function toggle between dark mode and light mode
     toggleMode() {
+      // reset back to dark mode of background and text are custom
+      if (this.isCustomColor) {
+        this.isDark = true;
+        this.darkColor = "#000000";
+        this.lightColor = "#ffffff";
+        localStorage.setItem("savedMode", "Dark");
+        localStorage.setItem("savedBgColor", this.darkColor);
+        localStorage.setItem("savedTextColor", this.lightColor);
+        return;
+      }
+
       this.isDark = !this.isDark;//if dark mode is active change to light mode, if light mode is active change to dark mode
       if (this.isDark) {
         this.darkColor = "#000000";
@@ -275,18 +299,18 @@ export default {
         this.lightColor = "#000000";
         localStorage.setItem("savedMode", "Light");// save light mode in local storage
       }
-      localStorage.setItem("savedDarkColor", this.darkColor);
-      localStorage.setItem("savedLightColor", this.lightColor);
+      localStorage.setItem("savedBgColor", this.darkColor);
+      localStorage.setItem("savedTextColor", this.lightColor);
     },
 
     // these function update the localstorage with the current colors selection
     updateDarkColor() {
 
-      localStorage.setItem("savedDarkColor", this.darkColor);
+      localStorage.setItem("savedBgColor", this.darkColor);
     },
 
     updateLightColor() {
-      localStorage.setItem("savedLightColor", this.lightColor);
+      localStorage.setItem("savedTextColor", this.lightColor);
     },
 
     handleFilters(filters) {
@@ -488,7 +512,7 @@ export default {
         const q3Config = quizConfig.fun[answers.fun]
 
         if (q3Config) {
-            if (q3Config.genres.includes(games.genre)) {
+            if (q3Config.genres.includes(game.genre)) {
                 score += 2
             }
 
@@ -592,11 +616,10 @@ export default {
         <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
         <div class="theme-controls">
 
-          <button class="toggle"
-                  :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
+          <button class="mode-toggle"
                   @click="toggleMode">
             <!--dynamically change thee text based on the mode-->
-            {{ isDark ? "Switch to Light" : "Switch to Dark" }}
+            {{ isCustomColor ? "Reset" :  (isDark ? "Switch to Light" : "Switch to Dark") }}
           </button>
           <div class="pickers">
             <label>
@@ -842,6 +865,22 @@ input[type='color'] {
   background: #111111;
   color: #ffffff;
   border-color: #111111;
+}
+
+.mode-toggle {
+  padding: 10px 16px;
+  border: 1px solid #ffffff;
+  background-color: #000000;
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.mode-toggle:hover {
+  background-color: #222222;
+  color: #ffffff;
+  border-color: #ffffff;
 }
 
 .quiz-container {
