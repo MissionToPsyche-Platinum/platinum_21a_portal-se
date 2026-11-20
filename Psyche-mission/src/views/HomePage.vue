@@ -224,7 +224,16 @@ export default {
 
     showNoMatchMessage() {
       return this.displayGames.length === 0 && this.hasSearchOrFilters;
-    }
+    },
+
+    // check if background and text colors have been changed
+    isCustomColor() {
+      const bg = this.darkColor.toLowerCase();
+      const text = this.lightColor.toLowerCase();
+      const isDefaultDark = bg === "#000000" && text === "#ffffff";
+      const isDefaultLight = bg ==="#ffffff" && text === "#000000";
+      return !isDefaultDark && !isDefaultLight;  
+    },
   },
   mounted() {
     // get the previously saved mode from the browser local storage
@@ -269,6 +278,17 @@ export default {
 
     //this function toggle between dark mode and light mode
     toggleMode() {
+      // reset back to dark mode of background and text are custom
+      if (this.isCustomColor) {
+        this.isDark = true;
+        this.darkColor = "#000000";
+        this.lightColor = "#ffffff";
+        localStorage.setItem("savedMode", "Dark");
+        localStorage.setItem("savedBgColor", this.darkColor);
+        localStorage.setItem("savedTextColor", this.lightColor);
+        return;
+      }
+
       this.isDark = !this.isDark;//if dark mode is active change to light mode, if light mode is active change to dark mode
       if (this.isDark) {
         this.darkColor = "#000000";
@@ -596,11 +616,10 @@ export default {
         <!--      toggle button that change the theme based on the mode, calls th toggleMode() function-->
         <div class="theme-controls">
 
-          <button class="toggle"
-                  :style="[{backgroundColor: isDark? darkColor: lightColor},{color: isDark? lightColor: darkColor}]"
+          <button class="mode-toggle"
                   @click="toggleMode">
             <!--dynamically change thee text based on the mode-->
-            {{ isDark ? "Switch to Light" : "Switch to Dark" }}
+            {{ isCustomColor ? "Reset" :  (isDark ? "Switch to Light" : "Switch to Dark") }}
           </button>
           <div class="pickers">
             <label>
@@ -846,6 +865,22 @@ input[type='color'] {
   background: #111111;
   color: #ffffff;
   border-color: #111111;
+}
+
+.mode-toggle {
+  padding: 10px 16px;
+  border: 1px solid #ffffff;
+  background-color: #000000;
+  color: #ffffff;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.mode-toggle:hover {
+  background-color: #222222;
+  color: #ffffff;
+  border-color: #ffffff;
 }
 
 .quiz-container {

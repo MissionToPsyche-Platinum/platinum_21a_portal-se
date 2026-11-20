@@ -49,9 +49,29 @@ export default {
   beforeUnmount() {
     window.removeEventListener("favorites-updated", this.loadFavoriteState);
   },
+  computed: {
+    // check if background and text colors have been changed
+    isCustomColor() {
+      const bg = this.backGround.toLowerCase();
+      const text = this.foreGround.toLowerCase();
+      const isDefaultDark = bg === "#000000" && text === "#ffffff";
+      const isDefaultLight = bg ==="#ffffff" && text === "#000000";
+      return !isDefaultDark && !isDefaultLight;  
+    },
+  },
   methods: {
     // toggle between black/white dark-light defaults
     toggleMode() {
+      if (this.isCustomColor) {
+        this.gameIsDark = true;
+        this.backGround = "#000000";
+        this.foreGround = "#ffffff";
+        localStorage.setItem("savedMode", "Dark");
+        localStorage.setItem("savedBgColor", this.backGround);
+        localStorage.setItem("savedTextColor", this.foreGround);
+        return;
+      }
+
       this.gameIsDark = !this.gameIsDark;
 
       if (this.gameIsDark) {
@@ -200,10 +220,9 @@ export default {
     <div class="theme-controls">
       <button
           class="toggle"
-          :style="{ color: foreGround, borderColor: foreGround }"
           @click="toggleMode"
       >
-        {{ gameIsDark ? "Switch to Light" : "Switch to Dark" }}
+        {{ isCustomColor ? "Reset" : (gameIsDark ? "Switch to Light" : "Switch to Dark") }}
       </button>
 
       <div class="pickers">
@@ -405,18 +424,18 @@ export default {
 
 .toggle {
   padding: 10px 16px;
-  border: 1px solid currentColor;
-  background: transparent;
-  color: inherit;
+  border: 1px solid #ffffff;
+  background-color: #000000;
+  color: #ffffff;
   cursor: pointer;
   border-radius: 4px;
   font-weight: 600;
 }
 
 .toggle:hover {
-  background: #111111;
+  background: #222222;
   color: #ffffff;
-  border-color: #111111;
+  border-color: #ffffff;
 }
 
 .pickers {
