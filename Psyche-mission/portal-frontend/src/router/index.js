@@ -18,6 +18,7 @@ const routes = [
     {path: "/game/:id", name: "GamePage", component: GamePage, props: true},
 
     {path: "/login", name: "Login", component: Login},
+    {path: "/admin/login", name: "AdminLogin", component: Login, props: { adminLogin: true }},
 
     {path: "/admin", name: "Admin", component: AdminPage, meta: { requiresAdmin: true }},
 
