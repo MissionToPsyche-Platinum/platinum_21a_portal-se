@@ -57,4 +57,30 @@ describe('HomePage empty search', () => {
     expect(wrapper.find('.empty-results').exists()).toBe(false)
     expect(wrapper.find('.game-shelves').exists()).toBe(true)
   })
+
+  it('fills quiz results after the quiz is completed', async () => {
+    wrapper = mount(HomePage, {
+      global: {
+        stubs: {
+          FeaturedGame: true,
+          GameLink: true,
+          QuizModal: true,
+          'router-link': true
+        }
+      }
+    })
+
+    wrapper.vm.handleQuizResults({
+      device: 'Laptop/Desktop',
+      difficulty: 'Easy',
+      fun: 'Exploring space',
+      interest: 'Psyche asteroid'
+    })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.showQuizResults).toBe(true)
+    expect(wrapper.vm.quizResults.length).toBeGreaterThan(0)
+    expect(wrapper.vm.quizResults.every((game) => game.title)).toBe(true)
+  })
 })
+
