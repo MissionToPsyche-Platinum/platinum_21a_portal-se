@@ -542,6 +542,16 @@ export default {
         return sorted.slice(0,3)
     },
 
+    playRandomGame() {
+      const randomIndex = Math.floor(Math.random() * this.games.length);
+      const randomGame = this.games[randomIndex];
+
+      this.$router.push ({
+        name: "GamePage",
+        params: { id: randomGame.id }
+      });
+    },
+
     updateHoverPreviewEnabled() {
       this.hoverPreviewEnabled = Boolean(this.hoverMediaQuery && this.hoverMediaQuery.matches);
       if (!this.hoverPreviewEnabled) {
@@ -637,6 +647,7 @@ export default {
       </template>
       <div id="quiz-container" class="quiz-container">
         <button id="quiz-button" class="quiz-button" @click="openQuiz">Take Quiz</button>
+        <button class="random-button" @click="playRandomGame">Random Game</button>
       </div>
     </FeaturedGame>
 
@@ -747,7 +758,9 @@ export default {
           :key="shelf.label"
           class="game-shelf"
         >
-          <h2 class="game-shelf-title">{{ shelf.label }}</h2>
+          <h2 class="game-shelf-title">
+            {{ shelf.label }} <span class="shelf-count">({{ shelf.games.length }})</span>
+          </h2>
           <div class="shelf-scroll-row">
             <GameLink
               v-for="game in shelf.games"
@@ -896,6 +909,22 @@ input[type='color'] {
   cursor: pointer;
 }
 
+.random-button {
+  padding: 12px 22px;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.random-button:hover {
+  background: rgba(128, 128, 128, 0.2);
+}
+
 .dark-mode .quiz-button {
   background: #ffffff;
   color: #111111;
@@ -910,6 +939,13 @@ input[type='color'] {
 
 .quiz-button:hover {
   opacity: 0.88;
+}
+
+.shelf-count {
+  margin-left: 10px;
+  font-size: 1.3rem;
+  font-weight: 500;
+  opacity: 0.7;
 }
 
 .games-heading {
