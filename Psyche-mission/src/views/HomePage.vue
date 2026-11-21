@@ -542,6 +542,16 @@ export default {
         return sorted.slice(0,3)
     },
 
+    playRandomGame() {
+      const randomIndex = Math.floor(Math.random() * this.games.length);
+      const randomGame = this.games[randomIndex];
+
+      this.$router.push ({
+        name: "GamePage",
+        params: { id: randomGame.id }
+      });
+    },
+
     updateHoverPreviewEnabled() {
       this.hoverPreviewEnabled = Boolean(this.hoverMediaQuery && this.hoverMediaQuery.matches);
       if (!this.hoverPreviewEnabled) {
@@ -637,6 +647,7 @@ export default {
       </template>
       <div id="quiz-container" class="quiz-container">
         <button id="quiz-button" class="quiz-button" @click="openQuiz">Take Quiz</button>
+        <button class="random-button" @click="playRandomGame">Random Game</button>
       </div>
     </FeaturedGame>
 
@@ -894,6 +905,22 @@ input[type='color'] {
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
+}
+
+.random-button {
+  padding: 12px 22px;
+  border: 1px solid currentColor;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.random-button:hover {
+  background: rgba(128, 128, 128, 0.2);
 }
 
 .dark-mode .quiz-button {
