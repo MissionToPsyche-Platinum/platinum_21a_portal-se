@@ -758,7 +758,9 @@ export default {
           :key="shelf.label"
           class="game-shelf"
         >
-          <h2 class="game-shelf-title">{{ shelf.label }}</h2>
+          <h2 class="game-shelf-title">
+            {{ shelf.label }} <span class="shelf-count">({{ shelf.games.length }})</span>
+          </h2>
           <div class="shelf-scroll-row">
             <GameLink
               v-for="game in shelf.games"
@@ -937,6 +939,13 @@ input[type='color'] {
 
 .quiz-button:hover {
   opacity: 0.88;
+}
+
+.shelf-count {
+  margin-left: 10px;
+  font-size: 1.3rem;
+  font-weight: 500;
+  opacity: 0.7;
 }
 
 .games-heading {
