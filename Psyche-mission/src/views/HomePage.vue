@@ -738,6 +738,17 @@ export default {
           No favorite games saved yet.
         </p>
       </section>
+
+      <div v-if="showQuizResults" class="quiz-results-banner">
+        <span>Showing your top quiz recommendations</span>
+        <button
+          type="button"
+          class="toggle"
+          @click="showQuizResults = false"
+        >
+          Show All Games
+        </button>
+      </div>
       <div v-if="showNoMatchMessage" class="empty-results">
         <p class="empty-results-message">No games match your search</p>
         <button
@@ -1216,6 +1227,20 @@ input[type='color'] {
 
 .favorites-scroll-row::-webkit-scrollbar-corner {
   background: transparent;
+}
+
+.quiz-results-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  margin-bottom: 28px;
+  border: 1px solid #f47c33;
+  border-radius: 6px;
+  background: color-mix(in srgb, #f47c33 12%, transparent);
+  font-weight: 600;
 }
 
 /* Responsive design */
