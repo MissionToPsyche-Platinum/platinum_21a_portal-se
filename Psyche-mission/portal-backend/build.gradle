@@ -34,6 +34,8 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-flyway'
 	runtimeOnly 'org.flywaydb:flyway-database-postgresql'
+
+	testRuntimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
