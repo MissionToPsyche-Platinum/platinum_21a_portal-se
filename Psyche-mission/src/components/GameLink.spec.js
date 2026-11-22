@@ -61,5 +61,27 @@ describe('GameLink', () => {
     expect(JSON.parse(localStorage.getItem('favoriteGames'))).not.toContain('jolts-journey')
     expect(wrapper.get('.favorite-btn').attributes('aria-label')).toBe('Save to favorites')
   })
+
+  it('falls back to the Psyche logo when the thumbnail is missing', () => {
+    const wrapper = mount(GameLink, {
+      props: {
+        game: { ...game, thumbnail: 'None' }
+      },
+      ...routerStub
+    })
+
+    expect(wrapper.get('img.media').attributes('src')).not.toBe('None')
+    expect(wrapper.get('img.media').attributes('src')).toBeTruthy()
+  })
+
+  it('uses the compact card style when compact is set', () => {
+    const wrapper = mount(GameLink, {
+      props: { game, compact: true },
+      ...routerStub
+    })
+
+    expect(wrapper.get('.game-link-card').classes()).toContain('compact-card')
+  })
 })
+
 

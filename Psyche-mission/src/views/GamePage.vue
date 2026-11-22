@@ -289,11 +289,13 @@ export default {
 
       <div class="metadata">
         <h3>Details</h3>
+        <template v-if="game">
         <p><strong>Difficulty</strong>: {{game.difficulty}}</p>
         <p><strong>Genre</strong>: {{game.genre}}</p>
         <p><strong>Age</strong>: {{game.age}}</p>
         <p><strong>Class</strong>: {{game.class}}</p>
         <p><strong>Credits</strong>: {{game.credits}}</p>
+        </template>
 
 <!--game rating component goes here-->
         <GameRating

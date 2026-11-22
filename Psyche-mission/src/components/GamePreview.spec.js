@@ -56,6 +56,18 @@ describe('GamePreview', () => {
     expect(wrapper.get('iframe.preview-iframe').attributes('src')).toContain('youtube.com')
     expect(wrapper.find('img.preview-video').exists()).toBe(false)
   })
+
+  it('treats Easy difficulty as one filled bar segment', () => {
+    const wrapper = mount(GamePreview, {
+      props: {
+        game: { ...baseGame, difficulty: 'Easy' }
+      }
+    })
+
+    expect(wrapper.get('.difficulty-label').text()).toContain('Easy')
+    expect(wrapper.vm.difficultyLevel).toBe(1)
+  })
 })
+
 
 
