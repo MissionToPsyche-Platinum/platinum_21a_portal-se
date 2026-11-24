@@ -32,4 +32,20 @@ describe('FeaturedGame', () => {
     expect(wrapper.text()).toContain('Nickel - 2020-2021')
     expect(wrapper.text()).toContain('Play')
   })
+
+  it('falls back to the Psyche logo when the thumbnail is missing', () => {
+    const wrapper = mount(FeaturedGame, {
+      props: {
+        game: { ...game, thumbnail: 'None' }
+      },
+      global: {
+        stubs: {
+          'router-link': true
+        }
+      }
+    })
+
+    expect(wrapper.vm.gameImage).not.toBe('None')
+    expect(wrapper.vm.gameImage).toBeTruthy()
+  })
 })

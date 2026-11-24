@@ -54,4 +54,12 @@ describe('QuizModal', () => {
       interest: 'Psyche asteroid'
     })
   })
+
+  it('emits close when Close is clicked', async () => {
+    const wrapper = mount(QuizModal)
+
+    await wrapper.get('.btn').trigger('click')
+
+    expect(wrapper.emitted('close')).toBeTruthy()
+  })
 })

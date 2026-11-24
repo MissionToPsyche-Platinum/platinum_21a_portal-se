@@ -32,4 +32,16 @@ describe('GameRating', () => {
     expect(wrapper.vm.currentRating).toBe(0)
     expect(localStorage.getItem('gameRating-jolts-journey')).toBeNull()
   })
+
+  it('restores a previously saved rating', async () => {
+    localStorage.setItem('gameRating-jolts-journey', '3')
+
+    const wrapper = mount(GameRating, {
+      props: { gameId: 'jolts-journey' }
+    })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.currentRating).toBe(3)
+    expect(wrapper.get('.rating-text').text()).toContain('3 out of 5')
+  })
 })

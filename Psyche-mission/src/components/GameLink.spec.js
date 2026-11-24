@@ -82,6 +82,19 @@ describe('GameLink', () => {
 
     expect(wrapper.get('.game-link-card').classes()).toContain('compact-card')
   })
+
+  it('marks the heart as saved when the game is already in favorites', async () => {
+    localStorage.setItem('favoriteGames', JSON.stringify(['jolts-journey']))
+
+    const wrapper = mount(GameLink, {
+      props: { game, textColor: '#ffffff' },
+      ...routerStub
+    })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.isFavorite).toBe(true)
+    expect(wrapper.get('.favorite-btn').attributes('aria-label')).toBe('Remove from favorites')
+  })
 })
 
 

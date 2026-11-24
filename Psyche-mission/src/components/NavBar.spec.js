@@ -25,4 +25,21 @@ describe('NavBar', () => {
     expect(about.attributes('href')).toBe('https://psyche.ssl.berkeley.edu/')
     expect(about.attributes('target')).toBe('_blank')
   })
+
+  it('shows the portal heading and a home logo link', () => {
+    const wrapper = mount(NavBar, {
+      global: {
+        stubs: {
+          'router-link': {
+            props: ['to'],
+            template: '<a :href="typeof to === \'string\' ? to : to.path || \'/\'"><slot /></a>'
+          }
+        }
+      }
+    })
+
+    expect(wrapper.get('.main-portal-heading').text()).toBe('Psyche Mission Game Portal')
+    expect(wrapper.get('.logo-link').attributes('href')).toBe('/')
+    expect(wrapper.get('.logo').attributes('alt')).toBe('Logo')
+  })
 })

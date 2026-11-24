@@ -20,4 +20,20 @@ describe('Login', () => {
     expect(wrapper.find('input[type="password"]').exists()).toBe(true)
     expect(wrapper.get('.sign-up-button').attributes('href')).toBe('/signup')
   })
+
+  it('keeps typed credentials on the form', async () => {
+    const wrapper = mount(Login, {
+      global: {
+        stubs: {
+          'router-link': true
+        }
+      }
+    })
+
+    await wrapper.get('input[type="text"]').setValue('user')
+    await wrapper.get('input[type="password"]').setValue('test')
+
+    expect(wrapper.vm.username).toBe('user')
+    expect(wrapper.vm.password).toBe('test')
+  })
 })

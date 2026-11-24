@@ -117,6 +117,68 @@ describe('HomePage empty search', () => {
 
     expect(wrapper.get('.empty-favorites-message').text()).toContain('No favorite games saved yet')
   })
+
+  it('keeps only Easy games when that difficulty is selected', async () => {
+    wrapper = mountHomePage()
+
+    wrapper.vm.activeFilters.difficulty = 'Easy'
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.filteredGames.length).toBeGreaterThan(0)
+    expect(wrapper.vm.filteredGames.every((game) => game.difficulty === 'Easy')).toBe(true)
+  })
+
+  it('keeps only High School games when that age is selected', async () => {
+    wrapper = mountHomePage()
+
+    wrapper.vm.activeFilters.age = 'High School'
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.filteredGames.length).toBeGreaterThan(0)
+    expect(wrapper.vm.filteredGames.every((game) => game.age === 'High School')).toBe(true)
+  })
+
+  it('filters games by title search', async () => {
+    wrapper = mountHomePage()
+
+    wrapper.vm.searchRequest = 'jolt'
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.filteredGames.some((game) => game.id === 'jolts-journey')).toBe(true)
+    expect(wrapper.vm.filteredGames.every((game) => game.title.toLowerCase().includes('jolt') || (game.description || '').toLowerCase().includes('jolt'))).toBe(true)
+  })
+
+  it('sorts game titles Z to A', async () => {
+    wrapper = mountHomePage()
+
+    wrapper.vm.sortBy = 'title-desc'
+    await wrapper.vm.$nextTick()
+
+    const titles = wrapper.vm.sortGames.map((game) => game.title)
+    expect(titles).toEqual([...titles].sort((a, b) => b.localeCompare(a)))
+  })
+
+  it('toggles the favorites-only list from the browse bar', async () => {
+    wrapper = mountHomePage()
+
+    const favoritesButton = wrapper.findAll('button').find((button) => button.text().includes('Show Favorite Games'))
+    expect(favoritesButton).toBeTruthy()
+
+    await favoritesButton.trigger('click')
+
+    expect(wrapper.vm.favoritesOnly).toBe(true)
+    expect(wrapper.text()).toContain('Show All Games')
+  })
+
+  it('saves light mode when the theme is toggled', () => {
+    wrapper = mountHomePage()
+
+    expect(wrapper.vm.isDark).toBe(true)
+    wrapper.vm.toggleMode()
+
+    expect(wrapper.vm.isDark).toBe(false)
+    expect(localStorage.getItem('savedMode')).toBe('Light')
+  })
 })
 
 

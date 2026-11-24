@@ -37,5 +37,23 @@ describe('Filter', () => {
     expect(wrapper.emitted('update-filter')).toBeTruthy()
     expect(wrapper.emitted('update-filter').at(-1)[0].class).toBe('Iridium - 2024-2025')
   })
+
+  it('emits Easy difficulty when that option is selected', async () => {
+    const wrapper = mount(Filter)
+
+    await wrapper.get('.filter-toggle').trigger('click')
+    await wrapper.findAll('select').at(3).setValue('Easy')
+
+    expect(wrapper.emitted('update-filter').at(-1)[0].difficulty).toBe('Easy')
+  })
+
+  it('emits the chosen sort option', async () => {
+    const wrapper = mount(Filter)
+
+    await wrapper.get('.filter-toggle').trigger('click')
+    await wrapper.findAll('select').at(4).setValue('title-desc')
+
+    expect(wrapper.emitted('sort-games').at(-1)[0]).toBe('title-desc')
+  })
 })
 

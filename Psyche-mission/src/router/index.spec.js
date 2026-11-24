@@ -18,4 +18,11 @@ describe('router', () => {
     expect(names).toContain('NotFound')
     expect(names).toContain('Login')
   })
+
+  it('sends unknown paths to NotFound', () => {
+    const catchAll = router.getRoutes().find((route) => route.path.includes(':path'))
+
+    expect(catchAll).toBeTruthy()
+    expect(catchAll.name).toBe('NotFound')
+  })
 })

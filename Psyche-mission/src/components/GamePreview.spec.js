@@ -67,6 +67,17 @@ describe('GamePreview', () => {
     expect(wrapper.get('.difficulty-label').text()).toContain('Easy')
     expect(wrapper.vm.difficultyLevel).toBe(1)
   })
+
+  it('treats Medium difficulty as two filled bar segments', () => {
+    const wrapper = mount(GamePreview, {
+      props: {
+        game: { ...baseGame, difficulty: 'Medium' }
+      }
+    })
+
+    expect(wrapper.get('.difficulty-label').text()).toContain('Medium')
+    expect(wrapper.vm.difficultyLevel).toBe(2)
+  })
 })
 
 

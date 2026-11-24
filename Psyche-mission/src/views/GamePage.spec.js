@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import GamePage from './GamePage.vue'
 
@@ -19,6 +19,10 @@ function mountGamePage(id, replace = vi.fn()) {
 }
 
 describe('GamePage', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
   it('shows title and details for a known game id', async () => {
     const wrapper = mountGamePage('jolts-journey')
     await wrapper.vm.$nextTick()
@@ -44,5 +48,33 @@ describe('GamePage', () => {
     await wrapper.setProps({ id: 'not-a-real-game' })
 
     expect(replace).toHaveBeenCalledWith({ name: 'NotFound' })
+  })
+
+  it('saves and unsaves the game from the details page', async () => {
+    const wrapper = mountGamePage('jolts-journey')
+    await wrapper.vm.$nextTick()
+
+    await wrapper.get('.favorite-btn').trigger('click')
+    expect(JSON.parse(localStorage.getItem('favoriteGames'))).toContain('jolts-journey')
+    expect(wrapper.get('.favorite-btn').attributes('aria-label')).toBe('Remove from favorites')
+
+    await wrapper.get('.favorite-btn').trigger('click')
+    expect(JSON.parse(localStorage.getItem('favoriteGames'))).not.toContain('jolts-journey')
+  })
+
+  it('shows a QR prompt for an AR game', async () => {
+    const wrapper = mountGamePage('Explore Psyche XR')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.find('.qr-code-div').exists()).toBe(true)
+    expect(wrapper.text()).toContain('Scan the QR code')
+  })
+
+  it('shows a download link for a VR game', async () => {
+    const wrapper = mountGamePage('psyche-scraper')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.get('.vr-download-button').text()).toContain('Download the game here')
+    expect(wrapper.get('.vr-download-button').attributes('href')).toBeTruthy()
   })
 })

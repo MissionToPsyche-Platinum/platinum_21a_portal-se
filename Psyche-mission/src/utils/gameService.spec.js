@@ -25,5 +25,12 @@ describe('getSuggestions', () => {
     expect(jolts.video).toBe('/gif/jolts_journey.gif')
     expect(jolts.class).toBe('Nickel - 2020-2021')
   })
+
+  it('returns at least one related game for Jolt\'s Journey', () => {
+    const suggestions = getSuggestions('jolts-journey')
+
+    expect(suggestions.length).toBeGreaterThan(0)
+    expect(suggestions.every((game) => game.id !== 'jolts-journey')).toBe(true)
+  })
 })
 
