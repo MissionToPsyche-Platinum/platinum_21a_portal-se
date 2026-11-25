@@ -109,4 +109,62 @@ class AdminAccessControlTest {
 
         verify(service).getPendingRequests();
     }
+
+
+
+    //regular user 1 cannot deny requests
+    @Test
+    void regularUserCannotDenyRequest() throws Exception {
+
+        mockMvc.perform(
+            put("/api/game-upload-requests/{id}/deny", REQUEST_ID)
+                .with(user("regularUser1").roles("USER"))
+                .with(csrf())
+        ).andExpect(status().isForbidden());
+
+        verify(service, never()).denyRequest(anyLong());
+    }
+
+    //regular user 2 cannot approve requests
+    @Test
+    void secondRegularUserCannotApproveRequest() throws Exception {
+
+        mockMvc.perform(
+            put("/api/game-upload-requests/{id}/approve", REQUEST_ID)
+                .with(user("regularUser2").roles("USER"))
+                .with(csrf())
+        ).andExpect(status().isForbidden());
+
+        verify(service, never()).approveRequest(anyLong());
+    }
+
+    //regular users cannot view pending requests
+    @Test
+    void regularUsersCannotViewPendingRequests() throws Exception {
+
+        mockMvc.perform(
+            get("/api/game-upload-requests/pending")
+                .with(user("regularUser1").roles("USER"))
+        ).andExpect(status().isForbidden());
+
+        mockMvc.perform(
+            get("/api/game-upload-requests/pending")
+                .with(user("regularUser2").roles("USER"))
+        ).andExpect(status().isForbidden());
+
+        verify(service, never()).getPendingRequests();
+    }
+
+    //unauthenticated users cannot view pending requests
+    @Test
+    void unauthenticatedUserCannotViewPendingRequests()
+            throws Exception {
+
+        mockMvc.perform(
+            get("/api/game-upload-requests/pending")
+        ).andExpect(status().isUnauthorized());
+
+        verify(service, never()).getPendingRequests();
+    }
+
 }
