@@ -72,9 +72,8 @@ export default {
         const classMatch = this.activeFilters.class ? game.class === this.activeFilters.class : true;
         const ageMatch = this.activeFilters.age ? game.age === this.activeFilters.age : true;
         const difficultyMatch = this.activeFilters.difficulty ? game.difficulty === this.activeFilters.difficulty : true;
-        const searchMatch = this.searchRequest ? game.title.toLowerCase().includes(this.searchRequest.toLowerCase()) ||
-            game.description.toLowerCase().includes(this.searchRequest.toLowerCase()) : true
-
+        const normalizedSearch = this.searchRequest.trim().replace(/\s+/g, " ").toLowerCase();
+        const searchMatch = normalizedSearch ? game.title.toLowerCase().includes(normalizedSearch) || game.description.toLowerCase().includes(normalizedSearch) : true;
         const favoriteMatch = this.favoritesOnly ? this.favoriteIds.includes(game.id) : true;
 
         return classMatch && genreMatch && ageMatch && difficultyMatch && searchMatch && favoriteMatch;
