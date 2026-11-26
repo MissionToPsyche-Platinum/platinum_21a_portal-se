@@ -81,8 +81,8 @@ describe("HomePage Search Accuracy", () => {
             expected: ["Super Psyched"]
         },
         {
-            search: "Asteroid    Tycoon",
-            expected: ["Asteroid Tycoon"]
+            search: "Psyche    Salvage",
+            expected: ["Psyche Salvage"]
         },
         {
             search: "",
