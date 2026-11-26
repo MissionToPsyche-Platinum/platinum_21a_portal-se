@@ -24,6 +24,8 @@ export default {
       displayQr: true,
       suggestedGames: null,
       isFavorite: false, // true if the game is saved in favorite
+      containerWidth: 1280,
+      resizeObserver: null,
     }
   },
   mounted() {
@@ -45,9 +47,14 @@ export default {
     this.loadFavoriteState();
     window.addEventListener("favorites-updated", this.loadFavoriteState);
 
+    this.setupResizeObserver();
+
   },
   beforeUnmount() {
     window.removeEventListener("favorites-updated", this.loadFavoriteState);
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
   },
   computed: {
     // check if background and text colors have been changed
@@ -57,6 +64,27 @@ export default {
       const isDefaultDark = bg === "#000000" && text === "#ffffff";
       const isDefaultLight = bg ==="#ffffff" && text === "#000000";
       return !isDefaultDark && !isDefaultLight;  
+    },
+
+    iframeStyle() {
+      const isUnity = this.game && this.game.engine === "unity";
+      const baseWidth = isUnity ? 1920 : 1280;
+      const baseHeight = isUnity ? 1320 : 720;
+
+      if (this.containerWidth < baseWidth) {
+        const scale = this.containerWidth / baseWidth;
+        return {
+          width: `${baseWidth}px`,
+          height: `${baseHeight}px`,
+          transform: `scale(${scale})`,
+          transformOrigin: "top left",
+        };
+      }
+
+      return {
+        width: "100%",
+        height: "100%",
+      };
     },
   },
   methods: {
@@ -153,6 +181,7 @@ export default {
     
     toggleGame() {
       this.displayQr = false;
+      this.setupResizeObserver();
     },
 
     isMobileDevice() {
@@ -191,6 +220,25 @@ export default {
       window.dispatchEvent(new Event("favorites-updated"));
     },
 
+    setupResizeObserver() {
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect();
+      }
+
+      this.$nextTick(() => {
+        const container = this.$refs.gameContainer;
+        if (!container) return;
+
+        const updateWidth = () => {
+          this.containerWidth = container.getBoundingClientRect().width;
+        };
+
+        updateWidth();
+        this.resizeObserver = new ResizeObserver(updateWidth);
+        this.resizeObserver.observe(container);
+      });
+    },
+
 
   },
 
@@ -201,6 +249,7 @@ export default {
     id() {
       this.displayQr = true;
       this.findGame();
+      this.setupResizeObserver();
     }
   }
 }
@@ -281,6 +330,7 @@ export default {
               :src="game.src"
               frameborder="0"
               allowfullscreen
+              :style="iframeStyle"
             ></iframe>
 
             <button v-if="game.engine != 'unity'" class="fullscreen-btn" @click="toggleFullscreen">
@@ -498,7 +548,7 @@ input[type="color"] {
 .game {
   margin: 0 auto 32px;
   width: calc(100% - 96px);
-  max-width: 1440p;
+  max-width: 1440px;
   border: 1px solid currentColor;
   overflow: hidden;
   background-color: black;
@@ -794,10 +844,6 @@ input[type="color"] {
   .suggested-games {
     grid-template-columns: 1fr;
     gap: 12px;
-  }
-
-  .game-iframe {
-    aspect-ratio: 4 / 5;
   }
 }
 </style>
