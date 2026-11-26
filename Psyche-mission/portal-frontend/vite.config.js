@@ -12,7 +12,10 @@ export default defineConfig({
     vueDevTools(),
     tailwindcss(),
   ],
-
+  test: {
+    environment: "jsdom",
+    globals: true
+  },
   server: {
     // used to allow communication with Spring Boot backend on port 8080
     // requests starting with /api endpoint will be routed to Spring Boot
