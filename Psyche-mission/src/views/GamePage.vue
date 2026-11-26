@@ -257,7 +257,7 @@ export default {
     </header>
 
     <div class="game">
-      <div v-if="game && game.src" class="game-iframe">
+      <div v-if="game && game.src" class="game-iframe" :class="{ 'unity-iframe': game.engine === 'unity'}">
           <div v-if="game.genre === 'AR Experience' && displayQr" class="qr-code-div">
             <img :src="qrCode" />
             <h3>The AR Experiences are optimized for use with a mobile device.</h3>
@@ -276,9 +276,8 @@ export default {
               </router-link>
             </div>
           </div>
-          <div v-else class="iframe-div">
+          <div ref="gameContainer" v-else class="iframe-div">
             <iframe
-              ref="gameContainer"
               :src="game.src"
               frameborder="0"
               allowfullscreen
@@ -497,9 +496,12 @@ input[type="color"] {
 }
 
 .game {
-  margin: 0 48px 32px;
+  margin: 0 auto 32px;
+  width: calc(100% - 96px);
+  max-width: 1440p;
   border: 1px solid currentColor;
   overflow: hidden;
+  background-color: black;
 }
 
 .game h1 {
@@ -516,7 +518,12 @@ input[type="color"] {
 }
 
 .game-iframe {
+  width: 100%;
   aspect-ratio: 16 / 9;
+}
+
+.game-iframe.unity-iframe {
+  aspect-ratio: 16 / 11;
 }
 
 .iframe-div {
@@ -537,9 +544,9 @@ input[type="color"] {
   bottom: 15px;
   right: 15px;
   padding: 8px 12px;
-  background: transparent;
-  color: inherit;
-  border: 1px solid currentColor;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border: 1px solid white;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.8rem;
@@ -548,9 +555,9 @@ input[type="color"] {
 }
 
 .fullscreen-btn:hover {
-  background: #111111;
-  color: #ffffff;
-  border-color: #111111;
+  background: white;
+  color: black;
+  border-color: white;
 }
 
 :fullscreen .fullscreen-btn {
@@ -758,6 +765,10 @@ input[type="color"] {
   .suggested-games {
     margin-left: 20px;
     margin-right: 20px;
+  }
+
+  .game {
+    width: calc(100% - 40px);
   }
 
   .game-header {
