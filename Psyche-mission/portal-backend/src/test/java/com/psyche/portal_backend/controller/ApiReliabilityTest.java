@@ -39,7 +39,25 @@ class ApiReliabilityTest {
         RequestPostProcessor admin = user("apiTestAdmin").roles("ADMIN");
         int total = 0;
         int successful = 0;
-
+        for (String endpoint : endpoints) {
+            int endpointPassed = 0;
+            for (int i = 0; i < 25; i++) {
+                int status = mockMvc.perform(get(endpoint).with(admin))
+                    .andReturn().getResponse().getStatus();
+                total++;
+                if (status == 200) {
+                    successful++;
+                    endpointPassed++;
+                } else {
+                    System.out.printf("FAIL %s request %d: HTTP %d%n", endpoint, i + 1, status);
+                }
+            }
+            System.out.printf("%s: %d/25 successful%n", endpoint, endpointPassed);
+        }
+        double successRate = 100.0 * successful / total;
+        System.out.printf("API VALID-REQUEST RESULT: %d/%d = %.2f%%%n", successful, total, successRate);
+        assertTrue(successRate >= 99.0,
+            String.format("Expected >=99%% but measured %.2f%%", successRate));
     }
 }
 
